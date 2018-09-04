@@ -1,0 +1,83 @@
+-------------------------------------------------
+CHAPTER 2 - HOW PYTHON RUNS PROGRAMS
+-------------------------------------------------
+
+1. Source code files are translated into byte code.  
+
+     - Byte code is a lower-level, platform-independent representation of your
+         source code.  
+
+     - This is done to speed execution - byte code can be done much more quickly.
+
+
+2. Byte Code is cached in .pyc files
+
+     - Before Python 3.2, these files were put into the same directory as your
+         source code.
+
+     - In Python 3.2+, these .pyc files are saved in a subdirectory called 
+         '__pycache__'
+
+     - Python detects changes in source files by looking at the LastModified 
+         timestamps of the source and byte code files.
+
+     - Python checks whether a files needs to be recompiled because it was created
+         by a different Python version, either using a magic number in the byte
+         code (<3.2) or looking at the filename (3.2+)
+
+         script.py
+         __pycache__/script.cpython-33.pyc
+
+     - If Python does not have write privileges to the machine, byte code will
+         never be cached.  It never gets cached in the interactive prompt either.
+
+
+3. Byte Code is executed by the Python Virtual Machine
+
+     - The PVM is the runtime engine of Python.  It's the last step of what is 
+          called the 'Python interpreter'.
+
+
+
+- Performance Implications
+
+    - Byte code is not machine code.  The PVM loop, not the CPU chip, must still 
+        interpret the byte code.  This is why Python code does not run as fast as C/C++ code.  
+
+
+- Common Python Implementations
+
+    1. CPython = the standard implementation, written in ANSI C
+
+    2. Jython = written in Java
+
+    3. IronPython = written for .NET
+
+    4. Stackless = does not save state on C call stack, allowing for microthreads
+                   and coroutines
+
+    5. PyPy = C implementation with a Jitter, successor to the original Pysco JIT
+
+              The JIT is an extension to the PVM that translates portions of your 
+                byte code all the way down to binary machine code for faster
+                execution.
+
+              PyPy can speed up the execution of some code by 10x-100x
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
