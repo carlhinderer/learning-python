@@ -1,0 +1,93 @@
+-------------------------------------------------
+CHAPTER 3 - HOW YOU RUN PROGRAMS
+-------------------------------------------------
+
+1. With an interactive prompt
+     % python
+
+     - End the interactive session with Cntl+D
+
+     - To import a module into the session:
+          >>> import os
+          >>> os.getcwd(s)
+
+     - Compound statements are terminated with a blank line
+
+
+2. From the command line
+     % python script1.py
+
+     - Because running the script from the command line uses a shell command,
+         the usual shell syntax applies
+
+         % python script1.py > saveit.txt
+
+
+3. As a Unix-style executable script
+     % python brian
+
+     - Can also turn Python code files into bash-like executable programs
+
+     - These kind of scripts have the path to the interpreter in the first line
+
+         #!/usr/local/bin/python
+         print('The bright side of life...')
+         ...rest of script...
+
+     - The script file needs to have execute privileges
+
+     - Can avoid harcoding the path to the Python interpreter by using an env lookup
+
+         #!/usr/bin/env python
+         ...rest of script...
+
+
+- Module Imports and Reloads
+
+     - Any Python source file with a .py extension is a 'Module'.  Other files can
+         access the module by importing it.
+
+     - To execute a module while using the interactive prompt:
+
+         >>> import script1
+
+     - If you want changes in your imported script to be reflected at the 
+         interactive prompt, must reload the module:
+
+         (Python2)
+         >>> reload(script1)
+
+         (Python3)
+         >>> from imp import reload
+         >>> reload(script1)
+
+
+- Attributes
+
+     - A module is a package of variable names known as a 'namespace'.  An 'attribute' 
+         is a variable name attached to an object (like a module).
+
+     - We can create a module with an attribute:
+
+         (myfile.py)
+         title = 'The Meaning of Life'
+
+
+     - Then we can import the attribute
+
+         >>> import myfile
+         >>> myfile.title
+
+       Or, alternately
+
+         >>> from myfile import title
+         >>> title
+
+     - The 'dir' function will give you all the names in a module
+
+         >>> dir(myfile)
+
+     - The 'exec' function can be used to import a module each time without 
+         having to reload it manually.
+
+         >>> exec(open('script1.py').read())
