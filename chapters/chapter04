@@ -1,0 +1,257 @@
+-------------------------------------------------
+CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
+-------------------------------------------------
+
+- Python Conceptual Hierarchy
+
+    1. Programs are composed of modules.
+    2. Modules contain statements.
+    3. Statements create expressions.
+    4. Expressions create and process objects.
+
+
+- Built-In Types
+
+    1. Numbers
+         1234, 3.1415, 3+4j, 0b111, Decimal(), Fraction()
+
+    2. Strings
+         'Spam', b'a\x01c', u'sp\xc4m'
+
+    3. Lists
+         [1, [2, 'three'], 4.5], list(range(10))
+
+    4. Dictionaries
+         {'food': 'spam', 'taste': 'yum'}
+
+    5. Tuples
+         (1, 'spam', 4), tuple('spam'), namedtuple
+
+    6. Files
+         open('eggs.txt'), open(r'C:\ham.bin', 'wb')
+
+    7. Sets
+         set('abc'), {'a', 'b', 'c'}
+
+    8. Other Core Types
+         Booleans, types, None
+
+    9. Program Unit Types
+         Functions, modules, classes
+
+    10. Implementation-Related Types
+         Compiled code, stack tracebacks
+
+
+- Numbers
+
+    - Very large exponents can by computed in Python, as Python's 3.X integer
+        type automatically adds extra precision for large numbers when needed.
+
+        >>> len(str(2 ** 1000000))
+        301030
+    
+
+- Strings
+
+    - Sequence Operations
+
+        >>> S = 'Spam'
+        >>> len(S)
+        4
+        >>> S[0]
+        'S'
+        >>> S[-1]
+        'm'
+
+        >>> S[1:3]
+        'pa'    # Slice starting at 1, not including 3
+        >>> S[0:3]
+        'Spa'
+        >>> S[:3]
+        'Spa'   # Same as [0:3]
+        >>> S[:]
+        'Spam'
+
+        >>> S + 'xyz'
+        'Spamxyz'
+        >>> S * 8
+        'SpamSpamSpamSpamSpamSpamSpamSpam'
+
+    - Python strings are immutable.
+
+    - The 'bytearray' type does allow for in-place text changes if you need it.
+
+    - String Methods
+
+        >>> S = 'Spam'
+        >>> S.find('pa')
+        1
+        >>> S.replace('pa', 'XYZ')
+        'SXYZm'
+        >>> S.upper()
+        'SPAM'
+        >>> S.isalpha()
+        True
+
+        >>> line = 'aaa,bbb,ccc,ddd'
+        >>> line.split
+        ['aaa','bbb','ccc','ddd']
+
+        >>> line = 'aaa,bbb,ccccc,dd\n'
+        >>> line.rstrip()
+        'aaa,bbb,ccccc,dd'
+
+        # Works in all Pythons
+        >>> '%s, eggs, and %s' % ('spam', 'SPAM!')
+        'spam, eggs, and SPAM!'
+
+        # Works in 2.6+, 3.0+
+        >>> '{0}, eggs, and {1}'.format('spam', 'SPAM!')
+        'spam, eggs, and SPAM!'
+
+        # Works in 2.7+, 3.1+
+        >>> '{}, eggs, and {}'.format('spam', 'SPAM!')
+
+    - Escape Sequences
+
+        >>> S = 'A\nB\nC'
+        >>> len(S)
+        5
+
+        >>> ord('\n')
+        10         # \n is a byte with binary value 10 in ASCII
+
+    - Multiline String Declarations
+
+        >>> msg = """
+        FirstPart
+        SecondPart
+        ThirdPart
+        """
+        >>> msg
+        'FirstPartSecondPartThirdPart'
+
+    - Unicode Strings
+
+        # Python 3.X
+        The normal 'str' string handles Unicode text (including ASCII, which is just a
+          simple kind of Unicode).  A 'bytes' string type represents raw byte value.
+          2.X Unicode literals are supported in 3.3+ for compatibility's sake.
+
+        >>> 'sp\xc4m'     # 3.X: normal str strings are Unicode text
+        'spÄm'
+        >>> b'a\x01c'     # bytes strings are byte-based data
+        b'a\x01c'
+        >>> u'sp\u00c4m'  # The 2.X Unicode literal works in 3.3+: just str
+        'spÄm'
+
+
+        # Python 2.X
+        The normal 'str' string handles both 8-bit strings and raw byte values.  A 
+          'unicode' string type represents Unicode text.  3.X bytes are supported in 
+          2.6+ for compatibility's sake.
+
+        >>> print u'sp\xc4m'      # 2.X: Unicode strings are a distinct type
+        spÄm
+        >>> 'a\x01c'              # Normal str strings contain byte-based text/data
+        'a\x01c'
+        >>> b'a\x01c'             # The 3.X bytes literal works in 2.6+: just str
+        'a\x01c'
+
+    - Pattern Matching
+
+       >>> import re
+       >>> match = re.match('Hello[\t]*(.*)world', 'Hello    Python world')
+       >>> match.group(1)
+       'Python '
+
+
+- Lists
+
+    - Lists are ordered collections with no fixed size.
+
+    - Sequence Operations
+
+        >>> L = [123, 'spam', 1.23]
+        >>> len(L)
+        3
+        >>> L[0]
+        123
+        >>> L[:-1]
+        [123, 'spam']
+
+        >>> L + [4, 5, 6]
+        [123, 'spam', 1.23, 4, 5, 6]
+        >>> L * 2
+        [123, 'spam', 1.23, 123, 'spam', 1.23]
+
+    - List Operations
+
+        >>> L.append('NI')
+        >>> L
+        [123, 'spam', 1.23, 'NI']
+
+        >>> L.pop(2)
+        1.23
+        >>> L
+        [123, 'spam', 'NI']
+
+        >>> M = ['bb', 'aa', 'cc']
+        >>> M.sort()
+        >>> M
+        ['aa', 'bb', 'cc']
+
+        >>> M.reverse()
+        >>> M
+        ['cc', 'bb', 'aa']
+
+
+- Dictionaries
+
+    - 
+
+
+- Tuples
+
+- Files
+
+- Other Core Types
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
