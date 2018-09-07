@@ -10,6 +10,7 @@ CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
     4. Expressions create and process objects.
 
 
+
 - Built-In Types
 
     1. Numbers
@@ -43,6 +44,7 @@ CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
          Compiled code, stack tracebacks
 
 
+
 - Numbers
 
     - Very large exponents can by computed in Python, as Python's 3.X integer
@@ -51,6 +53,7 @@ CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
         >>> len(str(2 ** 1000000))
         301030
     
+
 
 - Strings
 
@@ -167,9 +170,10 @@ CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
        'Python '
 
 
+
 - Lists
 
-    - Lists are ordered collections with no fixed size.
+    - Lists are dynamically-resizing ordered collections.
 
     - Sequence Operations
 
@@ -207,51 +211,200 @@ CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
         ['cc', 'bb', 'aa']
 
 
+    - All of Python's core data types allow arbitrary nesting.
+
+        >>> M = [[1, 2, 3],
+                 [4, 5, 6],
+                 [7, 8, 9]]
+        >>> M[1][2]
+        6
+
+
+    - Python also has advanced set operations called 'Comprehensions' for collections
+
+        >>> col2 = [row[1] for row in M]
+        [2, 5, 8]
+
+        >>> [row[1] for row in M if row[1] % 2 == 0]
+        [2, 8]
+
+        >>> diagonal = [M[i][i] for i in [0, 1, 2]]
+        >>> diagonal
+        [1, 5, 9]
+
+        >>> list(range(4))
+        [0, 1, 2, 3]
+
+        >>> list(range(-6, 7, 2))
+        [-6, -4, -2, 0, 2, 4, 6]
+
+
+
 - Dictionaries
 
-    - 
+    - Dictionaries are dynamically-resizing, unordered collections of key/value pairs.
+
+    - Mapping Operations
+
+        >>> D = {'food': 'Spam', 'quantity': 4, 'color': 'pink'}
+        >>> D['food']
+        'Spam'
+
+        >>> D['quantity'] += 1
+        >>> D['e'] = 99
+
+        >>> if not 'f' in D:
+                print('missing')
+
+    - Sorting Keys
+
+        # Long way to do it
+        >>> D = {'a': 1, 'b': 2, 'c': 3}
+        >>> Ks = list(D.keys())
+        >>> Ks.sort()
+        ['a', 'b', 'c']
+        >>> for key in Ks:
+                print(key, '=>' D[key])
+        a => 1
+        b => 2
+        c => 3
+
+        # Shorter way
+         >>> for key in sorted(D):
+                print(key, '=>' D[key])       
+
+
+
+- Iteration and Optimization
+
+     - In Python, an object is 'iterable' if it either:
+           1. a pysically stored sequence in memory
+           2. an object that generates one item at a time in the context of an 
+                  iteration operation
+
+     - Formally, an object is iterable if it responds to the iter() call with an object 
+         that advances in response to next() calls and raises an exception when it
+         is finished producing values.  This is called the 'iteration protocol'.
+
 
 
 - Tuples
 
+    - Tuples are immutable sequences.  They are used to represent fixed collections of 
+        items.  The support arbitrary types, arbitrary nesting, and the usual 
+        sequence operations.
+
+    - Tuple Operations
+
+        >>> T = (1, 2, 3, 4)
+        >>> len(T)
+        4
+
+        >>> T + (5, 6)
+        (1, 2, 3, 4, 5, 6)
+
+        >>> T[0]
+        1
+
+        >>> T[0] = 2
+        TypeError: 'tuple' object does not support item assignment
+
+        # Parentheses enclosing tuple's items can often be omitted
+        >>> T = 'spam', 3.0, [11, 22, 33]
+        >>> T[2][1]
+        22
+
+
+
 - Files
+
+      - File Operations
+
+          >>> f = open('data.txt', 'w')
+          >>> f.write('Hello\n')
+          6
+          >>> f.write('world\n')
+          6
+          >>> f.close()
+
+          >>> f = open('data.txt')
+          >>> text = f.read()
+          >>> text
+          'Hello\nworld\n'
+
+          >>> print(text)
+          Hello
+          world
+
+          >>> text.split()
+          ['Hello', 'world']
+
+          >>> for line in open('data.txt'): print(line)
+
+      - There are tools available for reading the raw byte data of binary files also.
+
+      - You can specify the encoding you want to open a file with, if it may differ
+          from the system's default.
+
+          >>> file = open('unidata.txt', 'w', encoding='utf-8')
+
+
 
 - Other Core Types
 
+      - Sets are recent additions to the language.  They are unordered collections of unique
+          and immutable objects.
+
+          >>> X = set('spam')
+          >>> Y = {'h', 'a', 'm'}
+
+          >>> X, Y      # tuple of sets
+          ({'m', 'a', 'p', 's'}, {'m', 'a', 'h'})
+
+          >>> X & Y
+          {'m', 'a'}
+
+          >>> X | Y
+          {'m', 'h', 'a', 'p', 's'}
+
+          >>> X - Y
+          {'p', 's'}
+
+          >>> set('spam') - set('ham')
+          {'p', 's'}
 
 
+      - There are new Decimal and Fraction types to work around the limitations of 
+          floating-point math.
+
+          # Decimals have fixed precision
+          >>> import decimal
+          >>> d = decimal.Decimal('3.141')
+          >>> d + 1
+          4.141
+
+          >>> decimal.Decimal('1.00') / decimal.Decimal('3.00')
+          Decimal(0.33)
 
 
+          # Fractions have an integer numerator and denominator
+          >>> from fractions import Fraction
+          >>> f = Fraction(2, 3)
+          >>> f + 1
+          Fraction(5, 3)
 
 
+      - There is a built-in Boolean type
+
+          >>> 1 > 2, 1 < 2
+          (False, True)
+
+          >>> bool('spam')
+          True
 
 
+      - There is also a None placeholder object commonly used to initialize names and objects.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+          >>> X = Nome
+          >>> print(X)
+          None
