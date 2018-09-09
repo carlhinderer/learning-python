@@ -1,0 +1,93 @@
+-------------------------------------------------
+CHAPTER 6 - DYNAMIC TYPING
+-------------------------------------------------
+
+- Variables and objects
+
+    - Variables are entries in a system table, with spaces to links for objects.
+      Objects are pieces of allocated memory.
+      References are automatically followed pointers from variables to objects.
+
+
+    - Objects have a type.  Variable names do not.
+
+
+    - Each object has 2 standard header fields:
+        1. Type Designator
+        2. Reference Counter
+
+
+    - Behavior with shared references:
+
+        >>> a = 3
+        >>> b = a
+        >>> a = 'spam'
+
+        >>> a
+        'spam'
+        >>> b
+        3
+
+
+    - In-place changes to shared references:
+
+        >>> L1 = [2, 3, 4]
+        >>> L2 = L1
+        >>> L1 = 24
+
+        >>> L1
+        24
+        >>> L2
+        [2, 3, 4]
+
+        >>> L3 = [2, 3, 4]
+        >>> L4 = L3
+        >>> L4[0] = 24
+
+        >>> L3
+        [24, 3, 4]
+        >>> L4
+        [24, 3, 4]
+
+
+
+- Shallow and Deep Object Copies
+
+    To copy a list, dictionary, or set:
+
+    >>> import copy
+
+    # Shallow Copy
+    X = copy.copy(Y)
+
+    # Deep Copy (With all nested parts copied also)
+    X = copy.deepcopy(Y)
+
+
+
+- Equality of Objects
+
+    - The == operator tests whether 2 referenced objects have the same values.
+      The is operator tests whether 2 references point to the same object.
+
+    >>> L = [1, 2, 3]
+    >>> M = L
+    >>> L == M
+    True         # Same values
+    >>> L is M   
+    True         # Same object
+
+    >>> L = [1, 2, 3]
+    >>> M = [1, 2, 3]
+    >>> L == M
+    True         # Same values
+    >>> L is M
+    False        # Different objects
+
+    # Note that small strings and numbers are often cached and reused by the compiler
+    >>> X = 42
+    >>> Y = 42
+    >>> X == Y
+    True
+    >>> X is Y
+    True
