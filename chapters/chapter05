@@ -151,36 +151,104 @@ CHAPTER 5 - NUMERIC TYPES
 
 
 
+- Hex, Octal, and Binary
+
+    >>> 0o1, 0o20, 0o377
+    (1, 16, 255)
+    >>> 0x01, 0x10, 0xFF
+    (1, 16, 255)
+    >>> 0b1, 0b10000, 0b11111111
+    (1, 16, 255)
 
 
 
+- Other Built-In Numeric Tools
+
+    >>> pow(2, 4), 2 ** 4, 2.0 ** 4.0
+    (16, 16, 16.0)
+
+    >>> abs(-42.0), sum((1, 2, 3, 4))
+    (42.0, 10)
+
+    >>> min(3, 1, 2, 4), max(3, 1, 2, 4)
+    (1, 4)
+
+
+    >>> import math
+    >>> math.pi, math.e
+    (3.141592653589793, 2.718281828459045)
+
+    >>> math.sin(2 * math.pi / 180)
+    0.03489949670250097
+
+    >>> math.sqrt(144), math.sqrt(2)
+    (12.0, 1.4142135623730951)
+
+
+    >>> import random
+    >>> random.random()
+    0.5566014960423105
+ 
+    >>> random.randint(1, 10)
+    5
+
+    >>> random.choice(['Life of Brian', 'Holy Grail', 'Meaning of Life'])
+    'Holy Grail'
+
+    >>> suits = ['hearts', 'clubs', 'diamonds', 'spades']
+    >>> random.shuffle(suits)
+    >>> suits
+    ['spades', 'hearts', 'diamonds', 'clubs']
 
 
 
+- Creating Sets
+
+    # Create a set with values
+    S = set([1, 2, 3, 4])
+
+    # Create a set with values
+    S = set('spam')
+
+    # Create a set with values (3.X)
+    S = {1, 2, 3, 4}
+
+    # Create a dictionary
+    D = {'a': 1, 'b': 2, 'c': 3}
+
+    # Create an empty dictionary
+    D = {}
+
+    # Create an empty set
+    S = set()
 
 
 
+- Set Example
 
+    >>> engineers = {'bob', 'sue', 'ann', 'vic'}
+    >>> managers = {'tom', 'sue'}
 
+    >>> 'bob' in engineers
+    True
 
+    >>> engineers & managers
+    {'sue'}
 
+    >>> engineers | managers
+    {'bob', 'sue', 'tom', 'vic', 'ann'}
 
+    >>> engineers - managers
+    {'vic', 'ann', 'bob'}
 
+    >>> managers - engineers
+    {'tom'}
 
+    >>> engineers > managers     # Superset
+    False
 
+    >>> {'bob', 'sue'} < engineers       # Subset
+    True
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    >>> managers ^ engineers      # In one group but not both
+    {'tom', 'vic', 'ann', 'bob'}
