@@ -1,0 +1,221 @@
+-------------------------------------------------
+CHAPTER 7 - STRING FUNDAMENTALS
+-------------------------------------------------
+
+- Unicode Handling
+
+    - (3.X)
+      'str' is used for Unicode text (including ASCII)
+      'bytes' is used for binary data (including encoded text)
+      'bytearray' is a mutant variant of 'bytes'
+
+      (2.X)
+      'unicode' strings represent Unicode text
+      'str' handles both 8-bit text and binary data
+
+
+
+- Common String Literals and Operations
+
+    S = """...multiline..."""               # Multiline String
+
+    R = r'\temp\spam'                       # Raw String (No Escapes)
+    B = b'sp\xc4m'                          # Byte String
+    U = u'sp\u00c4m'                        # Unicode String
+
+    "a %s parrot" % kind                    # String Formatting
+    "a {0} parrot".format(kind)             # String Formatting (2.6+, 3.X)
+
+    S.find('pa')
+    S.rstrip()
+    S.replace('pa', 'xx')
+    S.split(',')
+
+    S.isdigit()
+    S.lower()
+    S.endswith('spam')
+
+    S.encode('latin-1')                     # Unicode Encoding
+    B.decode('uft8')                        # Unicode Decoding
+
+
+
+- Python automatically concatenates adjacent string literals in any expression.
+
+    >>> title = "Meaning " 'of' " Life"
+    >>> title
+    'Meaning of Life'
+
+
+
+- In 3.X, 'str' strings are stored as sequences of Unicode code points.
+
+
+
+- You will sometimes see multiline strings being used to comment out a section of code.
+
+    X = 1
+    """
+    import os
+    print(os.getcwd())
+    """
+    Y = 2
+
+
+
+- Slicing 
+
+    S[initial : last(noninclusive) : step]
+
+    >>> S = 'abcdefghijklmnop'
+    >>> S[1:10:2]       # Skipping Items
+    'bdfhj'
+
+    >>> S = 'hello'
+    >>> S[::-1]         # Reversing
+    'olleh'
+
+    >>> line = 'abcdef\n'
+    >>> line[:-1]       # Get rid of last character
+    'abcdef'
+
+
+
+- String Methods
+
+    S.capitalize()
+    S.casefold()
+    S.center(width [, fill])
+    S.count(sub [, start [, end]])
+    S.encode([encoding [,errors]])
+    S.endswith(suffix [, start [, end]])
+    S.expandtabs([tabsize])
+    S.find(sub [, start [, end]])
+    S.format(fmtstr, *args, **kwargs)
+
+    S.index(sub [, start [, end]])
+    S.isalnum()
+    S.isalpha()
+    S.isdecimal()
+    S.isdigit()
+    S.isidentifier()
+    S.islower()
+    S.isnumeric()
+    S.isprintable()
+    S.isspace()
+    S.istitle()
+    S.isupper()
+
+    S.join(iterable)
+    S.ljust(width [, fill])
+    S.lower()
+    S.lstrip([chars])
+    S.maketrans(x[, y[, z]])
+    S.partition(sep)
+    S.replace(old, new [, count])
+    S.rfind(sub [,start [,end]])
+    S.rindex(sub [, start [, end]])
+    S.rjust(width [, fill])
+    S.rpartition(sep)
+    S.rsplit([sep[, maxsplit]])
+    S.rstrip([chars])
+
+    S.split([sep [,maxsplit]])
+    S.splitlines([keepends])
+    S.startswith(prefix [, start [, end]])
+    S.strip([chars])
+    S.swapcase()
+    S.title()
+    S.translate(map)
+    S.upper()
+    S.zfill(width)
+
+
+
+- Text Replacement
+
+    >>> S = 'xxxxSPAMxxxxSPAMxxxx'
+    >>> S.replace('SPAM', 'EGGS')        # Replace all
+    'xxxxEGGSxxxxEGGSxxxx'
+
+    >>> S.replace('SPAM', 'EGGS', 1)     # Replace one
+    'xxxxEGGSxxxxSPAMxxxx'
+
+
+
+- In older Python 2.X legacy code, you will sometimes see the 'string' module being used.
+    This should not be used for new code in either 2.X or 3.X.
+
+    >>> import string
+    >>> S = 'a+b+c+'
+    >>> y = string.replace(S, '+', 'spam')
+    >>> y
+    'aspambspamcspam'
+
+
+
+- String Formatting
+
+    There are 2 ways to format strings, both of which have stuck around although one or
+      the other was expected to be deprecated.
+
+      1. String Formatting Expression (Based on C printf)
+         '...%s...' % (values)
+
+      2. String Formatting Method Call (Based on C# tool)
+         '...{}...'.format(values)
+
+
+
+- String Formatting Type Codes
+
+    Code       Meaning
+    -----------------------------
+    s          String (or any object’s str(X) string)
+    r          Same as s, but uses repr, not str
+    c          Character (int or str)
+
+    d          Decimal (base-10 integer)
+    i          Integer
+    u          Same as d (obsolete: no longer unsigned)
+    o          Octal integer (base 8)
+
+    x          Hex integer (base 16)
+    X          Same as x, but with uppercase letters
+    e          Floating point with exponent, lowercase
+    E          Same as e, but uses uppercase letters
+    f          Floating-point decimal
+    F          Same as f, but uses uppercase letters
+    g          Floating-point e or f
+    G          Floating-point E or F
+
+    %          Literal % (coded as %%)
+
+
+
+- Dictionary-Based Formatting Expressions
+
+    With dictionary-based formatting expressions, string formatting expressions can be used
+      as a templating tool.
+
+    >>> '%(qty)'d more %(food)s' % {'qty': 1, 'food': 'spam'}
+    '1 more spam'
+
+
+
+- String Formatting Method Calls
+
+    >>> template = '{0}, {1}, and {2}'
+    >>> template.format('spam', 'ham', 'eggs')
+    'spam, ham, and eggs'
+
+    >>> template = '{motto}, {pork} and {food}'
+    >>> template.format(motto='spam', pork='ham', food='eggs')
+    'spam, ham, and eggs'
+
+    >>> template = '{}, {}, and {}'
+    >>> template.format('spam', 'ham', 'eggs')
+    'spam, ham, and eggs'
+
+    >>> '{0:e}, {1:.3e}, {2:g}'.format(3.14159, 3.14159, 3.14159)
+    '3.141490e+00, 3.142e+00, 3.14159'
