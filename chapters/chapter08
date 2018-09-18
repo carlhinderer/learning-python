@@ -1,0 +1,155 @@
+-------------------------------------------------
+CHAPTER 8 - LISTS
+-------------------------------------------------
+
+ - Python lists are:
+
+     1. Ordered collections of arbitrary objects
+     2. Accessed by offset
+     3. Variable-length, heterogenous, and arbitrarily nestable
+     4. Mutable sequences
+     5. Arrays of object references
+
+
+
+- Basic List Operations
+
+    >>> len([1, 2, 3])
+    3
+
+    >>> [1, 2, 3] + [4, 5, 6]
+    [1, 2, 3, 4, 5, 6]
+
+    >>> ['Ni!'] * 4
+    ['Ni!', 'Ni!', 'Ni!', 'Ni!']
+
+
+
+- List Iteration and Comprehensions
+
+    >>> 3 in [1, 2, 3]
+    True
+
+    >>> for x in [1, 2, 3]: print(x, end=' ')
+    1 2 3
+
+
+    # List comprehensions
+    >>> res = [c * 4 for c in 'SPAM']
+    >>> res['SSSS', 'PPPP', 'AAAA', 'MMMM']
+
+    # List comprehension equivalent
+    >>> res = []
+    >>> for c in 'SPAM':
+            res.append(c * 4)
+    >>> res
+    ['SSSS', 'PPPP', 'AAAA', 'MMMM']
+
+
+    # The 'map' built-in function takes a function and applies it to a list,
+    # collecting the results.
+
+    >>> list(map(abs, [-2, -1, 0, 1, 2]))
+    [2, 1, 0, 1, 2]
+
+
+
+- Since lists are mutable, the objects in them can be changed in place.
+
+    # Index Assignment
+    >>> L = 'spam', 'Spam', 'SPAM!'
+    >>> L[1] = 'eggs'
+    >>> L 
+    ['spam', 'eggs', 'SPAM!']
+
+
+    # Slice Assignment
+    >>> L[0:2] = ['eat', 'more']
+    >>> L
+    ['eat', 'more', 'SPAM!']
+
+
+    # Adding List Elements (Version 1)
+    >>> L = [1]
+    >>> L[:0] = [2, 3, 4]      # Insert at :0
+    >>> L
+    [2, 3, 4, 1]
+
+    # Adding List Elements (Version 2)
+    >>> L[len(L):] = [5, 6, 7]      # Insert at len(L):
+    >>> L
+    [2, 3, 4, 1, 5, 6, 7]
+
+    # Adding List Elements (Version 3)
+    >>> L.extend([8, 9, 10])       # Insert at end
+    >>> L
+    [2, 3, 4, 1, 5, 6, 7, 8, 9, 10]
+
+
+
+- List Method Calls
+
+    # Append
+    >>> L = ['eat', 'more', 'SPAM!']
+    >>> L.append('please')
+    >>> L
+    ['eat', 'more', 'SPAM!', 'please']
+
+    # Sort
+    >>> L.sort()
+    >>> L
+    ['SPAM!', 'eat', 'more', 'please']
+
+    # Sort (with advanced options)
+    >>> L = ['abc', 'ABD', 'aBe']
+    >>> L.sort(key=str.lower, reverse=True)
+    >>> L
+    ['aBe', 'ABD', 'abc']
+
+
+
+- Comparisons and Sorts in 2.X and 3.X
+
+    - In 2.X, different types can be compared and sorted.  When you do this,
+        Python looks at the name of the type and compares them.  For
+        instance, and 'int' is always less than a 'str'.
+
+    - In 3.X, trying to compare or sort different types will raise an
+        exception.
+
+
+
+- Python dictionaries are:
+
+    1. Hashes accessed by key
+    2. Unordered collections of arbitrary objects
+    3. Variable-length, heterogenous, and arbitrarily nestable
+    4. Mutable
+    5. Implemented as hash tables
+
+
+
+- Basic Dictionary Operations
+
+    # Creating Dictionaries
+    >>> D = {}
+    >>> D = ['name': 'Bob', 'age': 40]
+    >>> E = {'cto': {'name': 'Bob', 'age': 40}}
+
+    >>> D = dict(name='Bob', age=40)
+    >>> D = dict([('name', 'Bob'), ('age', 40)])
+    >>> D = dict(zip(keyslist, valueslist))
+    >>> D = dict.fromkeys(['name', 'age'])
+
+    # Indexing by Key
+    >>> D['name']
+    >>> E['cto']['age']
+
+    # Membership Test
+    >>> 'age' in D
+
+
+
+- Dictionary Method Calls
+
+    
