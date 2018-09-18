@@ -1,5 +1,5 @@
 -------------------------------------------------
-CHAPTER 8 - LISTS
+CHAPTER 8 - LISTS & DICTIONARIES
 -------------------------------------------------
 
  - Python lists are:
@@ -139,7 +139,14 @@ CHAPTER 8 - LISTS
     >>> D = dict(name='Bob', age=40)
     >>> D = dict([('name', 'Bob'), ('age', 40)])
     >>> D = dict(zip(keyslist, valueslist))
+
     >>> D = dict.fromkeys(['name', 'age'])
+    >>> D
+    {'name': None, 'age': None}
+
+    >>> D = dict.fromkeys(['a', 'b'], 0)
+    >>> D
+    {'a': 0, 'b': 0}
 
     # Indexing by Key
     >>> D['name']
@@ -152,4 +159,103 @@ CHAPTER 8 - LISTS
 
 - Dictionary Method Calls
 
-    
+    >>> D.keys()
+    >>> D.values()
+    >>> D.items()       # All key/values pairs
+
+    >>> D.copy()
+    >>> D.clear()
+    >>> D.update(E)     # Merge by keys
+
+    >>> D.get(key, default?)     # Fetch by key, if absent default (or None)
+    >>> D.pop(key, default?)     # Remove by key, if absent default (or Error)
+    >>> D.setdefault(key, default?)     # Fetch by key, if absent set default (or None)
+
+    >>> D.popitem()              # Remove and return any key/value pair
+    >>> len(D)                   # Number of entries
+    >>> list(D.keys())           # Create a new list of the keys (3.X)
+
+
+
+- Changing Dictionaries in Place
+
+    >>> D = {'eggs': 2, 'spam': 1, 'ham': 5}
+
+    # Change an entry
+    >>> D['ham'] = ['grill', 'bake', 'fry']
+
+    # Remove an entry
+    >>> del D['eggs']
+
+    # Add an entry
+    >>> D['brunch'] = 'Bacon'
+
+
+
+- Iterating Through Entries
+
+    >>> table = {'1975': 'Holy Grail',
+                 '1979': 'Life of Brian', 
+                 '1983': 'The Meaning of Life'}
+
+    >>> for year in table:
+            print(year + '\t' + table[year])
+
+
+
+- Dictionary keys can be:
+
+    1. Strings
+    2. Integers
+    3. Tuples (for compound key values)
+    4. User-defined objects (must implement hashable)
+ 
+    Mutable objects like lists, sets, and dictionaries cannot be keys, since their
+      values can be changed.
+
+
+
+- Dictionaries are often levereaged to implement sparse data structures.  For example, 
+      matrices where only a few positions have values stored in them.  
+
+    >>> Matrix = {}
+    >>> Matrix[(2, 3, 4)] = 88
+    >>> Matrix[(7, 9, 9)] = 99
+
+    >>> Matrix.get((2, 3, 4), 0)
+    88
+
+    >>> Matrix.get((2, 3, 6), 0)
+    0
+
+
+
+- There were major changes to dictionaries in 3.X.  Dictionaries in 3.X:
+
+    1. Support dictionary comprehension expression
+    2. Return set-like iterable views for methods keys(), values(), and items()
+    3. Require a new coding style for scanning by sorted keys (Because of #2)
+    4. No longer support relative magnitude comparisons
+    5. No longer have the D.has_key() method (use 'in' instead)
+
+
+
+- Sorting dictionary keys in 3.X
+
+    >>> D = {'a': 1, 'b': 2, 'c': 3}
+    >>> Ks = D.keys()
+
+    # Wont work! Can't sort a view object
+    >>> Ks.sort()
+    AttributeError: 'dict_keys' object has no attribute 'sort'
+
+    # Can make it a list, then sort
+    >>> Ks = list(Ks)
+    >>> Ks.sort()
+
+    # Or can use the sorted() method
+    >>> Ks = D.keys()
+    >>> for k in sorted(Ks): print(k, D[k])
+    a 1
+    b 2
+    c 3
