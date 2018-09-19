@@ -87,7 +87,7 @@ CHAPTER 8 - LISTS & DICTIONARIES
 
 
 
-- List Method Calls
+- List Methods
 
     # Append
     >>> L = ['eat', 'more', 'SPAM!']
@@ -157,7 +157,7 @@ CHAPTER 8 - LISTS & DICTIONARIES
 
 
 
-- Dictionary Method Calls
+- Dictionary Methods
 
     >>> D.keys()
     >>> D.values()
