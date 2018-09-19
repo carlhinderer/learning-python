@@ -1,0 +1,72 @@
+-------------------------------------------------
+CHAPTER 9B - CORE TYPES SUMMARY
+-------------------------------------------------
+
+- Object Classifications
+
+    Object Type        Category       Mutable?
+    ---------------------------------------------
+    Numbers            Numeric        No
+    Strings            Sequence       No
+    Lists              Sequence       Yes
+    Dictionaries       Mapping        Yes
+    Tuples             Sequence       No
+    Files              Extension      N/A
+    Sets               Set            Yes
+    Frozenset          Set            No
+    bytearray          Sequence       Yes
+
+
+
+- Object Flexibility
+
+    1. Lists, dictionaries, and tuples can hold any kind of object.
+    2. Sets can contain any type of immutable object.
+    3. Lists, dictionaries, and tuples can be arbitrarily nested.
+    4. Lists, dictionaries, and sets can dynamically resize.
+
+
+
+- Deep Copies
+
+    If you need a copy of an object,
+
+      1. Slice expressions with empty limits (L[:]) copy sequences
+      2. The dictionary, set, and list copy() method copies a dictionary, set, or list.
+      3. Some built in functions make copies (list(L), dict(D), set(S)).
+      4. The 'copy' standard library module makes full copies when needed.
+
+
+
+- Comparison and Equality
+
+    - The == operator tests value equivalence
+    - The is operator tests object identity
+
+    - Numbers are compared by relative magnitude
+    - Strings are compared lexicographically
+    - Lists and Tuples are compared by comparing each component
+    - Sets are equal if they have the same elements, and comparisons apply
+        subset and superset tests
+    - Dictionaries are equal if their sorted key/value lists are equal
+
+    - Non-numeric mixed type comparisons are errors in Python 3.X
+
+
+
+- Truthiness
+
+    - Numbers are false if zero, and true otherwise
+    - Other objects are false if empty, and true otherwise
+
+    Object         Value
+    --------------------------
+    'spam'         True
+    ''             False
+    [1, 2]         True
+    []             False
+    {'a': 1}       True
+    {}             False
+    1              True
+    0.0            False
+    None           False
