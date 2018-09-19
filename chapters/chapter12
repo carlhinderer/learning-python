@@ -1,0 +1,82 @@
+-------------------------------------------------
+CHAPTER 12 - IF TESTS & SYNTAX RULES
+-------------------------------------------------
+
+- Multiway Branching
+
+    >>> x = 'killer rabbit'
+    >>> if x == 'roger':
+    ...     print("shave and a haircut")
+    ... elif x == 'bugs':
+    ...     print("what's up doc?")
+    ... else:
+    ...     print('Run away! Run away!')
+    ...
+    Run away! Run away!
+
+
+
+- Python assume that a statement ends at the end of the line.  There are a few 
+    ways to span multiple lines, though.
+
+    1. Statements can span multiple lines if you're continuing an open syntactic
+         pair () {} []
+    2. Statements can span multiple lines if they end in a backslash, but this 
+         is not generally recommended
+    3. Triple-quoted strings can span multiple lines
+
+
+
+- Boolean expression operators
+
+    X and Y
+    X or Y
+    not X
+
+
+    The 'and' and 'or' operators return a true or false object in Python, not
+      the values True or False.
+
+      # Magnitude comparisons return True or False
+      >>> 2 < 3, 3 < 2
+      (True, False)
+
+      # The 'or' operator returns the first true operand it finds
+      #   (or the last operand)
+      >>> 2 or 3, 3 or 2
+      (2, 3)
+      >>> [] or 3
+      3
+      >>> [] or {}
+      {}
+
+      # The 'and' operator returns the first false operand it finds
+      #   (or the last operand)
+      >>> 2 and 3, 3 and 2
+      (3, 2)
+      >>> [] and {}
+      []
+      >>> 3 and []
+      []
+
+
+
+- Ternary Expression
+
+    A = Y if X else Z
+
+    >>> A = 't' if 'spam' else 'f'
+    >>> A
+    't'
+
+    >>> A = 't' if '' else 'f'
+    >>> A
+    'f'
+
+
+
+- Assigning to first nonempty object
+
+    >>> X = A or B or C or None
+
+    >>> X = A or default
