@@ -1,0 +1,150 @@
+-------------------------------------------------
+CHAPTER 11 -  ASSIGNMENTS, EXPRESSIONS, & PRINTS
+-------------------------------------------------
+
+- Sequence Assignments
+
+    # Basic Assignment
+    >>> nudge = 1
+    >>> wink = 2
+
+    # Tuple Assignment
+    >>> A, B = nudge, wink
+    >>> (A, B)
+    (1, 2)
+
+    # List Assignment
+    >>> [C, D] = [nudge, wink]
+    >>> C, D
+    (1, 2)
+
+    # Trick to swap values of variables
+    >>> nudge, wink = wink, nudge
+
+    # Assign an integer series to a set of variables
+    # (Similar to enumerated types in other languages)
+    >>> red, green, blue = range(3)
+
+
+
+- Sequence Assignment Unpacking
+
+    # Unpack a sequence
+    >>> seq = [1, 2, 3, 4]
+    >>> a, b, c, d = seq
+    >>> print(a, b, c, d)
+    1 2 3 4
+
+    # Error if lengths disagree
+    >>> a, b = seq
+    ValueError: too many values to unpack (expected 2)
+
+    # Starred targets to split off first value (3.X)
+    >>> a, *b = seq
+    >>> a
+    1
+    >>> b
+    [2, 3, 4]
+
+    # Split off last value
+    >>> *a, b = seq
+    >>> a
+    [1, 2, 3]
+    >>> b
+    4
+
+    # Split off first and last values
+    >>> a, *b, c = seq
+    >>> b
+    [2, 3]
+
+    # Split off last value (2.X)
+    >>> a, b = seq[:-1], seq[-1]
+    >>> a
+    [1, 2, 3]
+    >>> b
+    4
+
+    # Note that this works for any sequence type
+    # (And always returns a list)
+    >>> a, *b = 'spam'
+    >>> a
+    's'
+    >>> b
+    ['p', 'a', 'm']
+
+
+
+- Multiple-target assignment
+
+    >>> a = b = c = 'spam'
+    >>> a, b, c
+    ('spam', 'spam', 'spam')
+
+
+
+- Augmented assignment statements
+
+    X += Y       X &= Y
+    X -= Y       X |= Y
+    X *= Y       X ^= Y
+    X /= Y       X <<= Y
+    X //= Y      X >>= Y
+    X % Y
+    X ** Y
+
+
+
+- Variable Name Rules
+
+    1. Syntax: (underscore or letter) + (any number of letters, digits, underscores)
+    2. Case Matters (SPAM and spam are different variables)
+    3. Reserved words are off limits
+
+  
+
+- Expression Statements
+
+    Operation                      Interpretation
+    -------------------------------------------------------------------------
+    spam(eggs, ham)                Function calls
+    spam.ham(eggs)                 Method calls
+    spam                           Print variables in interactive prompt
+    print(a, b, c, sep='')         Printing in 3.X
+    yield x ** 2                   Yielding expression statements
+
+
+
+- Print Operations
+
+    - Printing:
+        1. Converts one or more objects to their textual representation
+        2. Adds some minor formatting
+        3. Sends the resulting text to stdout or another stream
+
+    - Print operations are similar to file operations, except print writes
+        to 'stdout' by default, and there is no need to convert objects to
+        strings as you do with file methods.
+
+    - (3.X) print is a built-in function
+      (2.X) print is a statement
+
+
+
+- 3.X print() Call Format
+
+    print ([object, ...][, sep=' '][, end='\n'][, file=sys.stdout][, flush=False])
+
+    sep is inserted between the objects
+    end is added at the end of the printed text
+    file specifies the stream where the text will be sent
+    flush mandates that the text is flushed through the output stream immediately
+
+
+
+- Print Stream Redirection
+
+    # Manual redirection
+    >>> import sys
+    >>> sys.stdout = open('log.txt', 'a')
+    >>> print(x, y, x)
