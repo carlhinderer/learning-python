@@ -1,0 +1,114 @@
+-------------------------------------------------
+CHAPTER 10 -  PYTHON STATEMENTS
+-------------------------------------------------
+
+- Python Statements
+
+    Statement                Role                        Example
+    ----------------------------------------------------------------------------
+    Assignment               Creating References         a, b = 'good', 'bad'
+
+    Calls and expressions    Running Functions           log.write('spam, ham')
+
+    print                    Printing Objects            print('The Killer')
+
+    if/elif/else             Selection                   if 'python' in text:
+                                                             print(text)
+
+    for/else                 Iteration                   for x in mylist:
+                                                             print(x)
+
+    while/else               Looping                     while X > Y:
+                                                             print('hello')
+
+    pass                     Empty Placeholder           while True:
+                                                             pass
+
+    break                    Loop Exit                   while True:
+                                                             if exittest(): break
+
+    continue                 Loop Continue               while True:
+                                                             if skiptest(): continue
+
+    def                      Functions and methods       def f(a, b, c=1, *d):
+                                                             print(a + b + c + d[0])
+
+    return                   Function results            def f(a, b, c=1, *d):
+                                                             return a + b + c + d[0]
+
+    yield                    Generator functions         def gen(n):
+                                                             for i in n: yield i*2
+
+    global                   Namespaces                  x = 'old'
+                                                         def function():
+                                                             global x, y
+                                                             x = 'new'
+
+    nonlocal                 Namespaces (3.X)            def outer():
+                                                             x = 'old'
+                                                             def function():
+                                                                 nonlocal x
+                                                                 x = 'new'
+
+    import                   Module access               import sys
+
+    from                     Attribute access            from sys import stdin
+
+    class                    Building objects            class Subclass(Superclass):
+                                                             staticData = []
+                                                             def method(self): pass
+
+    try/except/finally       Catching exceptions         try:
+                                                             action()
+                                                         except:
+                                                             print('action error')
+
+    raise                    Triggering exceptions       raise EndSearch(location)
+
+    assert                   Debugging checks            assert X > Y, 'X too small'
+
+    with/as                  Context managers            with open('data') as myfile:
+                                                             proecss(myfile)
+
+    del                      Deleting references         del data[k]
+
+
+
+- Python statements are automatically terminated at the end of the line.  If you want
+    to put multiple statements on one line, you can terminate them with semicolons.
+
+    >>> a = 1; b = 2; print(a + b)
+
+
+
+- If you have a single simple statement inside of a block, you can put it on the same
+    line as the header.
+
+    >>> if x > y: print(x)
+
+
+
+- Example: Simple REPL
+
+    while True:
+        reply = input('Enter text:')
+        if reply == 'stop': break
+        print(reply.upper())
+
+
+
+- Handing Errors By Testing Inputs
+
+    while True:
+        reply = input('Enter text:')
+        if reply == 'stop': 
+            break
+        elif not reply.isDigit():
+            print('Bad!' * 8)
+        else
+            print (int(reply) ** 2)
+    print('Bye')
+
+
+
+- 
