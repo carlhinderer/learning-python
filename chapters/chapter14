@@ -1,0 +1,193 @@
+-------------------------------------------------
+CHAPTER 14 - ITERATIONS AND COMPREHENSIONS
+-------------------------------------------------
+
+- The Iteration Protocol
+
+    This is an example of traditional file processing with 'readline':
+
+    >>> f = open('script2.py')
+    >>> f.readline()
+    'First Line'
+    >>> f.readline()
+    'Second Line'
+    >>> f.readline()
+    ''                     # Empty line for end of file
+
+
+    This is an example of using the iteration constructs from 3.X instead.
+      The '__next__' method returns the next line each time it is called.  When the 
+      end of the file is reached, the 'StopIteration' exception is raised.
+
+    >>> f = open('script2.py')
+    >>> f.__next__()
+    'First Line'
+    >>> f.__next__()
+    'Second Line'
+    >>> f.__next__()
+    StopIteration
+
+
+
+- Reason to use iterators to read text files:
+
+    1. It's the simplest to code
+    2. It is usually the fastest (since iterators run at C speed)
+    3. It uses memory most efficiently
+
+
+
+- The Full Iteration Protocol
+
+    The full iteration protocol is actually based on 2 objects, 
+      1. The iterable object, whose __iter__ method is run by 'iter'
+      2. The iterator object returned by the iterable, whose __next__ method is run
+           by 'next' and raises 'StopIteration' when finished.
+
+
+    To illustrate, this is how a for loop internally processes a list:
+
+    >>> L = [1, 2, 3]
+    >>> I = iter(L)
+    >>> I.__next__()
+    1
+    >>> I.__next__()
+    2
+    >>> I.__next__()
+    3
+    >>> I.__next__()
+    StopIteration
+
+
+
+- Automatic and Manual Iteration
+
+    # Using Iteration Automatically with For Loop
+    >>> L = [1, 2, 3]
+    >>> for X in L:
+    ...     print(X ** 2, end=' ')
+
+
+    # Using Iteration Manually
+    >>> L = [1, 2, 3]
+    >>> I = iter(L)
+
+    >>> while True:
+    ...     try:
+    ...         X = next(I)
+    ...     except StopIteration:
+    ...         break
+    ...     print(X ** 2, end=' ')
+
+
+
+- The 'enumerate' function, with an understanding of iterables
+
+    >>> E = enumerate('spam')
+    >>> E
+    <enumerate object at 0x000000004895856>
+    >>> I = iter(E)
+
+    >>> next(I)
+    (0, 's')
+    >>> next(I)
+    (1, 'p')
+
+    >>> list(enumerate('spam'))
+    [(0, 's'), (1, 'p'), (2, 'a'), (3, 'm')]
+
+
+
+- List Comprehensions
+
+    # Step Through List Without Comprehension
+    >>> L = [1, 2, 3, 4, 5]
+    >>> for i in range(len(L)):
+    ...     L[i] += 10
+    >>> L
+    [11, 12, 13, 14, 15]
+
+    # Step Through With Comprehension
+    >>> L = [x + 10 for x in L]
+    >>> L
+    [21, 22, 23, 24, 25]
+
+
+
+- Using List Comprehensions on Files
+
+    # Scans entire file, and strips newline characters from each line
+    >>> lines = [line.rstrip() for line in open('script2.py')]
+    >>> lines
+    ['import sys', 'print(sys.path)', 'x = 2', 'print(x ** 32)']
+
+
+
+- Filter Clauses
+
+    # If clauses can be used to filter out items
+    >>> lines = [line.rstrip() for line in open('script2.py') if line[0] == 'p']
+
+
+
+- Nested Loops
+
+    # For clauses can collect combinations of items
+    >>> [x + y for x in 'abc' for y in 'lmn']
+    ['al', 'am', 'an', 'bl', 'bm', 'bn', 'cl', 'cm', 'cn']
+
+
+
+- Every built-in function that scans left-to-right uses iterables under the hood.
+
+    - 'for' loop
+    - 'map' = applies a function to each item in iterable
+    - 'filter' = selects items from an iterable for which a function is true
+    - 'sorted' = sorts items in an iterable
+    - 'zip' = combines items from iterables
+    - 'reduce' = runs pairs of items in an iterable through a function
+    - 'list' and 'tuple'
+    - 'range'
+    - 'extend'
+    - 'sum', 'any', 'all', 'max', 'min'
+
+
+
+- Displaying Iterables
+
+    Since iterables generate elements one at a time, you may need to force them into
+      a list if you want to see all the elements at once.
+
+
+    # Display elements of a range iterable
+    >>> range(10)
+    range(0, 10)
+
+    >>> list(range(10))
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
+    # Display elements of a map iterable
+    >>> map(abs, (-1, 0, 1))
+    <map object at 0x0001>
+
+    >>> list(map(abs, (-1, 0, 1)))
+    [1, 0, 1]
+
+
+
+- In 3.X, dictionaries are iterables themselves, with an iterator that returns 
+    their keys.  
+
+
+    # Print all the keys
+    >>> D = {'a': 1, 'b': 2, 'c': 3}
+    >>> for key in D: print(key, end=' ')
+    ...
+    a b c
+
+
+    # Print all the entries, sorted by key
+    >>> for k in sorted(D): print(k, D[k], end=' ')
+    ...
+    a 1 b 2 c 3
