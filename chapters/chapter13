@@ -1,0 +1,246 @@
+-------------------------------------------------
+CHAPTER 13 - WHILE AND FOR LOOPS
+-------------------------------------------------
+
+- While loops
+
+    # General Format
+    while test:
+        ...
+    else
+        ...
+
+
+    # Infinite Loop
+    >>> while True:
+    ...     print('Type Ctrl+C to stop me!')
+
+    # Another Infinite Loop
+    >>> while True: pass
+
+
+    # Loop and a Half
+    while True:
+        ...loop body...
+        if exitTest(): break
+
+
+
+- Ellipses
+
+    In 3.X, an ellipses can appear as an alternative anywhere an expression can.
+      They are meant to be used as a placeholder for code to be written later.
+
+      >>> while True: ...
+
+      >>> def func1(): ...
+      >>> def func2(): ...
+
+
+
+ - continue, break, and else
+
+     # 'continue' causes an immediate jump to the top of a loop
+     >>> x = 10
+     >>> while x:
+             x = x - 1
+             if x % 2 != 0: continue      # Skip the odd numbers
+             print(x, end=' ')
+
+
+     # 'break' causes an immediate exit from a loop
+     >>> while True:
+             name = input('Enter name:')
+             if name == 'stop': break
+             age = input('Enter age:')
+             print('Hello', name, '=>', int(age) ** 2)
+
+
+     # The 'else' block runs if the 'break' is never hit
+     >>> x = y // 2
+     >>> while x > 1:
+             if y % x == 0:
+                 print(y, 'has factor', x)
+                 break
+             x -= 1
+         else:
+             print(y, 'is prime')
+
+
+
+- The 'for' loop is a generic iterator in Python.  It can step through the items in
+    any ordered sequence or other iterable object (like strings, lists, and tuples).
+
+    for target in object:
+        ...
+    else
+        ...
+
+
+    # Basic for loop
+    >>> for x in ['spam', 'eggs', 'ham']:
+            print(x, end=' ')
+
+
+    >>> sum = 0
+    >>> for x in [1, 2, 3, 4]: sum += x
+
+    >>> prod = 1
+    >>> for x in [1, 2, 3, 4]: prod *= x
+
+
+    # Iterate over a string
+    >>> for x in 'lumberjack': print(x, end=' ')
+
+    # Iterate over a tuple
+    >>> for x in ("and", "I'm", "okay"): print(x, end=' ')
+
+
+
+- Tuple assignment in for loops
+
+    # The for loop assigns items in the sequence to the target
+    >>> T = [(1, 2), (3, 4), (5, 6)]
+    >>> for (a, b) in T:
+            print(a, b)
+
+
+    # This works for nested sequences too
+    >>> ((a, b), c) = ((1, 2), 3)
+
+
+    # 3.X Starred Unpacking
+    >>> for (a, *b, c) in [(1, 2, 3, 4), (5, 6, 7, 8)]:
+    ...     print(a, b, c)
+    ...
+    1 (2, 3) 4
+    5 (6, 7) 8
+
+
+
+
+- Nested For Loops (Example 1)
+
+    # Search for keys in a list
+    >>> items = ['aaa', 111, (4, 5), 2.01]
+    >>> tests = [(4, 5), 3.14]
+
+    >>> for key in tests:
+    ...     for item in items:
+    ...         if item == key:
+    ...             print(key, 'was found')
+    ...             break
+    ...     else:
+    ...         print(key, 'not found!')
+    ...
+    (4, 5) was found
+    3.14 not found!
+
+
+    # Let Python check for a match instead
+    >>> for key in tests:
+    ...     if key in items:
+    ...         print(key, 'was found')
+    ...     else
+    ...         print(key, 'not found')
+    ...
+    (4, 5) was found
+    3.14 not found!
+
+
+
+- Nested For Loops (Example 2)
+
+    # Find the intersection of 2 sequences
+    >>> seq1 = 'spam'
+    >>> seq2 = 'scam'
+
+    >>> res = []
+    >>> for x in seq1:
+    ...     if x in seq2:
+    ...         res.append(x)
+    ...
+    >>> res
+    ['s', 'a', 'm']
+
+
+    # Let Python collect the results instead
+    >>> [x for x in seq1 if x in seq2]
+    ['s', 'a', 'm']
+
+    
+
+- The 'range' function
+
+    (3.X) 'range' is an iterable that generates items on demand.
+    (2.X) 'range' creates a physical list
+
+
+    >>> list(range(5))
+    [0, 1, 2, 3, 4]
+
+    >>> list(range(2, 5))
+    [2, 3, 4]
+
+    >>> list(range(0, 10, 2))
+    [0, 2, 4, 6, 8]
+
+
+    >>> for i in range(3):
+    ...     print(i, 'Pythons')
+    ...
+    0 Pythons
+    1 Pythons
+    2 Pythons
+
+
+
+- The 'zip' function
+
+    The 'zip' function takes one or more sequences as arguments, and returns a 
+      series of tuples that pair up parallel items from those sequences.
+
+
+    >>> L1 = [1, 2, 3, 4]
+    >>> L2 = [5, 6, 7, 8]
+
+    >>> zip(L1, L2)
+    <zip object at 0x026523C8>
+
+    >>> list(zip(L1, L2))         # list() required in 3.X, not 2.X
+    [(1, 5), (2, 6), (3, 7), (4, 8)]
+
+
+    # Dictionary construction using zip()
+    >>> keys = ['spam', 'eggs', 'toast']
+    >>> vals = [1, 3, 5]
+
+    >>> D = dict(zip(keys, vals))
+    >>> D
+    {'eggs': 3, 'toast': 5, 'spam': 1}
+
+
+
+- The 'enumerate' function
+
+    The 'enumerate' function returns a 'generator object' (the kind of object that
+      supports the iteration protocol).
+
+
+    # Get the offsets of each character in a string
+    >>> S = 'spam'
+    >>> offset = 0
+    >>> for item in S:
+    ...     print(item, 'appears at offset', offset)
+    ...     offset += 1
+    ...
+    s appears at offset 0
+    p appears at offset 1
+    a appears at offset 2
+    m appears at offset 3
+
+
+    # Use 'enumerate' instead
+    >>> S = 'spam'
+    >>> for (offset, item) in enumerate(S):
+    ...     print(item, 'appears at offset', offset)
