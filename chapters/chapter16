@@ -1,0 +1,68 @@
+-------------------------------------------------
+CHAPTER 16 - FUNCTION BASICS
+-------------------------------------------------
+
+- Concepts of Functions
+
+    1. 'def' is executable code.  You can even nest 'def' statements anywhere in 
+         code if you want.
+
+    2. 'def' creates a new function object and assigns it to a name.
+
+    3. 'lambda' creates an object, but returns it as a result.
+
+    4. 'return' sends an object back to the caller
+
+    5. 'yield' sends a result object back to the caller, but remembers where it
+         left off (ie generators keeping track of iterators)
+
+    6. 'global' declares module-level variables that are to be assigned
+
+    7. 'nonlocal' declares enclosing function variables that are to be assigned
+
+    8. Arguments are passed by reference.
+
+    9. Arguments are passed by position, unless you say otherwise.
+
+    10. Arguments, return values, and variables are not declared, so a single 
+          function can be applied to a variety of object types.  
+
+
+
+- A function without a return value specified will return 'None'.
+
+
+
+- Since 'def' executes at runtime, it can appear anywhere any other statement
+    can, including embedded in other statements.  A 'def' is really just
+    an assignment statement.
+
+    if test:
+      def func():
+          ...
+    else:
+      def func():
+          ...
+
+    func()
+
+
+
+- Polymorphism runs rampant in Python.  Every operation is a polymorphic operation 
+    in Python.  A single function can be applied to a wide variety of different types
+    of objects, as long as the object supports the expected interface.  This is 
+    known as 'duck typing'.
+
+    In fact, since Python will throw an error if the interface is not supported, there
+    isn't much of a point in checking for it.  Your code is not supposed to care about
+    specific data types.  
+
+    We code for object interfaces in Python, not data types.
+
+    >>> def times(a, b)
+    ...   a * b
+
+    >>> times(2, 4)
+    8
+    >>> times('Ni', 4)
+    'NiNiNiNi'
