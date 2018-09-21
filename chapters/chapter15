@@ -1,0 +1,106 @@
+-------------------------------------------------
+CHAPTER 15 - DOCUMENTATION
+-------------------------------------------------
+
+- The 'dir' function returns all the attributes available inside any  object,
+    including imported modules and built-in types.
+
+    >>> import sys
+    >>> dir(sys)
+    [list of attributes...]
+
+    >>> dir([])
+    [list of attributes...]
+
+
+    # Only get public attributes
+    >>> [a for a in dir(list) if not a.startswith('__')]
+    [list of public attributes...]
+
+
+
+- Docstrings
+
+    You can put strings anywhere in any file, and they will be retained for inspection
+      in the '__doc__' attributes after the file is imported.  These are known as
+      'docstrings'.   
+
+
+    # docstrings.py
+    ----------------------------
+    """
+    Module documentation
+    goes here
+    """
+
+    spam = 40
+
+    def square(x):
+      """
+      Function documentation
+      goes here
+      """
+      return x **2
+
+    class Employee:
+      "class documentation here"
+      pass
+
+    print(square(4))
+    print(square.__doc__)
+    ----------------------------
+
+
+    >>> import docstrings
+    16
+    Function documentation
+    goes here
+
+    >>> print(docstrings.__doc__)
+    Module documentation
+    goes here
+
+    >>> print(docstrings.square.__doc__)
+    Function documentation
+    goes here
+
+    >>> print(docstrings.Employee.__doc__)
+    Class documentation here
+
+
+
+- Built-in modules and objects have docstrings.
+
+    >>> import sys
+    >>> print(sys.__doc__)
+    >>> print(sys.getrefcount.__doc__)
+
+    >>> print(int.__doc__)
+    >>> print(map.__doc__)
+
+
+
+- PyDoc
+
+    The built-in PyDoc tool knows how to extract docstrings and other structural 
+      information and format them into nice reports.  To get a report on any object,
+      we use the 'help' function.
+
+
+    >>> import sys
+    >>> help(sys)
+    >>> help(sys.getrefcount)
+    >>> help(dict)
+
+    >>> help(docstrings.square)
+    >>> help(docstrings.Employee)
+
+
+
+- A full set of HTML PyDoc reports can be obtained by starting the PyDoc server.
+
+    $ python -m pydoc -b
+    Server ready at http://localhost:62135/
+    Server commands: [b]rowser, [q]uit
+    server> q
+    Server stopped
