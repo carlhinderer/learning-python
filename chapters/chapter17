@@ -1,0 +1,295 @@
+-------------------------------------------------
+CHAPTER 17 - SCOPES
+-------------------------------------------------
+
+- Variable Scopes
+
+    Python uses lexical scoping.  Variable scopes are determined entirely by 
+      their location in the code.
+
+    1. If a variable is assigned inside a 'def', it is 'local' to that function.
+
+    2. If a variable is assigned inside an enclosing 'def', it is 'nonlocal' to
+         nested functions.
+
+    3. If a variable is assigned outside of all 'def's, it is 'global' to the
+         entire file.
+
+
+
+- Scope Details
+
+    - Each module is its own global scope.  When you hear 'global' in Python, it
+        means at the module level.  There is no all-encompassing global scope.
+
+    - By default, all variables assigned inside a function definition are put in
+        local scope.  If you want a variable declared inside a function definition
+        to be at the top level of  the module, you declare it with the 'global' 
+        keyword.
+
+      If you want the variable to be in scope in an enclosing 'def', you declare
+        it with the 'nonlocal' keyword (3.X).
+
+    - Each call to a function creates a new local scope.
+
+
+
+- The LEBG Rule
+
+    - Name references search at most 4 scopes:
+
+        L = local
+        E = enclosing defs and lambdas
+        G = global
+        B = built-in
+
+
+
+- The Built-in Scope
+
+    The built-in scope is implemented as a module name 'builtins'.  To inspect it,
+
+    >>> import builtins
+    >>> dir(builtins)
+
+
+
+- Global variables
+
+    Normally, when you assign a local variable inside a function, which has the same
+      name as a global variable, the local assignment creates a completely different
+      variable. (Note that we can reference the global variables from inside a 
+      function, we just can't change them.)
+
+      X = 88
+
+      def func():
+          X = 99
+
+      func()
+      print(X)     # 88
+
+
+    If we want to change a global variable inside of a function, you need to declare
+      it using the 'global' keyword.
+
+      X = 88
+
+      def func():
+          global X
+          X = 99
+
+      func()
+      print(X)     # 99
+
+
+
+- Program Design Considerations
+
+    1. Minimize use of global variables
+         
+         # This will be very difficult to trace
+         X = 99
+
+         def func1():
+             global X
+             X = 88
+
+         def func2():
+             global X
+             X = 77
+
+
+    2. Minimize cross-file changes
+
+         # first.py
+         X = 99
+
+         # second.py (The person who wrote first.py has no idea about this change.)         
+         import first
+         print(first.X)       # Fine
+         first.X = 88         # Bad!
+
+
+
+- Nested Scope
+
+    A more precise way of describing how names are looked up with the LEGB Rule:
+       L = local
+       E = looks in enclosing scope, then keeps moving to outer enclosing scopes
+       G = global
+       B = built-in
+
+
+    This is an example of a nested scope.  'f2' is created in 'f1's local scope.  'f2'
+      is a temporary function that lives only during the execution of 'f1'.
+
+      X = 99
+
+      def f1():
+          X = 88
+          def f2():
+              print(X)
+          f2()
+
+      >>> f1()     # Prints 88
+
+
+
+- Nested Scope, 2nd Example
+
+    This code defines a function that makes and returns another function.  It is a common 
+      usage pattern.
+
+      def f1():
+          X = 88
+          def f2():
+              print(X)
+          return f2
+
+      >>> action = f1()
+      >>> action()        # Prints 88
+
+
+    The call to 'action' is really running the function we named f2 when f1 ran.  This 
+      works because functions are objects in Python like everything else, and can be
+      passed back as return values from other functions.
+
+    Most importantly, 'f2' remembers the enclosing scope's X in 'f1', even though 'f1' is
+      no longer active.
+
+
+
+- Closures
+
+    This sort of behavior is sometimes called a 'closure' (when referring to the functional
+      programming technique) or a 'factory function' (when referring to the design pattern).
+
+    The function object in question remembers values in enclosing scopes regardless of 
+      whether those scopes are still present in memory.  In effect, they have attached packets
+      of memory, which are local to each copy of the nested function created, and often
+      provide a simple alternative to classes in this role.
+
+
+
+- Simple Function Factory
+
+    Closures (aka factory functions) are sometimes used to generate event handlers
+      on the fly in response to conditions at runtime.  
+
+      def maker(N):
+          def action(X):
+              return X ** N
+          return action
+
+      >>> f = maker(2)
+      >>> f(3)    # 9
+      >>> f(4)    # 16
+
+      >>> g = maker(3)
+      >>> g(3)    # 27
+      >>> g(4)    # 64
+
+
+
+- Lambda Expressions
+
+      def maker(N):
+          return lambda X: X ** N
+
+      >>> h = maker(3)
+      >>> h(4)     
+
+
+
+- Closures vs Classes
+
+    Some people would rather use classes for this type of state retention.  Classes:
+
+      - Make memory more explicit with attribute assignments
+      - Support additional tools like inheritance and operator overloading
+      - More naturally implement behaviors as methods
+
+
+    Closures provide a lighter-weight alternative when retaining state is the only goal.
+
+
+
+- Retaining Enclosing Scope State with Defaults
+
+    In earlier versions of Python (before 2.2), default arguments had to be used to pass
+      in and remember the objects in an enclosing scope.
+
+      def f1():
+          x = 88
+          def f2(x=x):
+              print(x)
+          f2()
+      f1()        # Prints 88
+
+
+      def func():
+          x = 4
+          action = (lambda n, x=x, x ** n)
+          return action
+
+
+
+- Defs or lambdas defined in loops may require defaults, even in modern Python.
+
+    # This doesn't work, because all of the functions will have the last value of i
+    def makeActions():
+        acts = []
+        for i in range(5):
+            acts.append(lambda x: i ** x)
+        return acts
+
+    >>> acts = makeActions()
+    >>> acts[0](2)
+    >>> acts[1](2)
+    >>> acts[2](2)
+    >>> acts[3](2)
+    >>> acts[4](2)
+
+
+    # Setting the default argument will cause the correct value of i to be held onto
+    def makeActions():
+        acts = []
+        for i in range(5):
+            acts.append(lambda x, i=i, i ** x)
+        return acts
+
+
+
+- The 'nonlocal' Statement (3.X)
+
+    We've seen how nested functions can reference variables in an enclosing function's
+      scope, even if that function has already returned.  In 3.X, we can also change
+      the enclosing scope variables, as long as we declare them in nonlocal statements.
+
+    def tester(start):
+        state = start
+        def nested(label):
+            nonlocal state
+            print(label, state)
+            state += 1
+        return nested
+
+    >>> F = tester(0)
+    >>> F('spam')
+    spam 0
+    >>> F('ham')
+    ham 1
+    >>> F('eggs')
+    eggs 2
+
+
+
+- Keeping State With Function Attributes
+
+    def tester(start):
+        def nested(label):
+            print(label, nested.state)
+            nested.state += 1
+        nested.state = start
+        return nested
