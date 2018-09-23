@@ -1,0 +1,228 @@
+-------------------------------------------------
+CHAPTER 18 - ARGUMENTS
+-------------------------------------------------
+
+- Argument Passing Basics
+
+    1. Arguments are passed by automatically assigning objects to local variable
+         names.
+
+    2. Assigning to argument names inside a function does not affect the caller.
+
+    3. Changing a mutable object argument in a function may impact the caller.
+
+    4. Immutable arguments are effectively passed 'by value'
+
+    5. Mutable arguments are passed 'by pointer'
+
+
+
+- Mutable vs Immutable Arguments
+
+    def changer(a, b)
+        a = 2
+        b[0] = 'spam'
+
+    >>> X = 1
+    >>> L = [1, 2]
+
+    >>> changer(X, L)
+    >>> X, L
+    (1, ['spam', 2])       # X is unchanged, L is different
+
+
+
+- Avoiding Mutable Argument Changes
+
+    # Just pass a copy instead
+    changer(X, L[:])
+
+
+
+- Returning Multiple Values
+
+    # Only one return value is allowed, but it can be a tuple
+    def multiple(x, y):
+        x = 2
+        y = [3, 4]
+        return x, y
+
+    >>> X = 1
+    >>> L = [1, 2]
+    >>> X, L = multiple(X, L)
+
+
+
+- Calling with Positional and Named Argument Order
+
+    >>> def f(a, b, c): print(a, b, c)
+
+    # Call with positional arguments
+    >>> f(1, 2, 3)
+
+    # Call with named arguments
+    >>> f(c=3, b=2, a=1)
+
+
+
+- Default Function Values
+
+    >>> def f(a, b=2, c=3): print(a, b, c)
+
+    >>> f(1)
+    1 2 3
+
+
+
+- Collecting Arguments
+
+    # The * will collect unmatched positional arguments
+    >>> def f(*args): print(args)
+
+    >>> f()
+    ()
+    >>> f(1)
+    (1,)
+    >>> f(1, 2, 3, 4)
+    (1, 2, 3, 4)
+
+
+    # The ** works the same way, but with named arguments
+    >>> def f(**args): print(args)
+
+    >>> f()
+    {}
+    >>> f(a=1, b=2)
+    {'a': 1, 'b': 2}
+
+    
+    # The * and ** operators can be combined
+    >>> def f(a, *pargs, **kargs): print(a, pargs, kargs)
+
+    >>> f(1, 2, 3, x=1, y=2)
+    1 (2, 3) {'x': 1, 'y': 2}
+
+
+
+- Calling With Unpacking Arguments
+
+    >>> def func(a, b, c, d): print(a, b, c, d)
+
+    # Pass arguments as a tuple and use * to unpack them into arguments
+    >>> args = (1, 2)
+    >>> args += (3, 4)
+    >>> func(*args)
+    1 2 3 4
+
+
+    # Pass named arguments in a dictionary with **
+    >>> args = {'a': 1, 'b': 2, 'c': 3}
+    >>> args['d'] = 4
+    >>> func(**args)
+    1 2 3 4
+
+
+    # You can even combine them
+    >>> func(*(1, 2), **{'c': 3, 'd': 4})
+    1 2 3 4
+
+
+
+- The 'apply' function (2.X)
+
+    In 2.X, this same behavior  was achieved using the 'apply' function.
+
+    # 3.X
+    func(*pargs, **kargs)
+
+    # 2.X
+    apply(func, pargs, kargs)
+
+
+
+- Keyword-Only Arguments (3.X)
+
+    The * operator can be used in an argument list to denote that any arguments
+      past the * in the list are expected to be passed by name (not position).
+
+    # Specifies that b and c must be passed by name
+    >>> def kwonly(a, *, b, c): print(a, b, c)
+
+    >>> kwonly(1, b=2, c=3)
+    1 2 3
+
+    >>> kwonly(1, 2, 3)
+    TypeError: kwonly() takes 1 positional argument but 3 were given
+
+
+    Keyword-only arguments without default values are effectively required
+      argument.
+
+    # Has Default
+    def kwonly(a, *, b=3)
+
+    # No default, so must pass b when calling
+    def kwonly(a, *, b)
+
+
+
+- Argument Matching Example - Min and Max
+
+    def minmax(test, *args):
+        res = args[0]
+        for arg in args[1:]:
+            if test(arg, res):
+                res = arg
+        return res
+
+    def lessthan(x, y): return x < y
+    def morethan(x, y): return x > y
+
+    >>> print(minmax(lessthan, 4, 2, 1, 5, 6, 3))
+    1
+
+    >>> print(minmax(morethan, 4, 2, 1, 5, 6, 3))
+    6
+
+
+
+- Argument Matching Example - Intersection and Union
+
+    def intersect(*args):
+        res = []
+        for x in args[0]:
+            if x in res: continue
+            for other in args[1:]:
+                if x not in other: break
+            else:
+                res.append(x)
+        return res
+
+
+    def union(*args):
+        res = []
+        for seq in args:
+            for x in seq:
+                if not s in res:
+                    res.append(x)
+        return res
+
+
+    >>> s1, s2, s3 = 'SPAM', 'SCAM', 'SLAM'
+    >>> intersect(s1, s2, s3)
+    ['S', 'A', 'M']
+
+    >>> union(s1, s2, s3)
+    ['S', 'P', 'A', 'M', 'C', 'L']
+
+
+
+- Argument Matching Example - Print Function
+
+    def print2(*args, sep=' ', end='\n', file=sys.stdout):
+        output = ''
+        first = True
+        for arg in args:
+            output += ('' if first else sep) + str(arg)
+            first = False
+        file.write(output + end)
