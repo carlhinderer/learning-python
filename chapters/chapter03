@@ -5,8 +5,6 @@ CHAPTER 3 - HOW YOU RUN PROGRAMS
 1. With an interactive prompt
      % python
 
-     - End the interactive session with Cntl+D
-
      - To import a module into the session:
           >>> import os
           >>> os.getcwd(s)

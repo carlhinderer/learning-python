@@ -24,7 +24,7 @@ CHAPTER 17 - SCOPES
 
     - By default, all variables assigned inside a function definition are put in
         local scope.  If you want a variable declared inside a function definition
-        to be at the top level of  the module, you declare it with the 'global' 
+        to be at the top level of the module, you declare it with the 'global' 
         keyword.
 
       If you want the variable to be in scope in an enclosing 'def', you declare

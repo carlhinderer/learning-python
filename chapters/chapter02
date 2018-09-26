@@ -2,13 +2,7 @@
 CHAPTER 2 - HOW PYTHON RUNS PROGRAMS
 -------------------------------------------------
 
-1. Source code files are translated into byte code.  
-
-     - Byte code is a lower-level, platform-independent representation of your
-         source code.  
-
-     - This is done to speed execution - byte code can be done much more quickly.
-
+1. Source code files are translated into platform-independent byte code.  
 
 2. Byte Code is cached in .pyc files
 
