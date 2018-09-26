@@ -1,0 +1,185 @@
+-------------------------------------------------
+CHAPTER 19 - ADVANCED FUNCTION TOPICS
+-------------------------------------------------
+
+- Rules for function design:
+
+    1. Use arguments and return statements to isolate dependencies.
+    2. Use global variables only when truly necessary.
+    3. Don't change mutable arguments unless the caller expects it.
+    4. Each function should have a single, unified purpose.
+    5. Each function should be relatively small.
+    6. Avoid changing another module's variables directly.
+
+
+
+- Recursion works as expected.
+
+    # Direct recursion
+    def mysum(L):
+        if not L:
+            return 0
+        else:
+            return L[0] + mysum(L[1:])
+
+
+    # Indirect recursion
+    def mysum(L):
+        if not L: return 0
+        return nonempty(L)
+
+    def nonempty(L):
+        return L[0] + mysum(L[1:])
+
+
+
+- Example - Traversing Nested Sublists
+
+    def sumtree(L):
+        tot = 0
+        for x in L:                                  # For each item at this level
+        if not isinstance(x, list):
+            tot += x                                 # Add numbers directly
+        else:
+            tot += sumtree(x)                        # Recur for sublists
+    return tot
+
+    L = [1, [2, [3, 4], 5], 6, [7, 8]]               # Arbitrary nesting
+    print(sumtree(L))                                # Prints 36
+
+    # Pathological cases
+    print(sumtree([1, [2, [3, [4, [5]]]]]))          # Prints 15 (right-heavy)
+    print(sumtree([[[[[1], 2], 3], 4], 5]))          # Prints 15 (left-heavy)
+
+
+
+- If we have a data structure that may contain cycles, or if we need to keep 
+    track of the nodes we have already visited for some other reason:
+
+    if state not in visited:
+        visited.add(state)
+
+
+
+- By default, Python limits the depth of the runtime call stack to trap infinite
+    recursion errors.  The limit can be changed if necessary.
+
+    >>> sys.getrecursionlimit()
+    1000
+
+    >>> sys.setrecursionlimit(10000)
+
+
+
+- First Class Objects
+
+    Python uses a 'first class object model'.  Functions are objects, and thus can
+      be assigned to variables and passed around.
+
+      # Direct Call
+      >>> def echo(message): print(message)
+      >>> echo('Direct Call')
+      Direct Call
+
+      # Indirect Call
+      >>> x = echo
+      >>> x('Indirect Call')
+      Indirect Call
+
+      # Argument Call
+      >>> def indirect(func, arg): func(arg)
+      >>> indirect(echo, 'Argument Call')
+      Argument Call
+
+      # Put functions in data structures
+      >>> schedule = [(echo, 'Spam!'), (echo, 'Ham!')]      
+      >>> for (func, arg) in schedule: func(arg)
+      Spam!
+      Ham!
+
+
+
+- Lambda Functions
+
+    Lambda expressions create a function to be called later (like def statements),
+      but return the function instead of assigning it to a name.  They are 
+      sometimes called 'anonymous' functions.  They are often used to inline a
+      function definition or defer execution.
+
+      - 'lambda' is an expression not a statement, so it can appear in places a def
+          is not allowed
+
+      - 'lambda's body is a single expression, not a block of statements
+
+
+      # def
+      >>> def func(x, y, z): return x + y + z
+
+      # lambda
+      >>> f = lambda x, y, z: x + y + z
+
+      # lambda with default arguments
+      >>> x = (lambda a='fee', b='fie', c='foe': a + b + c)
+
+
+      # lambda with closure
+      >>> def knights():
+      ...     title = 'Sir'  
+      ...     action = (lambda x: title + ' ' + x)
+      ...     return action
+
+      >>> act = knights
+      >>> mgs = act('robin')
+      >>> msg
+      'Sir robin'
+
+
+
+- Lambda Callback Example
+
+    Lambdas are used to define inline callback functions for the 'tkinter'
+      GUI API.  Here, the lambda defers execution until the event occurs.
+
+    import sys
+    from tkinter import Button, mainloop
+    x = Button(
+            text='Press me',
+            command=(lambda: print('Spam')))
+    x.pack()
+    mainloop()
+
+
+
+- Functional Programming
+
+    The things that Python borrows from functional programming include
+      - First Class Object Model
+      - Closures
+      - Lambdas
+      - Generators
+      - Comprehensions
+      - Tools that apply to iterables like map, filter, and reduce
+
+    Python includes tools for:
+      - map = call functions on an iterable's items
+      - filter = filter out items based on a test function
+      - reduce = apply functions to pairs of items and run results
+
+
+    # map
+    >>> counters = [1, 2, 3, 4]
+    >>> def inc(x): return x + 10
+    >>> list(map(inc, counters))
+    [11, 12, 13, 14]
+
+    # map with lambda
+    >>> list(map((lambda x: x + 3), counters))
+    [4, 5, 6, 7]
+
+
+    # filter
+    >>> list(range(−5, 5))
+    [−5, −4, −3, −2, −1, 0, 1, 2, 3, 4]
+
+    >>> list(filter((lambda x: x > 0), range(−5, 5)))
+    [1, 2, 3, 4]
