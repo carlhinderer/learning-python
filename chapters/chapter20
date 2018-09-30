@@ -1,0 +1,170 @@
+-------------------------------------------------
+CHAPTER 20 - COMPREHENSIONS AND GENERATIONS
+-------------------------------------------------
+
+- Python's early functional programming toolset (including 'map' and 'filter')
+    was inspired by LISP.
+
+  List comprehensions are inspired by a tool in Haskell.
+
+
+
+- List Comprehensions vs Map
+
+    # Collect results manually
+    >>> res = []
+    >>> for x in 'spam':
+    ...     res.append(ord(x))
+    >>> res
+    [115, 112, 97, 109]
+
+    # Apply function to sequence with map
+    >>> res = list(map(ord, 'spam'))
+    >>> res
+    [115, 112, 97, 109]
+
+    # Apply expression to sequence with comprehension
+    >>> res = [ord(x) for x in 'spam']
+    >>> res
+    [115, 112, 97, 109]
+
+
+
+- Filtering in List Comprehensions
+
+    >>> [x ** 2 for x in range(10) if x % 2 == 0]
+    [0, 4, 16, 36, 64]
+
+
+
+- Nested Loops in List Comprehensions
+
+    >>> res = [x + y for x in [0, 1, 2] for y in [100, 200, 300]]
+    >>> res
+    [100, 200, 300, 101, 201, 301, 102, 202, 302]
+
+    >>> [(x, y) for x in range(5) if x % 2 == 0 for y in range(5) if y % 2 == 1]
+    [(0, 1), (0, 3), (2, 1), (2, 3), (4, 1), (4, 3)]
+
+
+
+- List Comprehensions and Matrices
+
+    One basic way to code matrices is with nested list structures.  If you code them this
+      way, list comprehensions can be used on them.
+
+
+    >>> M = [[1, 2, 3],
+             [4, 5, 6], 
+             [7, 8, 9]]
+
+    # Get row 2
+    >>> M[1]
+    [4, 5, 6]
+
+    # Row 2, Item 3
+    >>> M[1][2]
+    6
+
+    # Column 2
+    >>> [row[1] for row in M]
+    [2, 5, 8]
+
+    # Diagonals
+    >>> [M[i][i] for i in range(len(M))]
+    [1, 5, 9]
+
+
+
+- In Python 3.X,
+    - 'map' is an iterable, generating results on demand
+    - list comprehensions must be coded as generator expressions to achieve the same
+        memory economy
+
+
+
+- Generator Functions and Expressions
+
+    - 'Generator functions' are coded as normal def statements, but use 'yield' statements
+        to return results one at a time, suspending and resuming their state between each.
+
+    - 'Generator expressions' are similar to list comprehensions, but they return an object
+        that produces results on demand (rather than a result list)
+
+
+
+- Generator Functions
+
+    >>> def getsquares(N):
+            for in in range(N):
+                yield i ** 2
+
+    >>> for i in gensquares(5):
+            print(i, end=' : ')
+    0 : 1 : 4 : 9 : 16
+
+
+
+
+- Generator Expressions
+
+    Generator expressions work just like list comprehensions, but they are enclosed in 
+      parentheses rather than square brackets.
+
+      # List comprehension builds a list
+      >>> [x ** 2 for x in range(4)]
+      [0, 1, 4, 9]
+
+      # Generator expression makes an iterable
+      >>> (x ** 2 for x in range(4))
+      <generator object <genexpr> at 0x00000000029A8288>
+
+      # Forcing a generator to produce all its results in a list
+      >>> list(x ** 2 for x in range(4))
+
+
+
+- Unpacking Iterables
+
+    >>> def f(a, b, c): print('%s, %s, and %s' % (a, b, c))
+
+    >>> f(0, 1, 2)
+    0, 1, and 2
+
+    # Starred arguments can be used to unpack an iterable into individual arguments
+    >>> f(*range(3))
+    0, 1, and 2
+
+    >>> f(*(i for i in range(3)))
+    0, 1, and 2
+
+
+    >>> D = dict(a='Bob', b='dev', c=40.5)
+    
+    # Get keys
+    >>> f(*D)
+    a, b, and c
+
+    # Get values
+    >>> f(**D)
+    Bob, 40.5, and dev
+
+
+
+- Set and Dictionary Comprehensions
+
+    # List comprehension builds list
+    >>> [x * x for x in range(10)]
+    [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+    # Generator expression
+    >>> (x * x for x in range(10))
+    <generator object at 0x009E7328>
+
+    # Set comprehension
+    >>> {x * x for x in range(10)}
+    {0, 1, 4, 81, 64, 9, 16, 49, 25, 36}
+
+    # Dictionary comprehension
+    >>> {x: x * x for x in range(10)}
+    {0: 0, 1: 1, 2: 4, 3: 9, 4: 16, 5: 25, 6: 36, 7: 49, 8: 64, 9: 81}
