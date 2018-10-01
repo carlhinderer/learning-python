@@ -1,0 +1,164 @@
+-------------------------------------------------
+CHAPTER 21 - BENCHMARKING
+-------------------------------------------------
+
+- Writing a Homegrown Timer
+
+    # File timer.py
+    import time, sys
+    timer = time.time
+
+    # Total time to run func() reps times
+    # Returns (total time, last result)
+    def total(reps, func, *pargs, **kargs):
+        repslist = list(range(reps))
+        start = timer()
+        for i in repslist:
+            ret = func(*pargs, **kargs)
+        elapsed = timer() - start
+        return (elapsed, ret)
+
+    # Quickest func() among reps runs
+    # Returns (best time, last result)
+    def bestof(reps, func, *pargs, **kargs):
+        best = 2 ** 32
+        for i in range(reps):
+            start = timer()
+            ret = func(*pargs, **kargs)
+            elapsed = timer() - start
+            if elapsed < best: best = elapsed
+        return (best, ret)
+
+    # Best of reps1 runs of (total of reps2 runs of func)
+    def bestoftotal(reps1, reps2, func, *pargs, **kargs):
+        return bestof(reps1, total, reps2, func, *pargs, **kargs)
+
+
+    >>> import timer
+    >>> timer.total(1000, str.upper, 'spam')
+    (0.000504845391709686, 'SPAM')
+
+
+
+- Testing Iteration Tool Alternatives
+
+    # File timeseqs.py
+    import sys, timer
+    reps = 10000
+    repslist = list(range(reps))
+
+    def forLoop():
+        res = []
+        for x in repslist:
+            res.append(abs(x))
+        return res
+
+    def listComp():
+        return [abs(x) for x in repslist]
+
+    def mapCall():
+        return list(map(abs, repslist))
+
+    def genExp():
+        return list(abs(x) for x in repslist)
+
+    def genFunc():
+        def gen():
+            for x in repslist:
+                yield abs(x)
+        return list(gen())
+
+    print(sys.version)
+    for test in (forLoop, listComp, mapCall, genExpr, genFunc):
+        (bestof, (total, result)) = timer.bestoftotal(5, 1000, test)
+        print ('%-9s: %.5f => [%s...%s]' %
+           (test.__name__, bestof, result[0], result[-1]))
+
+
+
+- Timing Results
+
+    3.5.2 (default, Nov 23 2017, 16:37:01) 
+    [GCC 5.4.0 20160609]
+    forLoop  : 0.91092 => [0...9999]
+    listComp : 0.48742 => [0...9999]
+    mapCall  : 0.38954 => [0...9999]
+    genExpr  : 0.71790 => [0...9999]
+    genFunc  : 0.72306 => [0...9999]
+
+
+
+- The 'timeit' Module
+
+    # Interactive Usage
+    >>> import timeit
+    >>> min(timeit.repeat(stmt="[x ** 2 for x in range(1000)]", number=1000, repeat=5))
+    0.5062382371756811
+
+
+    # Command Line Usage
+    $ py −3 -m timeit -n 1000 -r 5 "[x ** 2 for x in range(1000)]"
+    1000 loops, best of 5: 505 usec per loop
+
+
+
+- Function Gotchas
+
+    1. Local names are detected statically, when the def's code is compiled, rather 
+         than by noticing assignments as they happen at runtime.
+
+       This leads to an oddity that commonly causes confusion:
+
+       >>> X = 99
+
+       >>> def selector():        # X used but not assigned
+               print(X)           # X found in global scope
+
+       >>> selector()
+       99
+
+
+       >>> def selector():
+               print(X)           # Does not yet exist!
+               X = 88             # X classified as a local name (everywhere)
+                                  # Can also happen for "import X", "def X"...
+
+       >>> selector()
+       UnboundLocalError: local variable 'X' referenced before assignment
+
+
+
+    2. Mutable default arguments retain state between calls.
+
+       >>> def saver(x=[]):
+               x.append(1)
+               print(x)
+
+       >>> saver([2])
+       [2, 1]            # Default not used
+
+       >>> saver()
+       [1]               # Default used
+
+       >>> saver()
+       [1, 1]            # Grows on each call!
+
+       >>> saver()
+       [1, 1, 1]
+
+
+       # How to get around this
+       >>> def saver(x=None):
+               if x in None:
+                   x = []
+               x.append(1)
+               print(x)
+
+       >>> saver([2])
+       [2, 1]
+
+       >>> saver()
+       [1]
+
+       >>> saver()
+       [1]
