@@ -290,3 +290,144 @@ def test_print_whether_prime():
     print_whether_prime(13.0)
     print_whether_prime(15)
     print_whether_prime(15.0)
+
+
+
+
+# Exercise 9
+# Iterations and comprehensions
+#
+# Write code to build a new list containing the square roots of all the numbers in 
+# this list: [2, 4, 9, 16, 25]. Code this as a for loop first, then as a map
+# call, then as a list comprehension, and finally as a generator expression. Use the 
+# sqrt function in the built-in math module to do the calculation (i.e., import math
+# and say math.sqrt(x)). Of the four, which approach do you like best?
+
+import math
+
+def sqrt_with_loop(square_list):
+    roots = []
+    for square in square_list: roots.append(math.sqrt(square))
+    return roots
+
+def sqrt_with_map(square_list):
+    return list(map(math.sqrt, square_list))
+
+def sqrt_with_comprehension(square_list):
+    return [math.sqrt(x) for x in square_list]
+
+def sqrt_with_generator(square_list):
+    return list(math.sqrt(x) for x in square_list)
+
+def test_sqrt_implementations():
+    list_of_squares = [2, 4, 9, 16, 25]
+    print(sqrt_with_loop(list_of_squares))
+    print(sqrt_with_map(list_of_squares))
+    print(sqrt_with_comprehension(list_of_squares))
+    print(sqrt_with_generator(list_of_squares))
+
+
+
+
+# Exercise 10
+# Timing  tools
+#
+# In   Chapter  5,  we  saw  three  ways  to  compute  square  roots: math.sqrt(X), 
+# X ** .5, and pow(X, .5). If your programs run a lot of these, their
+# relative performance might become important. To see which is quickest, repurpose
+# the timerseqs.py script we wrote in this chapter to time each of these three tools.
+# Use the bestof or bestoftotal functions in one of this chapter’s timer modules to
+# test (you can use either the original, the 3.X-only keyword-only variant, or the 2.X/
+# 3.X version, and may use Python’s timeit module as well). You might also want
+# to repackage the testing code in this script for better reusability—by passing a test
+# functions tuple to a general tester function, for example (for this exercise a copy-
+# and-modify approach is fine). Which of the three square root tools seems to run
+# fastest on your machine and Python in general? Finally, how might you go about
+# interactively timing the speed of dictionary comprehensions versus for loops?
+
+import timeit
+
+def time_math_sqrt():
+    math_time = min(timeit.repeat(stmt="[math.sqrt(x) for x in range(1000)]", number=1000, repeat=5))
+    print('The minimum time for math.sqrt(X) is %s seconds.' % math_time)
+
+def time_star():
+    star_time = min(timeit.repeat(stmt="[x ** .5 for x in range(1000)]", number=1000, repeat=5))
+    print('The minimum time for X ** .5 is %s seconds.' % star_time)
+
+def time_pow():
+    pow_time = min(timeit.repeat(stmt="[pow(x, .5) for x in range(1000)]", number=1000, repeat=5))
+    print('The minimum time for pow(X, .5) is %s seconds.' % pow_time)
+
+def time_square_root_implementations():
+    time_math_sqrt()
+    time_star()
+    time_pow()
+
+
+
+
+
+# Exercise 11
+# Recursive functions
+#
+# Write a simple recursion function named countdown that prints numbers as it counts down 
+# to zero. For example, a call countdown(5) will print: 5 4 3 2 1 stop.
+# There’s no obvious reason to code this with an explicit stack or
+# queue, but what about a nonfunction approach? Would a generator make sense
+# here?
+
+def countdown(start):
+    if start == 0:
+        print('stop')
+    else:
+        print(start, end=' ')
+        countdown(start - 1)
+
+def test_countdown():
+    # Countdown from i = 0
+    countdown(0)
+
+    # Countdown from i = 1
+    countdown(1)
+
+    # Countdown from i > 1
+    countdown(10)
+
+
+
+
+# Exercise 12
+# Computing factorials
+#
+# Finally, a computer science classic (but demonstrative none-theless). We employed the notion 
+# of factorials in Chapter 20’s coverage of permutations: N!, computed as N*(N-1)*(N-2)*...1.
+# For instance, 6! is 6*5*4*3*2*1, or 720. Code and time four functions that, for a call 
+# fact(N), each return N!. Code these four functions (1) as a recursive countdown per 
+# Chapter 19; (2) using thefunctional reduce call per Chapter 19; (3) with a simple iterative 
+# counter loop per Chapter 13; and (4) using the math.factorial library tool per Chapter 20.
+# Use Chapter 21’s timeit to time each of your functions. What conclusions can you
+# draw from your results?
+
+import functools
+
+def recursive_factorial(N):
+    if N == 1:
+        return 1
+    else:
+        return N * recursive_factorial(N-1)
+
+def reduce_factorial(N):
+    return functools.reduce(lambda x, y: x * y, range(1, N+1))
+
+def iterative_factorial(N):
+    product = 1
+    for i in range(1, N+1): product *= i
+    return product
+
+def math_factorial(N):
+    return math.factorial(N)
+
+def test_factorial_implementations():
+    for test in (recursive_factorial, reduce_factorial, iterative_factorial, math_factorial):
+        print(test.__name__, min(timeit.repeat(stmt=lambda: test(500), number=20, repeat=3)))
