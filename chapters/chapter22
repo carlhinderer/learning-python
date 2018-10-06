@@ -1,0 +1,45 @@
+-------------------------------------------------
+CHAPTER 22 - MODULES
+-------------------------------------------------
+
+- Modules have 3 roles:
+
+    1. Code reuse
+    2. System namespace partitioning
+    3. Implementing shared services or data
+
+
+
+- Import Statements complete 3 steps:
+
+    1. Find the module's file
+    2. Compile it to byte code
+    3. Run the module's code to build the objects it defines
+
+
+
+- Components of Module Search Path
+
+    1. The home directory of the program
+         - This is the directory of your top-level file
+         - In interactive mode, this is your current working directory
+
+    2. The PYTHONPATH directories (if set)
+         - Envionment variable
+
+    3. Standard library directories
+
+    4. The contents of any .pth files (if present)
+         - Can just add a text file with a .pth file and list all the paths to 
+             look in, one per line.
+
+    5. The site-packages home of third party extensions
+         - The 'site-packages' subdirectory of the standard library is also added
+             to the path.  When third party extensions are installed by the
+             'distutils' utility, they are in stalled in this directory.
+
+    These components are concatenated into 'sys.path', a mutable list of 
+      directory names strings.
+
+      >>> import sys
+      >>> sys.path
