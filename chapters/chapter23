@@ -1,0 +1,74 @@
+-------------------------------------------------
+CHAPTER 22 - MODULE CODING BASICS
+-------------------------------------------------
+
+- The 'import' statement identifies a file to be loaded, and then becomes
+    a variable in the script.
+
+    >>> import module1
+    >>> module1.printer('Hello World!')
+
+
+  The 'from' statement copies specific names from one file over to 
+    another scope.  This allows us to use the copied names directly in
+    our script without going through the other module.
+
+    >>> from module1 import printer
+    >>> printer('Hello World!')
+
+
+  The 'from *' statement will copy all names.
+
+    >>> from module1 import *
+    >>> printer('Hello World!')
+
+
+
+- Like 'def', 'import' and 'from' statements are executable statements, not
+    compile-time declarations.  They can appear anywhere in code that any
+    other statements can.
+
+
+
+- Files generate namespaces.
+
+    1. All the statements in the module are executed, top to bottom, at the
+         first import.
+
+    2. Top-level assignments (that are not 'def' or 'class' statements) 
+         create attributes.
+
+    3. Module namespaces can be accessed through the __dict__ attributes or
+         dir(M).
+
+    4. Modules are single scope (local is global).
+
+
+
+- Module namespaces are stored internally as dictionaries.
+
+    >>> list(module2.__dict__.keys())
+    ['__loader__', 'func', 'klass', '__builtins__', '__doc__', '__file__', 
+    '__name__', 'name', '__package__', 'sys', '__initializing__', '__cached__']
+
+
+
+- Namespace nesting
+
+    # module3.py
+    X = 3
+
+
+    # module2.py
+    X = 2
+    import module3
+
+
+    # module1.py
+    # Can access module3 from module2!
+    X = 1
+    import module2
+
+    print(X, end=' ')                # My global X
+    print(module2.X, end=' ')        # module2's X
+    print(module2.module3.X)         # Nested module3's X
