@@ -1,0 +1,48 @@
+-------------------------------------------------
+CHAPTER 24 - MODULE PACKAGES
+-------------------------------------------------
+
+- In addition to a module name, a directory path can also be imported.
+    A directory of Python code is called a 'package', and this type of import
+    is called a 'package import'.
+
+  A package import turns a directory into a namespace, with attributes 
+    corresponding to the subdirectories and module files that the directory
+    contains.
+
+    >>> import dir1.dir2.mod
+
+    >>> from dir1.dir2.mod import x
+
+
+
+- Any directory named within a package import statement must contain a 
+    '__init__.py' file, or the import will fail.  The code is this file is
+    run the first time a program imports the directory, so sometimes 
+    initialization logic is put there.  Often, the file is just empty.
+
+  For instance, in the above example, there would need to be an '__init__.py'
+    in 'dir1' and in 'dir2'.
+
+
+
+- An imported directory can be reloaded just like a module file.  
+
+    >>> from imp import reload
+    >>> reload(dir1)
+    >>> reload(dir1.dir2)
+
+
+
+- Usually, it is more convenient to use 'from' when importing longer 
+    directory paths, so you don't have to keep typing the entire path.
+
+    >>> from dir1.dir2 import mod
+    >>> mod.z
+    3
+
+
+
+- There is a new scheme in 3.X which allows for 'relative imports'.  These allow you to
+    use the same full path syntax inside a package as the code that imports from outside 
+    the package.
