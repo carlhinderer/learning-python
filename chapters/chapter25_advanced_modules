@@ -1,0 +1,52 @@
+-------------------------------------------------
+CHAPTER 25 - ADVANCED_MODULE TOPICS
+-------------------------------------------------
+
+- Principles of modules
+
+    1. You're always in a module in Python.
+    2. Avoid coupling modules with global variables.
+    3. Maximize module cohesion.
+    4. Modules should rarely change other modules' variables.
+
+
+
+- _X and __all__
+
+    If you prefice a module attribute with an underscore, it will be ignored when a client
+      imports a module with a 'from *' statement.
+
+      # unders.py
+      a, _b, c, _d = 1, 2, 3, 4
+
+      >>> from unders import *
+      >>> a
+      1
+      >>> b
+      NameError: name '_b' is not defined
+
+
+
+- Changing the module search path
+
+    >>> import sys
+    >>> sys.path
+    ['', 'c:\\temp', 'C:\\Windows\\system32\\python33.zip', ...more deleted...]
+
+    >>> sys.path.append('C:\\sourcedir')
+    >>> import string
+
+
+
+- The 'as' extension
+
+    # Shorten an attribute name
+    >>> from modulename import attrname as name
+
+    # Shorten a module name
+    >>> import reallylongmodulename as name
+    >>> name.func()
+
+
+
+- 
