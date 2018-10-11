@@ -1,0 +1,54 @@
+-------------------------------------------------
+CHAPTER 26 - OOP
+-------------------------------------------------
+
+- Attribute Inheritance Search
+
+    Fetching an attribute from an object is implemented as a simple tree search.  When you
+      reference a class attribute, Python looks for the attribute in the object's class, 
+      then keeps looking up the chain of superclasses until the attribute is found.
+
+
+
+- Python Class Basics
+
+    1. Each 'class' statement creates a new class object.
+    2. Each time a class is called, it generates a new instance object.
+    3. Instances are automatically linked to the classes from which they are created.
+    4. Classes are automatically linked to their superclasses according to the way we list
+         them in parentheses in a class header line; the left-to-right order there gives the
+         order in the tree. (Multiple inheritance is legal!)
+
+
+
+- The '__init__' method is the constructor in Python classes.
+
+    class C1(C2, C3):
+        def __init__(self, who):
+            self.name = who
+
+    >>> employee1 = C1('bob')
+    >>> employee2 = C1('tom')
+
+
+
+- Polymorphism
+
+    class Employee:
+        def computeSalary(self): ...     
+        def giveRaise(self): ...
+        def promote(self): ...
+        def retire(self): ...
+
+    class Engineer(Employee):
+        def computeSalary(self): ...
+            # Custom salary logic for engineers
+
+
+    >>> bob = Employee()
+    >>> sue = Employee()                     
+    >>> tom = Engineer()
+
+    >>> company = [bob, sue, tom]
+    >>> for emp in company:
+            print(emp.computeSalary())       
