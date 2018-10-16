@@ -41,6 +41,28 @@ CHAPTER 25 - ADVANCED_MODULE TOPICS
 
 
 
+- Enabling Future Language Features
+
+    Changes that may potentially break existing code are sometimes included as optional
+      extensions.  To turn them on,
+
+    >>> from __future__ import featurename
+
+
+
+- Mixed Usage Modes
+
+    It is possible to create a module that can either be imported or run as a standalone
+      program.  Each module has a built-in attribute '__name__'.
+
+      - If the file is being run as a top-level program, '__name__' is set to '__main__'
+      - If the file is being imported as a module, '__name__' is set to the module name
+
+      >>> if __name__ == '__main__':
+      ...     runtest()
+
+
+
 - Changing the module search path
 
     >>> import sys
@@ -60,3 +82,11 @@ CHAPTER 25 - ADVANCED_MODULE TOPICS
     # Shorten a module name
     >>> import reallylongmodulename as name
     >>> name.func()
+
+
+
+- Because modules expose properties as built-in attributes, it's easy to write programs
+    that manage other programs.
+
+    - The manager programs are usually called 'metaprograms'
+    - The technique of looking at process internals is called 'introspection'

@@ -68,3 +68,35 @@ CHAPTER 24 - MODULE PACKAGES
 
     # Imports sibling of mypkg
     >>> from .. import string
+
+
+
+- Python 3.3+ actually has four import models.
+
+    1. Basic module imports = imports of files and their contents, relative to the 
+         sys.path module search path
+
+         >>> import mod
+         >>> from mod import attr
+\
+
+    2. Package imports = imports that give directory path extensions relative to the 
+         sys.path module search path, each package requiring an initialization file
+
+         >>> import dir1.dir2.mod
+         >>> from dir.mod import attr
+
+
+    3. Package-relative imports = used for intrapackage imports
+
+         # Relative lookup
+         >>> from . import mod
+
+         # Absolute lookup
+         >>> import mod
+
+
+    4. Namespace packages (new in 3.3) = allows packages to span multiple directories,
+         and don't require an initialization file
+
+         >>> import splitdir.mod
