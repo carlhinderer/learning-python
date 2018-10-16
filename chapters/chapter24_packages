@@ -46,3 +46,25 @@ CHAPTER 24 - MODULE PACKAGES
 - There is a new scheme in 3.X which allows for 'relative imports'.  These allow you to
     use the same full path syntax inside a package as the code that imports from outside 
     the package.
+
+    1. Imports with dots in from statements' module names indicate the imports should be
+         relative-only to the containing package.
+
+    2. Imports without dots default to an absolute search path order.  They search the package's
+         own directory first, then the rest of the directories in sys.path.
+
+
+    # Relative to this package
+    >>> from . import spam
+
+    # From a module named 'spam' located in the same package directory that this file appears
+    >>> from .spam import name
+
+    # Imports names from mypkg.string
+    >>> from .string import name1, name2
+
+    # Imports mypkg.string
+    >>> from . import string
+
+    # Imports sibling of mypkg
+    >>> from .. import string
