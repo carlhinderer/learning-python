@@ -98,7 +98,7 @@ CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
         True
 
         >>> line = 'aaa,bbb,ccc,ddd'
-        >>> line.split
+        >>> line.split()
         ['aaa','bbb','ccc','ddd']
 
         >>> line = 'aaa,bbb,ccccc,dd\n'
@@ -262,9 +262,10 @@ CHAPTER 4 - INTRODUCING PYTHON OBJECT TYPES
         >>> D = {'a': 1, 'b': 2, 'c': 3}
         >>> Ks = list(D.keys())
         >>> Ks.sort()
+        >>> Ks
         ['a', 'b', 'c']
         >>> for key in Ks:
-                print(key, '=>' D[key])
+                print(key, '=>', D[key])
         a => 1
         b => 2
         c => 3

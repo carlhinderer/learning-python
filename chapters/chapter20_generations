@@ -96,7 +96,7 @@ CHAPTER 20 - COMPREHENSIONS AND GENERATIONS
 - Generator Functions
 
     >>> def getsquares(N):
-            for in in range(N):
+            for i in range(N):
                 yield i ** 2
 
     >>> for i in gensquares(5):
