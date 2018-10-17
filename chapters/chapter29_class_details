@@ -95,3 +95,135 @@ CHAPTER 29 - CLASS DETAILS
             print('starting Sub.method')
             Super.method(self)
             print('ending Sub.method')
+
+
+
+- Abstract Superclasses (aka Abstract Base Classes)
+
+    Abstract superclasses expect part of their behavior to be provided by its subclasses.
+      If an expected method is not defined in the subclass, an exception will be raised.
+
+    class Super:
+        def method(self):
+            print('in Super.method')
+        def delegate(self):
+            self.action()
+
+    class Provider(Super):
+        def action(self):
+            print('in Provider.action')
+
+    >>> x = Provider()
+    >>> x.delegate()
+    in Provider.action
+
+    >>> y = Super()
+    >>> y.delegate()
+    AssertionError: action must be defined!
+
+
+    Some programmers prefer to raise a 'NotImplementedError' directly to signal what the
+      problem is.
+
+    class Super:
+        def action(self):
+            raise NotImplementedError('action must be defined!')
+
+
+
+- In Python 3.X, there is a new decorator syntax that can be used to mark a method as
+    abstract.
+
+    class Super(metaclass=ABCMeta):
+        @abstractmethod
+        def method(self, ...):
+            pass
+
+
+
+- Full Namespacing Example
+
+    # File manynames.py
+    X = 11                       # Global (module) name/attribute (X, or manynames.X)
+
+    def f():
+        print(X)                 # Access global X (11)
+
+    def g():
+        X = 22                   # Local (function) variable (X, hides module X)
+        print(X)
+
+    class C:
+        X = 33                   # Class attribute (C.X)
+        def m(self):
+            X = 44               # Local variable in method (X)
+            self.X = 55          # Instance attribute (instance.X)
+
+
+
+- Getting a Class's Attributes at Runtime
+
+    # Get all of a class's attributes
+    >>> X.__dict__.keys()
+
+    # Get all attributes of a class and its inherited attributes
+    >>> dir(X)
+
+
+
+- Namespace Tree Climber
+
+    #!python
+    """
+    classtree.py: Climb inheritance trees using namespace links,
+     displaying higher superclasses with indentation for height
+    """
+
+    def classtree(cls, indent):
+        print('.' * indent + cls.__name__)    # Print class name here
+        for supercls in cls.__bases__:        # Recur to all superclasses
+            classtree(supercls, indent+3)     # May visit super > once
+
+    def instancetree(inst):
+        print('Tree of %s' % inst)            # Show instance
+        classtree(inst.__class__, 3)          # Climb to its class
+
+    def selftest():
+        class A:      pass
+        class B(A):   pass
+        class C(A):   pass
+        class D(B,C): pass
+        class E:      pass
+        class F(D,E): pass
+        instancetree(B())
+        instancetree(F())
+
+    if __name__ == '__main__': selftest()
+
+
+    >>> class Emp: pass
+    >>> class Person(Emp): pass
+    >>> bob = Person()
+
+    >>> import classtree
+    >>> classtree.instancetree(bob)
+    Tree of <__main__.Person object at 0x000000000298B6D8>
+    ...Person
+    ......Emp
+    .........object
+
+
+
+- Classes vs Modules
+
+    Modules
+      1. Implement data/logic packages
+      2. Are created with Python files (or other language extensions)
+      3. Are used by being imported
+      4. Form the top-level in Python program structure
+
+    Classes
+      1. Implement full-featured objects
+      2. Are created with 'class' statements
+      3. Are used by being called
+      4. Always live within a module
