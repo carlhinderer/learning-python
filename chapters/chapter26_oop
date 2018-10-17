@@ -8,6 +8,18 @@ CHAPTER 26 - OOP
       reference a class attribute, Python looks for the attribute in the object's class, 
       then keeps looking up the chain of superclasses until the attribute is found.
 
+    The search is bottom-to-top, left-to-right.
+
+
+
+- Instance and Class Methods
+
+    # Call instance method
+    >>> bob.giveRaise()
+
+    # Call class method
+    >>> Employee.giveRaise(bob)
+
 
 
 - Python Class Basics
@@ -32,7 +44,7 @@ CHAPTER 26 - OOP
 
 
 
-- Polymorphism
+- Polymorphism = the meaning of an operation depends on the object being operated on
 
     class Employee:
         def computeSalary(self): ...     
@@ -51,4 +63,4 @@ CHAPTER 26 - OOP
 
     >>> company = [bob, sue, tom]
     >>> for emp in company:
-            print(emp.computeSalary())       
+            print(emp.computeSalary())
