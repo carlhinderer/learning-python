@@ -1,0 +1,97 @@
+-------------------------------------------------
+CHAPTER 29 - CLASS DETAILS
+-------------------------------------------------
+
+- General Form of 'class' Statement
+
+    class name(superclass,...):
+        attr = value
+        def method(self,...):
+            self.attr = value
+
+
+
+- Any sort of statement can be nested inside a class body - prints, assignments, def, etc.
+    All the statement inside the class statement run when the class statement itself runs.
+
+
+
+- Python has class-level attributes similar to static members in C++.  In Python, they're not
+    special.  They're just attributes added to the class, rather than to individual objects.
+
+    >>> class SharedData:
+            spam = 42
+
+    >>> x = SharedData()
+    >>> y = SharedData()
+    >>> x.spam, y.spam
+    (42, 42)
+
+    # Change value of class attribute
+    >>> SharedData.spam = 99
+    >>> x.spam, y.spam
+    (99, 99)
+
+    # Changes the 'spam' attribute at the object level only
+    >>> x.spam = 88
+    >>> x.spam, y.spam
+    (88, 99)
+
+
+
+- Methods always take the class instance as their first argument.  This is because method
+    calls like this:
+
+    instance.method(args...)
+
+  are always automatically translated into class method function calls:
+
+    class.method(instance, args...)
+
+
+
+- When referencing instance attributes, we must always qualify them with 'self'.  This is to 
+    avoid having any ambiguity about whether the attribute is class- or instance-level.
+
+    class NextClass:
+        def printer(self, text):
+            self.message = text
+            print(self.message)
+
+    # Call 'printer()' on instance
+    >>> x = NextClass()
+    >>> x.printer('instance call')
+    instance call
+
+    # Call 'printer()' on class, has exact same effect
+    >>> NextClass.printer(x, 'class call')
+    class call
+
+
+
+- Calling a Superclass Constructor
+
+    class Super:
+        def __init__(self, x):
+            ...default code...
+
+    class Sub(Super):
+        def __init__(self, x, y):
+            Super.__init__(self, x)       # Run superclass __init__
+            ...custom code...
+
+    >>> I = Sub(1, 2)
+
+
+
+- Calling Other Superclass Methods
+
+    class Super:
+        def method(self):
+            print('in Super.method')
+
+    class Sub(Super):
+        def method(self):
+            print('starting Sub.method')
+            Super.method(self)
+            print('ending Sub.method')
