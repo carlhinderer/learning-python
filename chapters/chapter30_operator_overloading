@@ -213,3 +213,60 @@ CHAPTER 30 - OPERATOR OVERLOADING
         def __iadd__(self, other):
             self.val += other
             return self
+
+
+
+- Call Expressions
+
+    The '__call__' method is called any time your instance is called.
+
+    class Callee:
+        def __call__(self, *pargs, **kargs):
+            print('Called:', pargs, kargs)
+
+
+
+- Comparisons
+
+    There is no implicit relationship between pairs of comparison operators.  If you
+      want less-than and greater-than both to work, you have to code them both.
+
+    class C:
+        data = 'spam'
+        def __gt__(self, other):
+            return self.data > other
+        def __lt__(self, other):
+            return self.data < other
+
+
+
+- Boolean Tests
+
+    The '__bool__' method overrides whether your class is truthy.
+    The '__len__' method overrides what the len() method returns.
+
+    class Truth:
+        def __bool__(self): return False
+        def __len__(self): return 0
+
+
+
+- Destructor
+
+    The destructor '__del__' is run automatically when an instance's space is being reclaimed.
+
+    class Life:
+        def __init__(self, name='unknown'):
+            print('Hello ' + name)
+            self.name = name
+        def live(self):
+            print(self.name)
+        def __del__(self):
+            print('Goodbye ' + self.name)
+
+    >>> brian = Life('Brian')
+    Hello Brian
+    >>> brian.live()
+    Brian
+    >>> brian = 'loretta'
+    Goodbye Brian
