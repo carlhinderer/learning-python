@@ -1,0 +1,115 @@
+-------------------------------------------------
+CHAPTER 30 - OPERATOR OVERLOADING
+-------------------------------------------------
+
+- Basics of Overloading
+
+    1. Operator overloading lets classes intercept normal Python operations
+    2. Classes can overload all Python expression operators
+    3. Classes can also overload built-in operations like printing, function calls, etc
+    4. Overloading makes class instances act more like built-in types
+    5. Overloading is implemented by providing 
+
+
+
+- Common Operator Overloading Methods
+
+    __init__     Constructor
+    __del__      Destructor
+
+    __add__      Addition
+    __sub__      Subtraction
+
+    __or__       Bitwise OR
+
+    __repr__     Printing and conversions
+    __str__
+
+    __call__     Function calls
+
+    __getattr__  Attribute Fetch
+    __setattr__  Attribute Assignment
+    __delattr__  Attribute Deletion
+
+    __getitem__  Indexing, Slicing, Iteration
+    __setitem__  Index and slice assignment
+    __delitem__  Index and slice deletion
+
+    __lt__       Comparisons
+    __gt__
+    __le__
+    __ge__
+    __eq__
+    __ne__
+
+    __iter__     Iteration contexts
+    __next__
+
+    __contains__ Membership test
+    __index__    Integer value
+
+    __enter__    Context manager
+    __exit__
+
+    __get__      Descriptor attributes
+    __set__
+    __delete__
+
+    __new__      Object creation, before __init__
+
+
+
+- Indexing and Slicing
+
+    # Indexing with '__getitem__'
+    class Indexer:
+        def __getitem__(self, index):
+            return index ** 2
+
+    >>> X = Indexer()
+    >>> X[2]
+    4
+
+
+    # Slicing with '__getitem__'
+    class Indexer:
+        data = [5, 6, 7, 8, 9]
+        def __getitem__(self, index):
+            print('getitem:', index)
+            return self.data[index]
+
+    >>> X = Indexer()
+    >>> X[0]
+    5
+    >>> X[-1]
+    9
+    >>> X[2:4]
+    [7, 8]
+    >>> X[1:]
+    [6, 7, 8, 9]
+
+
+
+- User-Defined Iterables
+
+    # squares.py
+    # Generates squares on demand
+    class Squares:
+        def __init__(self, start, stop):    # Save state when created
+            self.value = start - 1
+            self.stop  = stop
+
+        def __iter__(self):                 # Get iterator object on iter
+            return self
+
+        def __next__(self):                 # Return a square on each iteration
+            if self.value == self.stop:     # Also called by next built-in
+                raise StopIteration
+            self.value += 1
+            return self.value ** 2
+
+
+    >>> from squares import Squares
+    >>> for i in Squares(1, 5):
+            print(i, end=' ')
+    1 4 9 16 25
