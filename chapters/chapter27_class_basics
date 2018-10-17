@@ -1,0 +1,143 @@
+-------------------------------------------------
+CHAPTER 27 - CLASS BASICS
+-------------------------------------------------
+
+- Class Basics
+
+    1. The 'class' statement creates a class object and assigns it a name.  Life 'def',
+         it is an executable statement.
+
+    2. Top-level assignments inside class statements are class attributes.
+
+    3. Class attributes provide state and behavior.
+
+
+  Instance Basics
+
+    1. Calling a class like a function creates a new instance.
+
+    2. Each instance inherits class attributes and gets its own namespace.
+
+    3. Assignments to attributes in 'self' make per-instance attributes.
+
+
+  >>> class FirstClass:
+          def setdata(self, value):
+              self.data = value
+          def display(self):
+              print(self.data)
+
+  >>> x = FirstClass()
+  >>> x.setdata('SPAM')
+  >>> x.display()
+
+
+
+- Inheritance Basics
+
+    1. Superclasses are listed in parentheses in a class header.
+
+    2. Classes inherit attributes from their superclasses.
+
+    3. Instances inherit attributes from all accessible classes.
+
+    4. Each 'object.attribute' reference invokes a new, independent search.
+
+    5. Logic changes are made by subclassing, not by changing superclasses.
+
+
+    # SecondClass 'overrides' or 'overloads' FirstClass's 'display' method
+    >>> class SecondClass(FirstClass):
+            def display(self):
+                print('Current value = %s' % self.data)
+
+
+
+- Overloading Basics
+
+    1. Methods named with double underscores are special hooks.
+
+    2. Such methods are called automatically when instances appear in built-in operations.
+
+    3. Classes may override most built-in type operations.  (And special methods are inherited
+         by subclasses.)
+
+    4. There are no defaults for operator overloading methods, and none are required.
+
+    5. New-style classes have some defaults, but not for common operations.
+
+    6. Operators allow classes to integrate with Python's object model.
+
+
+
+- Overloading Example
+
+    In this example, we'll overload 3 methods:
+      - '__init__' is run when a new object instance is created
+      - '__add__' is run when a ThirdClass instance appears in a + expression
+      - '__str__' is run when an object is printed or converted with 'str()'
+
+    >>> class ThirdClass(SecondClass):
+            def __init__(self, value):
+                self.data = value
+            def __add__(self, other):
+                return ThirdClass(self.data + other)
+            def __str__(self):
+                return 'ThirdClass: %s' % self.data
+
+
+
+- Classes are objects in their own right.  We can operate on them even when there are no
+    instances of them.
+
+    >>> class rec: pass
+
+    >>> rec.name = 'Bob'
+    >>> rec.age = 40
+
+    >>> print(rec.name)
+    Bob
+
+    >>> x = rec()
+    >>> y = rec()
+    >>> x.name, y.name
+    ('Bob', 'Bob')
+
+
+
+- The '__dict__' attribute will give you the namespace dictionary for class-based objects.
+
+    >>> list(rec.__dict__.keys())
+    'age', '__module__', '__qualname__', '__weakref__', 'name', '__dict__', '__doc__']
+
+
+  The '__class__' attribute gives you a link to an object's class.
+
+    >>> x.__class__
+    <class '__main__.rec'>
+
+
+  The '__bases__' attribute gives you a tuple of superclass objects.
+
+    >>> rec.__bases__
+    (<class 'object'>,)
+
+
+
+- Python's class model is extremely dynamic.  Classes and instances are just namespace
+    objects created on the fly by assignment.  For an example, even methods can be 
+    created independently of any class object.
+
+    >>> def uppername(obj):
+            return obj.name.upper()
+
+    >>> uppername(x)
+    'SUE'
+
+    # Now make it a class method
+    >>> rec.method = uppername
+
+    >>> x.method()
+    'SUE'
+    >>> y.method()
+    'BOB'
