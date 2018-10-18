@@ -84,5 +84,84 @@ CHAPTER 32 - ADVANCED CLASS TOPICS
         def cmeth(cls, x):
             print(cls, x)
 
-        smeth = staticmethod(smeth)
+        smeth = staticmethod(smeth)      # Only needed in 2.X
         cmeth = classmethod(cmeth)
+
+
+    # Call instance method
+    >>> obj = Methods()
+    >>> obj.imeth(1)
+    1
+
+    # Call static method
+    >>> Methods.smeth(3)
+    3
+    >>> obj.smeth(4)
+    4
+
+    # Call class method (like static, but class is automatically passed in as first argument)
+    >>> Methods.cmeth(5)
+    5
+    >>> obj.cmeth(6)
+    6
+
+
+
+- Function Decorators
+
+    Function decorators augment function definitions.  They specify special operation modes for 
+      both simple functions and classes' methods by wrapping them in a metafunction.
+
+    They consist of an '@' followed by a metafunction name.
+
+
+    class C:
+        @staticmethod
+        def meth():
+            ,,,
+
+
+
+- User-defined Function Decorators
+
+    class tracer:
+        def __init__(self, func):          # Remember original, init counter
+            self.calls = 0
+            self.func  = func
+        def __call__(self, *args):         # On later calls: add logic, run original
+            self.calls += 1
+            print('call %s to %s' % (self.calls, self.func.__name__))
+            return self.func(*args)
+
+    @tracer                                # Same as spam = tracer(spam)
+    def spam(a, b, c):                     # Wrap spam in a decorator object
+        return a + b + c
+
+    print(spam(1, 2, 3))                   # Really calls the tracer wrapper object
+    print(spam('a', 'b', 'c'))             # Invokes __call__ in class
+
+
+
+- Class Decorators
+
+    # Decorator definition
+    def decorator(aClass): ...
+
+    # Class definition
+    @decorator
+    class C: ...
+
+
+
+- Metaclasses
+
+    Metaclasses and class decorators are different, but similar models for wrapping classes.
+
+    # Metaclass definition
+    class Meta(type):
+        def __new__(meta, classname, supers, classdict):
+            ... extra logic + class creation via type call ...
+
+    # Class definition
+    class C(metaclass=Meta):
+        ... my creation routed to Meta ...
