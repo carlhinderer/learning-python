@@ -94,3 +94,213 @@ CHAPTER 31 - CLASS DESIGN
       So, a name '__X' in the 'Spam' class will be changed to '_Spam__X'.
 
     This protects against name clashes arising from subclasses defining duplicate names.
+
+
+
+- Unbound Methods are Functions in 3.X
+
+    # This is an error in 2.X but is allowed in 3.X
+    class Selfless:
+        def sum(arg1, arg2):
+            return arg1 + arg2
+
+    >>> Selfless.sum(1, 3)
+    4
+
+
+    # Must do this instead in 2.X
+    class Selfless:
+        def sum(self, arg1, arg2):
+            return arg1 + arg2
+
+    >>> s1 = Selfless()
+    >>> s1.sum(1, 3)
+    4
+
+
+
+- Bound Methods are Callable
+
+    Bound methods can be passed around arbitrarily like any other simple functions.
+
+    class Number:
+        def __init__(self, base):
+            self.base = base
+        def double(self):
+            return self.base * 2
+        def triple(self):
+            return self.base * 3
+
+    >>> x = Number(2)
+    >>> y = Number(3)
+    >>> z = Number(4)
+
+    >>> acts = [x.double, y.double, y.triple, z.triple]
+    >>> for act in acts:
+            print(act())
+    4
+    6
+    27
+    64
+
+
+
+- Factory Pattern
+
+    Classes are first class objects in Python.  They can be passed around like any other object.
+
+    def factory(aClass, *pargs, **kargs):
+        return aClass(*pargs, **kargs)
+
+    class Spam:
+        def doit(self, message):
+            print(message)
+
+    class Person:
+        def __init__(self, name, job=None):
+            self.name = name
+            self.job = job
+
+
+    >>> object1 = factory(Spam)
+    >>> object2 = factory(Person, 'Arthur', 'King')
+    >>> object3 = factory(Person, name='Brian')
+
+
+
+- Multiple Inheritance
+
+    The most common purpose of multiple inheritance is to mix in general purpose
+      methods from superclasses.  Mix-ins are sort of like modules, but they participate
+      in inheritance hierarchies and have object to the 'self' instance for using state.
+
+    For instance, we can use a mix-in that overloads the __str__ method for all classes
+      to list instance attributes called 'ListInstance'.
+
+
+    class ListInstance:
+        """
+        Mix-in class that provides a formatted print() or str() of instances via
+        inheritance of __str__ coded here;  displays instance attrs only;  self is
+        instance of lowest class; __X names avoid clashing with client's attrs
+        """
+        def __attrnames(self):
+            result = ''
+            for attr in sorted(self.__dict__):
+                result += '\t%s=%s\n' % (attr, self.__dict__[attr])
+            return result
+        def __str__(self):
+            return '<Instance of %s, address %s:\n%s>' % (
+                               self.__class__.__name__,         # My class's name
+                               id(self),                        # My address
+                               self.__attrnames())              # name=value list
+
+    if __name__ == '__main__':
+        import testmixin
+        testmixin.tester(ListInstance)
+
+
+    from listinstance import ListInstance
+    class Spam(ListInstance):
+        def __init__(self):
+            self.data1 = 'food'
+
+
+    >>> x = Spam()
+    >>> print(x)
+    <Instance of Spam, address 43034496:
+            data1=food
+    >
+
+
+
+- Example - List Inherited Attributes Also
+
+    class ListInherited:
+        """
+        Use dir() to collect both instance attrs and names inherited from
+        its classes;  Python 3.X shows more names than 2.X because of the
+        implied object superclass in the new-style class model;  getattr()
+        fetches inherited names not in self.__dict__;  use __str__, not
+        __repr__, or else this loops when printing bound methods!
+        """
+        def __attrnames(self):
+            result = ''
+            for attr in dir(self):                              # Instance dir()
+                if attr[:2] == '__' and attr[-2:] == '__':      # Skip internals
+                    result += '\t%s\n' % attr
+                else:
+                    result += '\t%s=%s\n' % (attr, getattr(self, attr))
+            return result
+        def __str__(self):
+            return '<Instance of %s, address %s:\n%s>' % (
+                               self.__class__.__name__,         # My class's name
+                               id(self),                        # My address
+                               self.__attrnames())              # name=value list
+    if __name__ == '__main__':
+        import testmixin
+        testmixin.tester(ListInherited)
+
+
+
+- Example - List Attributes of Class's Entire Hierarchy
+
+    class ListTree:
+        """
+        Mix-in that returns an __str__ trace of the entire class tree and all
+        its objects' attrs at and above self;  run by print(), str() returns
+        constructed string;  uses __X attr names to avoid impacting clients;
+        recurses to superclasses explicitly, uses str.format() for clarity;
+        """
+        def __attrnames(self, obj, indent):
+            spaces = ' ' * (indent + 1)
+            result = ''
+            for attr in sorted(obj.__dict__):
+                if attr.startswith('__') and attr.endswith('__'):
+                    result += spaces + '{0}\n'.format(attr)
+                else:
+                    result += spaces + '{0}={1}\n'.format(attr, getattr(obj, attr))
+            return result
+        def __listclass(self, aClass, indent):
+            dots = '.' * indent
+            if aClass in self.__visited:
+                return '\n{0}<Class {1}:, address {2}: (see above)>\n'.format(
+                               dots,
+                               aClass.__name__,
+                               id(aClass))
+            else:
+                self.__visited[aClass] = True
+                here  = self.__attrnames(aClass, indent)
+                above = ''
+                for super in aClass.__bases__:
+                    above += self.__listclass(super, indent+4)
+                return '\n{0}<Class {1}, address {2}:\n{3}{4}{5}>\n'.format(
+                               dots,
+                               aClass.__name__,
+                               id(aClass),
+                               here, above,
+                               dots)
+        def __str__(self):
+            self.__visited = {}
+            here  = self.__attrnames(self, 0)
+            above = self.__listclass(self.__class__, 4)
+            return '<Instance of {0}, address {1}:\n{2}{3}>'.format(
+                               self.__class__.__name__,
+                               id(self),
+                               here, above)
+    if __name__ == '__main__':
+        import testmixin
+        testmixin.tester(ListTree)    
+
+
+
+- Collector Module
+
+    Finally, we put all of our listers into a single namespace for convenience.
+
+    # lister.py
+    # Collect all 3 listers into one module
+
+    from listinstance import ListInstance
+    from listinherited import ListInherited
+    from listtree import ListTree
