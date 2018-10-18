@@ -1,0 +1,88 @@
+-------------------------------------------------
+CHAPTER 32 - ADVANCED CLASS TOPICS
+-------------------------------------------------
+
+- Extending Built-in Types
+
+    Before Python 2.2, the only way to extend built-in types was to wrap the class you
+      wanted to extend.
+
+    In 2.2+, built-in types can be subclassed directly.
+
+
+    class MyList(list):
+        def __getitem__(self, offset):
+            print('(indexing %s at %s)' % (self, offset))
+            return list.__getitem__(self, offset - 1)
+
+
+
+- Slots
+
+    New-style classes(2.2+, 3.X) have a '__slots__' class attribute that can be used to 
+      hold a sequence of attribute names.
+
+    >>> class limiter(object):
+            __slots__ = ['age', 'name', 'job']
+
+    >>> x = limiter()
+    >>> x.age
+    AttributeError: age     # Must assign before use
+
+    >>> x.age = 40
+    >>> x.age
+    40
+
+
+
+- Properties
+
+    Properties are another extension of new-style classes.  These are similar to properties
+      (getters and setters) in C#/Java.  It is an alternative to the '__getattr__' and
+      '__setattr__' approach.
+
+    class Properties(object):
+        def getage(self):
+            return 40
+        def setage(self, value):
+            print('set age: %s' % value)
+            self._age = value
+        age = property(getage, setage, None, None)     # (get, set, del, docs)
+
+
+
+- Static Methods
+
+    # Use a class attribute to keep track of how many instances have been created
+    # Only works in 3.X
+    class Spam:
+        numInstances = 0
+        def __init__(self):
+            Spam.numInstances = Spam.numInstances + 1
+        def printNumInstances():
+            print("Number of instances created: %s" % Spam.numInstances)
+
+    >>> Spam.printNumInstances()
+    Number of instances created: 3
+
+    >>> a = Spam()
+    >>> a.printNumInstances()
+    TypeError: printNumInstances() takes 0 positional arguments but 1 was given
+
+
+
+- We can also create classes with static and class methods, which don't require an instance
+    argument to be invoked.
+
+    class Methods:
+        def imeth(self, x):
+            print(self, x)
+
+        def smeth(x):
+            print(x)
+
+        def cmeth(cls, x):
+            print(cls, x)
+
+        smeth = staticmethod(smeth)
+        cmeth = classmethod(cmeth)
