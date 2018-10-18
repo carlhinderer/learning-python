@@ -1,0 +1,96 @@
+-------------------------------------------------
+CHAPTER 31 - CLASS DESIGN
+-------------------------------------------------
+
+- 3 Pillars of OOP
+
+    1. Inheritance
+    2. Polymorphism
+    3. Encapsulation
+
+
+
+- Unlike in C++, there is no concept of overloading the same method with different
+    arguments.  In Python, polymorphism is based on object interfaces, not types.
+
+    # Whatever def is last wins
+    class C:
+        def meth(self, x):
+            ...
+        def meth(self, x, y, z):
+            ...
+
+
+
+- Stream Processor Example
+
+    We created a stream processor in a previous chapter:
+
+      def processor(reader, converter, writer):
+          data = reader.read()
+          if not data: break
+          data = converter(data)
+          writer.write(data)
+
+
+    We can rewrite our processing solution as a set of classes instead.
+
+      # streams.py
+      class Processor:
+          # Composition
+          def __init__(self, reader, writer):
+              self.reader = reader
+              self.writer = writer
+
+          def process(self):
+              while True:
+                  data = self.reader.readline()
+                  if not data: break
+                  data = self.converter(data)
+                  self.writer.write(data)
+
+          # Inheritance
+          def converter(self, data):
+              assert False, 'converter must be defined'
+
+
+      # converters.py
+      from streams import Processor
+
+      class Uppercase(Processor):
+          def converter(self, data):
+              return data.upper()
+
+      if __name__ == '__main__':
+          import sys
+          obj = Uppercase(open('trispam.txt'), sys.stdout)
+          obj.process()
+
+
+
+- Besides inheritance and composition, 'delegation' is the next most commonly used OOP pagadigm.
+    It's a special form of composition, where a 'wrapper class' (aka 'proxy class') retains
+    an embedded object's interface.
+
+  In Python, this is often accomplished using the '__getattr' hook.
+
+    class Wrapper:
+        def __init__(self, object):
+            self.wrapped = object
+        def __getattr__(self, attrname):
+            print('Trace: ' + attrname)
+            return getattr(self.wrapped, attrname)
+
+
+
+- Pseudoprivate Class Attributes
+
+    All attributes in Python classes are public. There is a way to use name mangling to
+      make pseudoprivate attributes.
+
+    If a name within a class statement starts (but does not end) with 2 underscores, an 
+      underscore and the class name will be automatically prepended to the name.
+
+      So, a name '__X' in the 'Spam' class will be changed to '_Spam__X'.
+
+    This protects against name clashes arising from subclasses defining duplicate names.
