@@ -66,3 +66,43 @@ def exercise2b():
 #   __name__ for the string "__main__", as shown in this chapter. Try running your module from the 
 #   system command line; then, import the module and test its functions interactively. Does it still 
 #   work in both modes?
+
+
+
+
+# Exercise 4
+# Nested imports
+#
+# Write a second module, myclient.py, that imports mymod and tests its functions; then run myclient
+#   from the system command line. If myclient uses from to fetch from mymod, will mymod’s functions 
+#   be accessible from the top level of myclient? What if it imports with import instead? Try coding 
+#   both variations in myclient and test interactively by importing myclient and inspecting its 
+#   __dict__ attribute.
+
+import myclient
+
+def exercise4():
+    print(myclient.__dict__.keys())
+    myclient.testmymod()
+
+
+
+
+# Exercise 5
+# Package imports
+#
+# Import your file from a package. Create a subdirectory called mypkg nested in a directory on your 
+#   module import search path, copy or move the mymod.py module file you created in exercise 1 or 3 
+#   into the new directory, and try to import it with a package import of the form import mypkg.mymod
+#   and call its functions. Try to fetch your counter functions with a from too.
+#
+# You’ll need to add an __init__.py file in the directory your module was moved to make this go, but it 
+#   should work on all major Python platforms (that’s part of the reason Python uses “.” as a path 
+#   separator). The package directory you create can be simply a subdirectory of the one you’re working
+#   in; if it is, it will be found via the home directory component of the search path, and you won’t 
+#   have to configure your path. Add some code to your __init__.py, and see if it runs on each import.
+
+import mypkg.mymod
+
+def exercise5():
+    mypkg.mymod.test(testfile)
