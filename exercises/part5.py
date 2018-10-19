@@ -106,3 +106,36 @@ import mypkg.mymod
 
 def exercise5():
     mypkg.mymod.test(testfile)
+
+
+
+
+# Exercise 6
+# Reloads
+#
+# Experiment  with  module  reloads:  perform  the  tests  in Chapter  23’s changer.py example, 
+#   changing the called function’s message and/or behavior repeatedly, without stopping the Python 
+#   interpreter. Depending on your system, you might be able to edit changer in another window, or 
+#   suspend the Python interpreter and edit in the same window (on Unix, a Ctrl-Z key combination 
+#   usually suspends the current process, and an fg command later resumes it, though a text edit 
+#   window probably works just as well).
+
+
+
+
+# Exercise 7
+# Circular imports
+#
+# In the section on recursive (a.k.a. circular) import gotchas, importing recur1 raised an error. 
+#   But if you restart Python and import recur2 interactively, the error doesn’t occur—test this and 
+#   see for yourself. Why do you think it works to import recur2, but not recur1? (Hint: Python 
+#   stores new modules in the built-in sys.modules table—a dictionary—before running their code; 
+#   later imports fetch the module from this table first, whether the module is “complete” yet
+#   or not.) 
+#
+# Now, try running recur1 as a top-level script file: python recur1.py. Do you get the same error 
+#   that occurs when recur1 is imported interactively? Why? (Hint: when modules are run as programs, 
+#   they aren’t imported, so this case has the same effect as importing recur2 interactively;  
+#   recur2 is the first module imported.) What happens when you run recur2 as a script? Circular 
+#   imports are uncommon and rarely this bizarre in practice. On the other hand, if you can understand
+#   why they are a potential problem, you know a lot about Python’s import semantics.
