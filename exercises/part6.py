@@ -86,8 +86,7 @@ class MyList(list):
     def __repr__(self):
         return self.listval.repr()
     def append(self, node):
-        
-
+        self.listval.append(node)
 
 
 
@@ -103,3 +102,33 @@ class MyList(list):
 #   class interactively. Do your counters count calls per instance, or per class (for all instances of the 
 #   class)? How would you program the other option? (Hint: it depends on which object the count members are 
 #   assigned to: class members are shared by instances, but self members are per-instance data.)
+
+class MyListSub(MyList):
+    def __init__(self, listval):
+        self.addcount =  0
+        MyList.__init__(self, listval)
+    def __add__(self, other):
+        self.addcount += 1
+        print('Incrementing add counter, new value: %s' % self.addcount)
+        MyList.__add__(self, other)
+
+
+
+
+# Exercise 4
+# Attribute methods
+#
+# Write a class called Attrs with methods that intercept every attribute qualification (both fetches and 
+#   assignments), and print messages listing their arguments to stdout. Create an Attrs instance, and experiment 
+#   with qualifying it interactively. What happens when you try to use the instance in expressions? Try adding, 
+#   indexing, and slicing the instance of your class. (Note: a fully generic approach based upon __getattr__
+#   will work in 2.X’s classic classes but not in 3.X’s new-style classes—which are optional in 2.X—for reasons 
+#   noted in Chapter 28, Chapter 31, and Chapter 32, and summarized in the solution to this exercise.)
+
+# Note: this code only works for 2.X, since all methods will use '__getattr__' and '__setattr__'.
+#   In 3.X, we must override each individual method.
+class Attrs:
+    def __getattr__(self, name):
+        print('getattr: %s' % name)
+    def __setattr__(self, name, value):
+        print('setattr: Name: %s, Value: %s' % (name, value))
