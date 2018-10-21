@@ -1,0 +1,76 @@
+-------------------------------------------------
+CHAPTER 33 - EXCEPTION BASICS
+-------------------------------------------------
+
+- Five variations of exception handling statements
+
+    1. try/except
+    2. try/finally
+    3. raise
+    4. assert
+    5. with/as
+
+
+
+- Exception Roles
+
+    1. Error handling
+    2. Event notification
+    3. Special-case handling
+    4. Termination actions
+    5. Unusual control flows
+
+
+
+- Basic try/except statement
+
+    >>> def catcher():
+            try:
+                fetcher(x, 4)
+            except IndexError:
+                print('got exception')
+            print('continuing')
+
+
+
+- Raising Exceptions
+
+    # Raise exception
+    >>> raise IndexError
+    IndexError
+
+    # Conditional raise
+    >>> assert False, 'Nobody expects the Spanish Inquisition!'
+    AssertionError: Nobody expects the Spanish Inquisition!
+
+
+
+- User-defined Exceptions
+
+    >>> class AlreadyGotOne(Exception): pass
+
+    >>> def grail():
+            raise AlreadyGotOne()
+
+    >>> try:
+            grail()
+        except AlreadyGotOne:
+            print('got exception')
+
+    got exception
+
+
+
+- Termination Actions
+
+    When you use a try/finally block, the 'finally' block is always executed, whether an exception
+      occurred during the 'try' block or not.
+
+    >>> try:
+            fetcher(x, 3)
+        finally:
+            print('after fetch')
+
+
+    As of 2.5, we can mix 'except' and 'finally' clauses into the same statement, even though
+      they serve different purposes.
