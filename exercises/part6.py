@@ -132,3 +132,80 @@ class Attrs:
         print('getattr: %s' % name)
     def __setattr__(self, name, value):
         print('setattr: Name: %s, Value: %s' % (name, value))
+
+
+
+
+# Exercise 5
+# Set objects
+#
+# Experiment with the set class described in “Extending Types by Embedding”. Run commands to do the 
+#   following sorts of operations:
+#
+#     a. Create two sets of integers, and compute their intersection and union by using & and | 
+#          operator expressions.
+#     b. Create a set from a string, and experiment with indexing your set. Which methods in the class 
+#          are called?
+#     c. Try iterating through the items in your string set using a for loop. Which methods run this 
+#          time?
+#     d. Try computing the intersection and union of your string set and a simple Python string. Does 
+#          it work?
+#     e. Now, extend your set by subclassing to handle arbitrarily many operands using the *args 
+#          argument form. (Hint: see the function versions of these algorithms in Chapter 18.) Compute 
+#          intersections and unions of multiple operands with your set subclass. How can you intersect 
+#          three or more sets, given that & has only two sides?
+#     f. How would you go about emulating other list operations in the set class? (Hint: __add__
+#          can catch concatenation, and __getattr__ can pass most named list method calls like append
+#          to the wrapped list.)
+
+from exercises.setwrapper import Set
+
+def exercise5a():
+     set1 = Set(['a', 'b', 'c'])
+     set2 = Set(['c', 'd', 'e'])
+
+     # Union and Intersection
+     print(set1 & set2)
+     print (set1 | set2)
+
+     # From a string
+     set3 = Set('spam')
+     print('S[0]: %s' % set3[0])
+     print('S[-1]: %s' % set3[-1])
+     print('S[0:2]: %s' % set3[0:2])
+
+     # Iterate
+     for c in set3: print(c)
+
+     # Union and Intersection of strings
+     set4 = 'clam'
+     print(set3 & set4)
+     print(set3 | set4)
+
+class SetWithMultiples(Set):
+    def intersect(self, *others):
+        res = []
+        for item in self.data:
+            for set in list(others): 
+                if not item in set: break
+            else:
+                res.append(item)
+        return Set(res)
+
+    def union(self, *others):
+        res = list(self.data)
+        for set in others:
+            for item in list(set):
+                if not item in res:
+                    res.append(item)
+        return Set(res)
+
+def exercise5b():
+    S1 = {'a', 'b', 'c'}
+    S2 = {'c', 'd', 'e'}
+    S3 = {'c', 'f', 'g', 'h'}
+    setwithmults = SetWithMultiples(S1)
+    u = setwithmults.union(S2, S3)
+    print('Union', u)
+    i = setwithmults.intersect(S2, S3)
+    print('Intersection', i)
