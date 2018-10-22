@@ -1,0 +1,51 @@
+-------------------------------------------------
+CHAPTER 36 - EXCEPTION DESIGN
+-------------------------------------------------
+
+- Exception Idiom: Breaking Out of Nested Loops
+
+    class ExitLoop(Exception): pass
+
+    try:
+        while True:
+            while True:
+                for i in range(10):
+                    if i > 3: raise ExitLoop
+    except ExitLoop:
+        print('Continuing...')
+
+
+
+- In Python, not all exceptions are errors.  For example, to signal that an entire file has been
+    read, the 'EOFError' is raised.  When an iterator is finished returning values, it raises
+    a 'StopIteration'.
+
+
+
+- Exception Idiom: Wrap Entire Program in try Statement for Debugging
+
+    try:
+        ... run program ...
+    except:
+        import sys
+        print('uncaught!', sys.exc_info()[0], sys.exc_info()[1])
+
+
+
+- sys.exec_info
+
+    When you use an empty 'except' clause, you have to look in 'sys.exec_info' is you want
+      to know what type of exception was raised.  It returns a tuple containing 3 values
+      (type, value, traceback).
+
+      type = exception class
+      value = exception class instance
+      traceback = call stack
+
+    try:
+        ....
+    except:
+        import sys
+        print('Exception Class:', sys.exec_info()[0])
+        print('Class Instance:', sys.exec_info()[1])
+        print('Traceback:', sys.exec_info()[2])
