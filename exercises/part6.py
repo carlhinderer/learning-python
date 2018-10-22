@@ -304,3 +304,77 @@ def exercise7():
     lunch.order('hamburger')
     lunch.order('hot dog')
     print(lunch.result())
+
+
+
+
+# Exercise 8
+# Zoo  animal  hierarchy
+#
+# Code a set of six class statements to model this taxonomy with Python inheritance. Then, add a 
+#   speak method to each of your classes that prints a unique message, and a reply method in your 
+#   top-level Animal superclass that simply calls self.speak to invoke the category-specific message 
+#   printer in a subclass below (this will kick off an independent inheritance search from self). 
+#   Finally, remove the speak method from your Hacker class so that it picks up the default above it.
+
+class Animal:
+    def reply(self):
+        self.speak()
+    def speak(self):
+        print("I'm an animal!")
+
+class Mammal(Animal):
+    def speak(self):
+        print("I'm a mammal!")
+
+class Cat(Mammal):
+    def speak(self):
+        print('Meow')
+
+class Dog(Mammal):
+    def speak(self):
+        print('Woof')
+
+class Primate(Mammal):
+    def speak(self):
+        print("I'm a primate!")
+
+class Hacker(Primate): pass
+
+def exercise8():
+    for animal in [Animal(), Mammal(), Cat(), Dog(), Primate(), Hacker()]:
+        animal.reply()
+
+
+
+
+# Exercise 9
+# The Dead Parrot Sketch
+#
+# Code a set of Python classes to implement this structure with composition. Code your Scene
+#   object to define an action method, and embed instances of the Customer, Clerk, and Parrot
+#   classes (each of which should define a line method that prints a unique message). The 
+#   embedded objects may either inherit from a common superclass that defines line and simply 
+#   provide message text, or define line themselves.
+
+class Customer:
+    def speak(self): print("I'd like to buy a bird.")
+
+class Clerk:
+    def speak(self): print("I've got a parrot here you'll love!")
+
+class Parrot:
+    def speak(self): print("Squawk!!!")
+
+class Scene:
+    def __init__(self):
+        self.customer = Customer()
+        self.clerk = Clerk()
+        self.parrot = Parrot()
+
+    def play(self):
+        for actor in [self.customer, self.clerk, self.parrot]: actor.speak()
+
+def exercise9():
+    scene = Scene()
+    scene.play()
