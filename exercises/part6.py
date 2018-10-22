@@ -209,3 +209,98 @@ def exercise5b():
     print('Union', u)
     i = setwithmults.intersect(S2, S3)
     print('Intersection', i)
+
+
+
+
+# Exercise 6
+# Class tree links
+# 
+# In “Namespaces: The Whole Story” in  Chapter 29 and in “Multiple Inheritance:  ‘Mix-in’  Classes”  in 
+#   Chapter  31,  we  learned  that  classes  have  a __bases__ attribute that returns a tuple of their 
+#   superclass objects (the ones listed in parentheses in the class header). Use __bases__ to extend the 
+#   lister.py mix-in classes we wrote in Chapter 31 so that they print the names of the immediate
+#   superclasses of the instance’s class. When you’re done, the first line of the string representation 
+#   should look like this (your address will almost certainly vary):
+#   <Instance of Sub(Super, Lister), address 7841200>
+
+class SuperclassLister:
+    def listsupers(self):
+        supers = []
+        for klass in self.__class__.__bases__: supers.append(klass.__name__)
+        print('Supers: ', supers)
+
+class Superclass:
+    def supermethod(): pass
+
+class Subclass(Superclass, SuperclassLister):
+    def superclasses(self):
+        SuperclassLister.listsupers(self)
+
+def exercise6():
+    sub = Subclass()                                                                                                                                                
+    sub.listsupers()
+
+
+
+
+# Exercise 7
+# Composition
+#
+# Simulate a fast-food ordering scenario by defining four classes:
+#   Lunch
+#     A container and controller class
+#   Customer
+#     The actor who buys food
+#   Employee
+#     The actor from whom a customer orders
+#   Food
+#     What the customer buys
+#
+# To get you started, here are the classes and methods you’ll be defining:
+#   class Lunch:
+#       def __init__(self)               # Make/embed Customer and Employee
+#       def order(self, foodName)        # Start a Customer order simulation
+#       def result(self)                 # Ask the Customer what Food it has
+# 
+#   class Customer:
+#       def __init__(self)                        # Initialize my food to None
+#       def placeOrder(self, foodName, employee)  # Place order with an Employee
+#       def printFood(self)                       # Print the name of my food
+#
+#   class Employee:
+#       def takeOrder(self, foodName)    # Return a Food, with requested name
+#
+#   class Food:
+#       def __init__(self, name)         # Store food name
+
+class Lunch:
+    def __init__(self):
+        self.customer = Customer()
+        self.employee = Employee()
+    def order(self, foodName):
+        self.customer.placeOrder(foodName, self.employee)
+    def result(self):
+        self.customer.printFood()
+
+class Customer:
+    def __init__(self):
+        self.food = None
+    def placeOrder(self, foodName, employee):
+        self.food = employee.takeOrder(foodName)
+    def printFood(self):
+        print(self.food.name)
+
+class Employee:
+    def takeOrder(self, foodName):
+        return Food(foodName)
+
+class Food:
+    def __init__(self, name):
+        self.name = name
+
+def exercise7():
+    lunch = Lunch()
+    lunch.order('hamburger')
+    lunch.order('hot dog')
+    print(lunch.result())
