@@ -92,3 +92,25 @@ CHAPTER 35 - EXCEPTION OBJECTS
           mathlib.func()
       except NumErr:
           ... handle and recover ...
+
+
+
+- Built-In Exception Classes
+
+    - BaseException: top-level root superclass of exceptions
+    - Exception: top-level root superclass of application exceptions
+    - ArithmeticError: root of numeric errors
+    - LookupError: root of indexing errors
+
+
+
+- Default Printing and State
+
+    Built-in exceptions provide default print displays and state retentions.  Any constructor
+      arguments you pass to these classes are automatically saved in the instance's 'args' tuple
+      argument, and are automatically displayed when the instance is printed.
+
+      >>> raise IndexError('spam')
+      Traceback (most recent call last):
+        File "<stdin>", line 1, in <module>
+      IndexError: spam
