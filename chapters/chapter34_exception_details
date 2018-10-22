@@ -1,0 +1,92 @@
+-------------------------------------------------
+CHAPTER 34 - EXCEPTION DETAILS
+-------------------------------------------------
+
+- The try/except/else Statement
+
+    try: 
+        statements
+    except name1:
+        statements
+    except (name2, name3):     # Run if any of these occur
+        statements
+    except name4 as var:       # Assign exception to variable
+        statements
+    except:                    # For any other exceptions raised
+        statements
+    else:                      # If no exceptions occur
+        statements
+
+
+
+- In 2.5+, try/except/else and try/finally can be used together in the same statement.
+
+    try:
+        main-action
+    except Exception1:
+        handler1
+    else:
+        else-block
+    finally:
+        finally-block
+
+
+
+- The 'finally' clause is always run, even if
+    - an exception occurred in the main action and was handled
+    - an exception occurred in the main action and was not handled
+    - no exceptions occurred in the main action
+    - a new exception was triggered in one of the handlers
+
+
+
+- The 'raise' Statement
+
+    raise instance         # Raise instance of a class
+    raise IndexError()
+
+    raise class            # Makes and raises instance of a class
+    raise IndexError
+
+    raise                  # Re-raise the most recent exception
+
+    # raise example
+    # Bubbles the exception up the chain
+    try:
+        raise IndexError('spam')
+    except IndexError:
+        print('Propogating')
+        raise
+
+
+
+- The 'assert' Statement
+
+    The 'assert' statement is used for debugging.  It's basically just a conditional 'raise'
+      statement.  
+
+    # assert statement
+    assert test, data
+
+    # assert equivalent
+    if __debug__:
+        if not test:
+            raise AssertionError(data)
+
+
+    # assert example
+    def f(x):
+        assert x < 0, 'x must be negative'
+        return x ** 2
+
+
+
+- with/as Context Managers
+
+    The 'with' statement is similar to the 'using' statement in C#.
+
+    # File objects have a context manager that automatically closes
+    #   the file after the 'with' block.
+    with open('myfile.txt') as myfile:
+        for line in myfile:
+            print(line)
