@@ -1,0 +1,94 @@
+-------------------------------------------------
+CHAPTER 35 - EXCEPTION OBJECTS
+-------------------------------------------------
+
+- String Exceptions in Legacy Code
+
+    Before 2.6 and 3.0, it was possible to just raise a string as an exception rather
+      than a class.
+
+      myex = 'My exception string'
+      try:
+          raise myex
+      except myex:
+          print('caught')
+
+
+
+- Exception Hierarchies
+
+    # Class Definitions
+    class General(Exception): pass
+    class Specific1(General): pass
+    class Specific2(General): pass
+
+    def raiser0():
+        raise General()
+    def raiser1():
+        raise Specific1()
+    def raiser2():
+        raise Specific2()
+
+    for func in (raiser0, raiser1, raiser2):
+        try:
+            func()
+        except General:      # Matches General and any subclass
+            print('caught')
+
+
+
+- Reasons For Exception Hierarchies
+
+    Let's say we have a math library, and we that 2 types of errors can occur in our library:
+      zero division and overflow.  We create exceptions for them.
+
+      # mathlib.py
+      class Divzero(Exception): pass
+      class Oflow(Exception): pass
+
+      def func():
+          ...
+          raise Divzero()
+
+
+    Then, clients who use our library can handle those exceptions in their code:
+
+      # client.py
+      import mathlib
+
+      try:
+          mathlib.func(...)
+      except (mathlib.Divzero, mathlib.Oflow):
+          ... handle and recover ...
+
+
+    This works fine, but then we end up having to create a new exception for underflow errors.
+
+      class Divzero(Exception): pass
+      class Oflow(Exception): pass
+      class Uflow(Exception): pass
+
+
+    The problem is that now every single client needs to change their code.  You could say that 
+      it's easier to just catch all exceptions, but then even things like running out of memory,
+      keyboard interrupts, and system exits will get caught.  In general, it is better to try and
+      handle specific exceptions, rather than just catching all exceptions.  
+
+      try:
+          mathlib.func(...)
+      except:
+          ... handle and recover ...
+
+
+    The solution to this problem is a hierarchy of exceptions.  For instance, a base 'NumErr'
+      exception could be defined, and caller's could just handle that.
+
+      class NumErr(Exception): pass
+      class Divzero(NumErr): pass
+      class Oflow(NumErr): pass
+      class Uflow(NumErr): pass
+
+      try:
+          mathlib.func()
+      except NumErr:
+          ... handle and recover ...
