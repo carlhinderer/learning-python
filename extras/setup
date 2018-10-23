@@ -1,0 +1,41 @@
+-------------------------------------------------
+TOOLS AND SETUP
+-------------------------------------------------
+
+- Sublime Text Setup 
+  (https://www.youtube.com/watch?v=xFciV6Ew5r4&index=10&list=PL-osiE80TeTt2d9bfVyTiXJA-UTHn6WwU)
+
+
+  # Update Sublime Text
+
+  # Get path of executable
+  cat $(which subl)
+
+  # This assumes you have the executable from command line (e.g. subl), otherwise find a way to locate your 
+  #   installation (e.g. locate sublime_text), mine was /opt/sublime_text.
+
+  # Download latest version and untar it
+  curl https://download.sublimetext.com/sublime_text_3_build_3176_x64.tar.bz2 | tar vxj
+
+  # Overwrite old installation
+  sudo cp -rf sublime_text_3/. /opt/sublime_text
+
+  # Remove the download
+  rm -rf sublime_text_3
+
+
+  # Add Package Control
+  Cntl+Shift+P for (Tools > Command Pallette) and type 'install Package Control'
+  Then click the link to install it
+
+
+  # Open Sublime Text Preferences File (Preferences > Settings)
+  # 2 files are opened
+  #  Preferences.sublime-settings -- Default  (Default settings, don't change them)
+  #  Preferences.sublime-settings -- User     (Custom settings go here)
+
+
+  # Packages Installed
+  bracket highlighter = highlights matching brackets
+  sidebar enhancement = more file commands
+  anaconda = python linter
