@@ -1,0 +1,83 @@
+-------------------------------------------------
+CHAPTER 37 - UNICODE AND BYTE STRINGS
+-------------------------------------------------
+
+- Character sets assign integer codes to individual characters.
+
+    - ASCII 
+        - defines character codes 0-127, so that each character can be stored in 7 bits
+        - fixed-size characters
+        - created in the USA
+        - many standards use values 128-255 to accomodate special characters
+
+      # Use the built-in 'ord' function to get a character's ASCII code
+      >>> ord('a')
+      97
+      >>> chr(97)
+      'a'
+
+
+    - Latin-1
+        - used widely in Western Europe
+        - fixed-size characters
+        - supports ASCII standard
+        - values 128-255 are used for accented and other special characters
+
+
+    - Unicode
+        - characters may be represented in multiple bytes if needed (variable-sized characters)
+        - typically used in internationalized applications
+
+
+
+- Encoding and Decoding
+
+    - Encoding = translate string of characters into it's raw byte form
+    - Decoding = translate raw string of bytes into character string form
+
+
+
+- UTF-8 Encoding
+
+    - Widely used
+    - ASCII is a subset of both UTF-8 and Latin-1 (ie. any ASCII file is a valid UTF-8 file)
+
+    - Codes 0-127 are represented as a single byte
+    - Codes 128-2047 are turned into 2 bytes
+    - Codes above 2047 are turned into 3- or 4-byte sequences
+
+
+
+- UTF-16 and UTF-32
+
+    - UTF-16 uses a fixed-size 2-byte character scheme
+    - uTF-32 uses a fixed-size 4-byte character scheme
+
+
+
+- The string 'encode' Method
+
+    >>> S = 'ni'
+    >>> S.encode('ascii'), S.encode('latin1'), S.encode('utf8')
+    (b'ni', b'ni', b'ni')
+
+    >>> S.encode('utf16'), len(S.encode('utf16'))
+    (b'\xff\xfen\x00i\x00', 6)
+
+    >>> S.encode('utf32'), len(S.encode('utf32'))
+    (b'\xff\xfe\x00\x00n\x00\x00\x00i\x00\x00\x00', 12)
+
+
+
+- How Python Stores Strings in Memory
+
+    Encodings only really apply when text is stored or transferred externally.  In memory,
+      Python always stores decoded text in an encoding-neutral format.  All text processing
+      occurs in this uniform internal format.
+
+    Text is translated to and from an encoding-specific format only when it is transferred to
+      or from exernal text files, byte strings, or APIs.
+
+
+    - In <=3.2, Python stored strings internally as fixed-length UTF-16 (2 bytes per char)
+    - In 3.3+, a variable-length scheme with 1, 2, or 4 bytes per character is used
