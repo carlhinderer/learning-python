@@ -39,3 +39,30 @@ TOOLS AND SETUP
   bracket highlighter = highlights matching brackets
   sidebar enhancement = more file commands
   anaconda = python linter
+
+
+
+- pip
+
+  pip Basics
+  (https://www.youtube.com/watch?v=U2ZN104hIcc&index=13&list=PL-osiE80TeTt2d9bfVyTiXJA-UTHn6WwU)
+
+  # Manual
+  pip help
+  pip help install
+
+  # Search for packages
+  pip search Pympler
+
+  # Install and uninstall
+  pip install Pympler
+  pip uninstall Pympler
+
+  # List installed packages
+  pip list
+
+  # Show outdated packages
+  pip list --outdated
+  pip list -o
+
+  
