@@ -76,7 +76,7 @@ TOOLS AND SETUP
 
 
 
-- Setting Up Python Environment (Part 1) - pyenv
+- Setting Up Python Environment (Part 1) - Install pyenv
   (https://medium.com/@henriquebastos/the-definitive-guide-to-setup-my-python-workspace-628d68552e14)
   (https://github.com/pyenv/pyenv#installation)
 
@@ -115,3 +115,40 @@ TOOLS AND SETUP
    export PROJECT_HOME=~/Code/Python/workspace
    eval "$(pyenv init -)"
    pyenv virtualenvwrapper_lazy
+
+
+
+- Setting Up Python Environment (Part 3) - Configure Environments
+
+   # Make sure you have Python prereqs
+   sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+   libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+   xz-utils tk-dev libffi-dev liblzma-dev
+
+   # Add most recent versions of Python
+   pyenv install 3.7.0
+   pyenv install 2.7.15
+
+   # Create 4 special virtualenvs
+   pyenv virtualenv 3.7.0 jupyter3
+   pyenv virtualenv 3.7.0 tools3
+   pyenv virtualenv 2.7.15 ipython2
+   pyenv virtualenv 2.7.15 tools2
+
+   # Configure virtualenvs
+   pyenv activate jupyter3
+   pip install jupyter
+   python -m ipykernel install --user
+   pyenv deactivate
+
+   pyenv activate ipython2
+   pip install ipykernel
+   python -m ipykernel install --user
+   pyenv deactivate
+
+   # tools3 is used for any Python 3.X tools
+   # tools2 is used for any Python 2.X tools
+
+
+   # Make all versions of Python and special virtualenvs work together
+   pyenv global 3.7.0 2.7.15 jupyter3 ipython2 tools3 tools2
