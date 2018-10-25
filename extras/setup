@@ -91,3 +91,27 @@ TOOLS AND SETUP
 
    # Add pyenv init to your shell to enable shims and autocompletion
    echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
+
+
+
+- Setting Up Python Environment (Part 2) - Install pyenv plugins
+  (https://github.com/pyenv/pyenv-virtualenv)
+
+   # Get pyenv-virtualenv plugin
+   git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+
+   # Installing pyenv-virtualenvwrapper as a pyenv plugin will give you access to the pyenv 
+   #   virtualenvwrapper and pyenv virtualenvwrapper_lazy command.
+   git clone https://github.com/pyenv/pyenv-virtualenvwrapper.git $(pyenv root)/plugins/pyenv-virtualenvwrapper
+
+   # Create directories for environments and projects
+   # All virtualenvs will be on...
+   mkdir ~/.ve 
+   # All projects will be on...
+   mkdir ~/Code/Python/workspace
+
+   # Add to .bashrc
+   export WORKON_HOME=~/.ve
+   export PROJECT_HOME=~/Code/Python/workspace
+   eval "$(pyenv init -)"
+   pyenv virtualenvwrapper_lazy
