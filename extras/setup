@@ -152,3 +152,8 @@ TOOLS AND SETUP
 
    # Make all versions of Python and special virtualenvs work together
    pyenv global 3.7.0 2.7.15 jupyter3 ipython2 tools3 tools2
+
+
+
+- Manage virtual environments
+  (https://virtualenvwrapper.readthedocs.io/en/latest/command_ref.html)
