@@ -65,4 +65,29 @@ TOOLS AND SETUP
   pip list --outdated
   pip list -o
 
-  
+  # Update a package
+  pip install -U setuptools
+
+  # Output installed packages to a file
+  pip freeze > requirements.txt
+
+  # Install packages from a file
+  pip install -r r_test.txt
+
+
+
+- Setting Up Python Environment (Part 1) - pyenv
+  (https://medium.com/@henriquebastos/the-definitive-guide-to-setup-my-python-workspace-628d68552e14)
+  (https://github.com/pyenv/pyenv#installation)
+
+   # Install pyenv to manage Python versions
+
+   # Get pyenv
+   git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+   # Add environment variable PYENV_ROOT to point to pyenv
+   echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+   echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+
+   # Add pyenv init to your shell to enable shims and autocompletion
+   echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
