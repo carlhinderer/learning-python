@@ -205,4 +205,59 @@ CHAPTER 37 - UNICODE AND BYTE STRINGS
 
 
 
+- The 'bytes' Type
+
+    - 'bytes' supports most string operations (excluding 'format' and %)
+    - 'bytes' and 'str' types cannot be mixed without explicit conversions
+
+
+    >>> B = b'spam'     # b'...' bytes literal
+
+    >>> B.find(b'pa')
+    1
+
+    >>> B.replace(b'pa', b'XY')     # bytes methods expect bytes arguments
+    b'sXYm'
+
+    >>> B.split(b'pa')     # bytes methods return bytes results
+    [b's', b'm']
+
+
+
+- The 'bytearray' Type
+
+    # Create bytearray from string, must specify encoding
+    >>> S = 'spam'
+    >>> C = bytearray(S, 'latin1')
+    >>> C
+    bytearray(b'spam')
+
+    # Create bytearray from bytes
+    >>> B = b'spam'
+    >>> C = bytearray(B)
+    >>> C
+    bytearray(b'spam')
+
+    >>> C[0] = ord('x')
+    >>> C
+    bytearrary(b'xpam')
+
+    >>> C[1] = b'Y'[0]
+    >>> C
+    bytearray(b'xYam')
+
+    >>> C.append(ord('L'))
+    >>> C
+    bytearray(b'xYamL')
+
+    >>> C.extend(b'MNO')
+    >>> C
+    bytearray(b'xYamLMNO')
+
+    >>> C.replace(b'xY', b'sp')
+    >>> C
+    bytearray(b'spamLMNO')
+
+
+
 - 
