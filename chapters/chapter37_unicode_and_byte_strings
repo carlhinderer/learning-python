@@ -169,3 +169,40 @@ CHAPTER 37 - UNICODE AND BYTE STRINGS
     'spam'
     >>> str(B, encoding='ascii')
     'spam'
+
+
+
+- Coding Non-ASCII Characters
+
+    >>> chr(0xc4)         # 0xC4, 0xE8: characters outside ASCII's range
+    'Ä'
+    >>> chr(0xe8)
+    'è'
+
+    >>> S = '\xc4\xe8'    # Single 8-bit value hex escapes: two digits
+    >>> S
+    'Äè'
+
+    >>> S = '\u00c4\u00e8'   # 16-bit Unicode escapes: four digits each
+    >>> S
+    'Äè'
+
+    >>> len(S)            # Two characters long (not number of bytes!)
+    2
+
+    >>> S = '\U000000c4\U000000e8'       # 32-bit Unicode escapes: eight digits each
+    >>> S
+    'Äè'
+
+    >>> S.encode('ascii')
+    UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-1: ordinal 
+    not in range(128)
+
+
+
+- Either hex escapes or Unicode escapes can be embedded into 3.X strings.  Only hex escapes
+    are allowed in 'bytes' literals.
+
+
+
+- 
