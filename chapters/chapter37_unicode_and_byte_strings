@@ -260,4 +260,37 @@ CHAPTER 37 - UNICODE AND BYTE STRINGS
 
 
 
-- 
+- Reading and Writing Binary Files
+
+    # Write to binary file
+    >>> open('temp', 'wb').write(b'abc\n')
+    4
+
+    # Read binary file
+    >>> open('temp', 'r').read()
+    'abc\m'
+
+    # Read binary file and return bytes
+    >>> open('temp', 'rb').read()
+    b'abc\n'
+
+
+
+- Specifying Encoding for File Reading/Writing
+
+    >>> S = 'A\xc4B\xe8C'      # Five-character decoded string, non-ASCII
+    >>> S
+    'AÄBèC'
+
+    # Encoding automatically when written
+    >>> open('latindata', 'w', encoding='latin-1').write(S)     # Write as latin-1
+    5
+
+    >>> open('utf8data', 'w', encoding='utf-8').write(S)        # Write as utf-8
+    5
+
+    >>> open('latindata', 'rb').read()                          # Read raw bytes
+    b'A\xc4B\xe8C'
+
+    >>> open('utf8data', 'rb').read()                           # Different in files
+    b'A\xc3\x84B\xc3\xa8C'
