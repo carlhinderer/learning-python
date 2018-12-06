@@ -101,7 +101,8 @@ CHAPTER 37 - UNICODE AND BYTE STRINGS
 
     - 'bytes' is similar to the 'str', it is an immutable sequence used to represent binary
         data, and supports most string methods.  Internally, it is implemented as a sequence of 
-        small integers (0-255).
+        small integers (0-255).  Indexing a 'bytes' returns an int, slicing one returns another 
+        'bytes', and running the list built-in on one returns a list of integers, not characters.
 
     - 'bytearray' is a variant of 'bytes' that is mutable.
 
@@ -114,8 +115,57 @@ CHAPTER 37 - UNICODE AND BYTE STRINGS
         encodes it before transferring it to a file.  The encoding used by default is set at
         the platform level.  
 
+      Text-mode files also handle the BOM (Byte Order Marker) sequence that may appear at the 
+        beginning of files under some encoding schemes.  For instance, the BOM specifies whether
+        big-endian or little-endian format is to be used for UTF-16 and UTF-32.
+
     - When a file is opened in 'binary mode' by adding a 'b' to the mode argument, reading 
         its data doesn't do any decoding.  The file contents are returned raw and unchanged.
         Writing takes a 'bytes' object and transfers it to the file unchanged.  This will most 
         likely be used to process images, data transferred over networks, packed binary data
         that must be extracted, or device data streams.
+
+
+
+- To see all the encodings supported by Python,
+
+    >>> import encodings
+    >>> help(encodings)
+
+
+
+- Python 3.X String Literals
+
+    >>> B = b'spam'
+    >>> B
+    b'spam'
+
+    >>> type(B)
+    <class 'bytes'>
+
+    >>> B[0]
+    115
+
+    >>> B[1:]
+    b'pam'
+
+    >>> list(B)
+    [115, 112, 97, 109]
+
+
+
+- String Type Conversions
+
+    # Encode text into raw bytes
+    >>> S = 'eggs'
+    >>> S.encode()
+    b'eggs'
+    >>> bytes(S, encoding='ascii')
+    b'eggs'
+
+    # Decode raw bytes into text
+    >>> B = b'spam'
+    >>> B.decode()
+    'spam'
+    >>> str(B, encoding='ascii')
+    'spam'
