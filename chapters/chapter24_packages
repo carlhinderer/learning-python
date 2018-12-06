@@ -78,7 +78,7 @@ CHAPTER 24 - MODULE PACKAGES
 
          >>> import mod
          >>> from mod import attr
-\
+
 
     2. Package imports = imports that give directory path extensions relative to the 
          sys.path module search path, each package requiring an initialization file

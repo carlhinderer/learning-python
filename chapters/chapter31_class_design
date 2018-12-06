@@ -72,7 +72,7 @@ CHAPTER 31 - CLASS DESIGN
     It's a special form of composition, where a 'wrapper class' (aka 'proxy class') retains
     an embedded object's interface.
 
-  In Python, this is often accomplished using the '__getattr' hook.
+  In Python, this is often accomplished using the '__getattr__' hook.
 
     class Wrapper:
         def __init__(self, object):
