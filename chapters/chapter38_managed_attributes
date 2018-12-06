@@ -1,0 +1,84 @@
+-------------------------------------------------
+CHAPTER 38 - MANAGED ATTRIBUTES
+-------------------------------------------------
+
+- Why Manage Attributes?
+
+    # Basic Attribute Syntax
+    >>> person.name
+    >>> person.name = value
+
+
+    # If you want to add some extra logic, you could write getters and setters
+    class Person:
+        def getName(self):
+            if not valid():
+                raise TypeError('cannot fetch name')
+            else:
+                return self.name.transform()
+
+        def setName(self, value):
+            if not valid(value):
+                raise TypeError('cannot change name')
+            else:
+                self.name = transform(value)
+
+
+    However, if you do that, you'd have to also change each place the names are used in the 
+      entire program.  For a more flexible approach, we could use several strategies:
+
+      1. The '__getattr__' and '__setattr__' methods, for routing undefined attribute fetches
+           and all attribute assignments to generic handler methods.
+
+      2. The '__getattribute__' method, for routing all attribute fetches to a generic 
+           handler method.
+
+      3. The 'property' built-in, for routing specific attribute access to get and set handler
+           functions.
+
+      4. The descriptor protocol, for routing specific attribute accesses to instances of 
+           classes with arbitrary get and set handler methods, and the basis for other tools
+           such as properties and slots.
+
+
+
+- Properties
+
+    The property protocol allows us to route a specific attribute's get, set, and delete operations
+      to functions or methods we provide.  We can also provide documentation for the attribute
+      if desired.
+
+
+    # All parameters default to None, none are required
+    # If fget, fset, or fdel is None, that means the operation is not supported
+
+    attribute = property(fget, fset, fdel, doc)
+
+
+
+- Property Example
+
+    class Person:
+        def __init__(self, name):
+            self._name = name
+
+        def getName(self):
+            print('fetch...')
+            return self._name
+
+        def setName(self):
+            print('change...')
+            self._name = value
+
+        def delName(self):
+            print('remove...')
+            del self._name
+
+        name = property(getName, setName, delName, 'name property docs')
+
+
+    >>> bob = Person('Bob Smith')
+    >>> bob.name                        # Calls getName
+    >>> bob.name = 'Robert Smith'       # Calls setName
+    >>> del bob.name                    # Calls delName
+    >>> help(Person.name)               # Prints documentation
