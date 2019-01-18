@@ -51,7 +51,7 @@ CHAPTER 37 - UNICODE AND BYTE STRINGS
 - UTF-16 and UTF-32
 
     - UTF-16 uses a fixed-size 2-byte character scheme
-    - uTF-32 uses a fixed-size 4-byte character scheme
+    - UTF-32 uses a fixed-size 4-byte character scheme
 
 
 

@@ -82,3 +82,95 @@ CHAPTER 38 - MANAGED ATTRIBUTES
     >>> bob.name = 'Robert Smith'       # Calls setName
     >>> del bob.name                    # Calls delName
     >>> help(Person.name)               # Prints documentation
+
+
+
+- Alternative Property Syntax with Decorators
+
+    class Person:
+        def __init__(self, name):
+            self._name = name
+
+        @property
+        def name(self):
+            "name property docs"
+            print('fetch...')
+            return self._name
+
+        @name.setter
+        def name(self, value):
+            print('change...')
+            self._name = value
+
+        @name.deleter
+        def name(self):
+            print('remove...')
+            del self._name
+
+
+
+- Descriptors
+
+    The descriptor protocol allows us to route a specific attribute's get, set, and delete
+      operations to methods of a separate class's instance that we provide.
+
+    This allows us to insert code to be run automatically on attribute fetches and 
+      assignments, intercept attribute deletions, and provide documentation for attributes.
+      Several other tools, like properties and slots, are implemented using descriptors.
+
+    Like any other class attribute, descriptors and properties are inherited by subclasses.
+
+
+    class Descriptor:
+        "docstring goes here"
+        def __get__(self, instance, owner): ...        # Return attr value
+        def __set__(self, instance, value): ...        # Return nothing (None)
+        def __delete__(self, instance): ...            # Return nothing (None)
+
+
+
+- Descriptor Example
+
+    class Name:
+        "name descriptor docs"
+        def __get__(self, instance, owner):
+            print('fetch')
+            return instance._name
+        def __set__(self, instance, value):
+            print('change...')
+            instance._name = value
+        def __delete__(self, instance):
+            print('remove...')
+            del instance._name
+
+    class Person:                           
+        def __init__(self, name):
+            self._name = name
+        name = Name()                       # Assign descriptor to attr
+
+    bob = Person('Bob Smith')               # bob has a managed attribute
+    print(bob.name)                         # Runs Name.__get__
+    bob.name = 'Robert Smith'               # Runs Name.__set__
+    print(bob.name)
+    del bob.name                            # Runs Name.__delete__
+
+
+
+- Example - Keeping State In a Descriptor
+
+    class DescState:                           
+        def __init__(self, value):
+            self.value = value
+        def __get__(self, instance, owner):    # On attr fetch
+            print('DescState get')
+            return self.value * 10
+        def __set__(self, instance, value):    # On attr assign
+            print('DescState set')
+            self.value = value
+
+    # Client class
+    class CalcAttrs:
+        X = DescState(2)                       # Descriptor class attr
+        Y = 3                                  # Class attr
+        def __init__(self):
+            self.Z = 4                         # Instance attr

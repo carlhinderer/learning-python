@@ -89,7 +89,7 @@ CHAPTER 34 - EXCEPTION DETAILS
     #   the file after the 'with' block.
     with open('myfile.txt') as myfile:
         for line in myfile:
-            print(line
+            print(line)
 
 
 

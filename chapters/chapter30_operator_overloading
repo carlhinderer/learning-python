@@ -8,7 +8,7 @@ CHAPTER 30 - OPERATOR OVERLOADING
     2. Classes can overload all Python expression operators
     3. Classes can also overload built-in operations like printing, function calls, etc
     4. Overloading makes class instances act more like built-in types
-    5. Overloading is implemented by providing 
+    5. Overloading is implemented by providing specially named methods in a class.
 
 
 

@@ -81,7 +81,7 @@ CHAPTER 35 - EXCEPTION OBJECTS
 
 
     The solution to this problem is a hierarchy of exceptions.  For instance, a base 'NumErr'
-      exception could be defined, and caller's could just handle that.
+      exception could be defined, and callers could just handle that.
 
       class NumErr(Exception): pass
       class Divzero(NumErr): pass
