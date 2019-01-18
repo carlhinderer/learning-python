@@ -174,3 +174,14 @@ CHAPTER 38 - MANAGED ATTRIBUTES
         Y = 3                                  # Class attr
         def __init__(self):
             self.Z = 4                         # Instance attr
+
+
+
+- The __getattr__ and __getattribute__ methods
+
+    __getattr__ is run for undefined attribute fetches
+
+    __getattribute__ is run for all attribute fetches
+
+
+    When using these methods, it is important to avoid creating infinite loops!
