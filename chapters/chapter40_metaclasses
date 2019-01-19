@@ -42,3 +42,4 @@ CHAPTER 40 - METACLASSES
 - The Class and Metaclass Models
 
     - Classes are instances of 'type', which is itself a class
+    - Metaclasses are subclasses of 'type'
