@@ -1,0 +1,44 @@
+-------------------------------------------------
+CHAPTER 40 - METACLASSES
+-------------------------------------------------
+
+- Levels of Python Magic
+
+    1. Introspection attributes and tools
+    2. Operator overloading methods
+    3. Attribute interception methods
+    4. Class properties
+    5. Class attribute descriptors
+    6. Function and class decorators
+    7. Metaclasses
+
+
+
+- Class Decorators vs Metaclasses
+
+    - Decorators = run at instance creation time, used to manage instances
+    - Metaclasses = run at class creation time, used to manage classes themselves
+
+
+
+- Metaclass Usage
+
+    def extra(self, arg): ...
+
+    class Extras(type):
+        def __init__(Class, classname, superclasses, attributedict):
+            if required():
+                Class.extra = extra
+
+    class Client1(metaclass=Extras): ...    # Metaclass declaration only (3.X form)
+    class Client2(metaclass=Extras): ...    # Client class is instance of meta
+    class Client3(metaclass=Extras): ...
+
+    X = Client1()                           # X is instance of Client1
+    X.extra()
+
+
+
+- The Class and Metaclass Models
+
+    - Classes are instances of 'type', which is itself a class
