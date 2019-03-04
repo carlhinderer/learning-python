@@ -1,0 +1,51 @@
+-------------------------------------------------
+TOOLS AND SETUP - UBUNTU 18.04
+-------------------------------------------------
+
+- Setting Up Python Environment (Part 1) - Prereqs
+  
+   # Install pip for python3
+   sudo apt install python3-pip
+
+   # Install venv for python3
+   sudo apt install python3-venv
+
+
+
+- Setting Up Python Environment (Part 2) - Install pyenv
+  (https://medium.com/@henriquebastos/the-definitive-guide-to-setup-my-python-workspace-628d68552e14)
+  (https://github.com/pyenv/pyenv#installation)
+
+   # Install pyenv to manage Python versions
+
+   # Get pyenv
+   git clone https://github.com/pyenv/pyenv.git ~/.pyenv
+
+   # Add environment variable PYENV_ROOT to point to pyenv
+   echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+   echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+
+   # Add pyenv init to your shell to enable shims and autocompletion
+   echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
+
+   # Install desired pythons
+   pyenv install 3.7.1
+   pyenv global 3.7.1
+
+
+
+- Setting Up Python Environment (Part 3) - Create virtual environments
+  (https://linoxide.com/linux-how-to/setup-python-virtual-environment-ubuntu/)
+
+   # Create environments directory and navigate to it
+   mkdir environments
+   cd environments
+
+   # Create virtual environment
+   python -m venv data-science
+
+   # Use virtual environment
+   source data-science/bin/activate
+
+   # Stop using virtual environment
+   deactivate
