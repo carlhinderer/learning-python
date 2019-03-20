@@ -7,7 +7,7 @@ CHAPTER 3 - HOW YOU RUN PROGRAMS
 
      - To import a module into the session:
           >>> import os
-          >>> os.getcwd(s)
+          >>> os.getcwd()
 
      - Compound statements are terminated with a blank line
 
