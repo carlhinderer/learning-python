@@ -1,0 +1,117 @@
+--------------------------------------------------------------------
+CHAPTER 1 - STARTING PROJECTS
+--------------------------------------------------------------------
+
+- Python Versions
+
+    - Python 3
+
+        Oct 19 = Python 3.8
+        Jun 18 = Python 3.7
+
+        Around December 2019, the last bug fix release of Python 3.7 will occur, and everyone will be
+          expected to switch to Python 3.8.  
+
+
+    - Python 2
+
+        - Versions <= 2.6 are now obselete, and they should not need to be supported at all.
+        - Version 2.7 is the last version of Python 2.  It will not be supported after 2020.
+
+
+
+- Standard Package Directory
+
+    foobar
+        /docs
+            conf.py
+            index.rst
+            quickstart.rst
+        /foobar
+            /data
+                image.png
+            /tests
+                __init__.py
+                test_storage.py
+                test_cli.py
+                __init__.py
+            cli.py
+            storage.py
+        setup.py
+        setup.cfg
+        README.rst
+
+
+    - The standard name for a Python installation script is 'setup.py'.  It comes with its companion 'setup.cfg',
+        which should contain the installation script details.
+
+    - The '.rst' files are in the 'reStructuredText' format, which will be consumed by Sphinx.
+
+
+
+- Version Numbering
+
+    - PEP 440 defines the correct format for version numbers.  
+
+    - Valid:
+
+        1.2 or 1.2.0
+        1.2a1          # Alpha
+        1.2b2          # Beta
+        1.2rc1         # Release Candidate
+
+      Invalid:
+
+        2013.06.22
+
+
+
+- Tools to Catch Style Errors
+
+    - The PEP8 specification sets basic style guidelines.  The guidelines include:
+
+        1. Use 4 spaces per indentation level
+        2. Limit all lines to a maximum of 79 characters
+        3. Separate top-level function and class definitions with 2 blank lines
+        4. Encode files using ASCII or UTF-8
+        5. Use one module import per import statement and line.  Place imports at the top of
+             the file, after comments and docstrings, grouped by standard, then third-party,
+             then finally by local library imports.
+        6. Do not use extraneous whitespace between parentheses, brackets, or braces, or 
+             before commas.
+        7. Write class names in CamelCase, suffix exceptions with 'Error', and name functions 
+             with words and underscores.  Use a leading underscore for _private attributes
+             or methods.
+
+
+    - We can use the 'pep8' tool to check our code automatically.
+
+        # Install pep8
+        $ pip install pep8
+
+        # Use pep8 checker
+        $ pep8 hello.py
+
+        # Ignore certain errors
+        $ pep8 --ignore
+
+
+    - The community still debates whether validating against PEP 8 code, which is not part of the 
+        Standard Library, is good practice.  It can easily be integrated into a continuous
+        integration system.  Most open source projects do enforce PEP 8 conformance.
+
+
+- Tools to Catch Coding Errors
+
+    - Python also has tools that check for actual coding errors.  These tools make use of static analysis,
+        meaning they parse the code rather than actually running it.
+
+        - Pyflakes = entendable via plugins, doesn't check PEP8
+        - Pylint = Checks PEP8 conformances while performing code checks by default
+
+
+    - To simplify things, Python has a project named 'flake8' that combines pyflakes and pep8 into a
+        single command.  
+
+      There are a large number of plugins available for flake8.  For example, the 'flake8-import-order' 
+        plugin will check to make sure your import statements are in alphabetical order.
