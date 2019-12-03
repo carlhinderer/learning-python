@@ -146,3 +146,108 @@ CHAPTER 2 - MODULES, LIBRARIES, & FRAMEWORKS
         
                 sys.modules[fullname] = mod
                 return mod
+
+
+
+- Useful Standard Libraries
+
+    atexit
+      Allows you to register functions for your program to call when it exits
+
+    argparse
+      Provides functions for parsing command line arguments
+
+    bisect
+      Provides bisection algorithms for sorting lists
+
+    calendar
+      Provides a number of date-related functions
+
+    codecs
+      Provides functions for encoding and decoding data
+
+    collections
+      Provides a variety of useful data structures
+
+    concurrent
+      Provides asynchronous computation
+
+    copy
+      Provides functions for copying data
+
+    csv
+      Provides functions for reading and writing csv files
+
+    datetime
+      Provides classes for handling dates and times
+
+    fnmatch
+      Provides functinos for matching Unix-style filename patterns
+
+    glob
+      Provides functinos for matching Unix-style path patterns
+
+    io
+      Provides functions for handling i/o streams
+
+    json
+      Provides functions for reading and writing JSON data
+
+    logging
+      Provides access to Python's own built-in logging functionality
+
+    multiprocessing
+      Allows you to run multiple subprocesses from your application, while providing an API
+      that makes them look like threads.
+
+    operator
+      Provides functions for impementing basic Python operators
+
+    os
+      Provides access to basic OS functions
+
+    random
+      Provides functions for generating pseudorandom numbers
+
+    re
+      Provides regular expression functionality
+
+    sched
+      Provides an event scheduler without using multithreading
+
+    select
+      Provides access to the 'select()' and 'poll()' functions for creating event loops
+
+    shutil
+      Provides access to high-level file functions
+
+    signal
+      Provides functions for handling POSIX signals
+
+    tempfile
+      Provides functions for creating temporary files and directories
+
+    threading
+      Provides access to high-level threading functionality
+
+    urllib
+      Provides functinos for handling and parsing URLs
+
+    uuid
+      Allows you to generate UUIDs
+
+
+
+- External Libraries
+
+
+- The External Libraries Safety List
+
+
+- Protecting Your Code with an API Wrapper
+
+
+- Getting More From pip
+
+
+- Using and Choosing Frameworks
