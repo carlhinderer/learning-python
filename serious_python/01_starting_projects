@@ -101,6 +101,13 @@ CHAPTER 1 - STARTING PROJECTS
         integration system.  Most open source projects do enforce PEP 8 conformance.
 
 
+    - Note that 'pycodestyle' has replaced 'pep8', which will be removed in future versions.
+
+        $ pip install pycodestyle
+        $ pycodestyle hello.py
+
+
+
 - Tools to Catch Coding Errors
 
     - Python also has tools that check for actual coding errors.  These tools make use of static analysis,
@@ -111,7 +118,15 @@ CHAPTER 1 - STARTING PROJECTS
 
 
     - To simplify things, Python has a project named 'flake8' that combines pyflakes and pep8 into a
-        single command.  
+        single command.  flake8 is heavily used for style verification in open-source projects.
 
       There are a large number of plugins available for flake8.  For example, the 'flake8-import-order' 
         plugin will check to make sure your import statements are in alphabetical order.
+
+
+        # Install flake8
+        $ pip install flake8
+
+        # Run flake8
+        $ flake8 path/check.py
+        $ flake8 path/
