@@ -70,3 +70,79 @@ CHAPTER 2 - MODULES, LIBRARIES, & FRAMEWORKS
 
         1. Meta Path Finders for use with 'sys.meta_path'
         2. Path Entry Finders for use with 'sys.path_hooks'
+
+
+
+- Meta Path Finders
+
+    - The 'meta path finder' is an object that will allow you to load custom objects as well as
+        standard .py files.  
+
+      A meta path finder object must expose a 'find_module(fullname, path=None)' method that returns 
+        a loader object.  The loader object must also have a 'load_module(fullname)' method
+        resposible for loading the module from a source file.
+
+
+    - We want to write classes so that we can load modules in files with .hy extensions.  Here is the
+        finder object:
+
+        class MetaImporter(object):
+            def find_on_path(self, fullname):
+                fls = ["%s/__init__.hy", "%s.hy"]
+                dirpath = "/".join(fullname.split("."))
+        
+                for pth in sys.path:
+                    pth = os.path.abspath(pth)
+                    for fp in fls:
+                        composed_path = fp % ("%s/%s" % (pth, dirpath))
+                        if os.path.exists(composed_path):
+                            return composed_path
+        
+            def find_module(self, fullname, path=None):
+                path = self.find_on_path(fullname)
+                if path:
+                    return MetaLoader(path)
+
+        sys.meta_path.append(MetaImporter())
+
+
+    - Once Python has determined that the path is valid and points to a module, a 'MetaLoader' class is
+        returned:
+
+        class MetaLoader(object):
+            def __init__(self, path):
+                self.path = path
+        
+            def is_package(self, fullname):
+                dirpath = "/".join(fullname.split("."))
+                for pth in sys.path:
+                    pth = os.path.abspath(pth)
+                    composed_path = "%s/%s/__init__.hy" % (pth, dirpath)
+                    if os.path.exists(composed_path):
+                        return True
+                return False
+        
+            def load_module(self, fullname):
+                if fullname in sys.modules:
+                    return sys.modules[fullname]
+        
+                if not self.path:
+                    return
+        
+                sys.modules[fullname] = None
+                mod = import_file_to_module(fullname, self.path)
+        
+                ispkg = self.is_package(fullname)
+        
+                mod.__file__ = self.path
+                mod.__loader__ = self
+                mod.__name__ = fullname
+        
+                if ispkg:
+                    mod.__path__ = []
+                    mod.__package__ = fullname
+                else:
+                    mod.__package__ = fullname.rpartition('.')[0]
+        
+                sys.modules[fullname] = mod
+                return mod
