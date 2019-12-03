@@ -1,0 +1,72 @@
+--------------------------------------------------------------------
+CHAPTER 2 - MODULES, LIBRARIES, & FRAMEWORKS
+--------------------------------------------------------------------
+
+- The Import System
+
+    - The 'import' keyword is actually a wrapper around a function named '__import__'.
+
+        # These are the same
+        >>> import itertools
+        >>> itertools = __import__("itertools")
+
+        # These are also the same
+        >>> import itertools as it
+        >>> it = __import__("itertools")
+
+
+    - This technique can be leveraged to load a module whose name you don't know at compile time.  
+        Remember that modules, once imported, are essentially objects with classes, functions, 
+        variables, etc.
+
+        >>> random = __import__("RANDOM".lower())
+
+
+
+- The sys Module
+
+    - The 'sys' module provides access to variables and functions related to Python itself and the 
+        operating system it is running on.  It also contains information about Python's import
+        system.
+
+
+    - The 'sys.modules' variable is a dictionary whose key is the module name and value is the 
+        module object.
+
+        >>> import sys
+        >>> import os
+        >>> sys.modules['os']
+        <module 'os' from '/usr/lib/python2.7/os.pyc'>
+
+
+    - We can also retrieve the list of built-in modules.
+
+        >>> import sys
+        >>> sys.builtin_module_names
+
+
+
+- Import Paths
+
+    - When importing modules, Python relies on a list of paths to know where to look for the
+        module.  This list is stored in the 'sys.path' variable.
+
+        # Add a path for modules
+        >>> import sys
+        >>> sys.path.append('/foo/bar')
+
+
+
+- Custom Importers
+
+    - The import mechanism can be extended using custom importers.  This 'import hook technique'
+        is defined by PEP 302.
+
+      For example, you could write an extension that imports modules from a database or does
+        sanity checks before importing a module.
+
+
+    - Python offers 2 different ways to broaden the import system:
+
+        1. Meta Path Finders for use with 'sys.meta_path'
+        2. Path Entry Finders for use with 'sys.path_hooks'
