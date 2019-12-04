@@ -240,14 +240,80 @@ CHAPTER 2 - MODULES, LIBRARIES, & FRAMEWORKS
 
 - External Libraries
 
+    - Python has a vast ecosystem of third-party packages.  Note that unlike the standard library,
+        external libraries may be buggy, have sparse documentation, or never update.  So, it is
+        necessary to be mindful of the risks in using them.
+
+
 
 - The External Libraries Safety List
+
+    - To mitigate risks, this checklist can be used to determine whether an external library should
+        be used:
+
+        1. Is it Python 3 compatible?
+        2. Is it being actively developed?
+        3. Is it being actively maintained?
+        4. Is it packaged with Linux distros (if it is, many people will be watching for issues)?
+        5. Does the API have breaking changes?
+        6. What is the license?
+
 
 
 - Protecting Your Code with an API Wrapper
 
+    - No matter how useful an external library might be, be way of letting it get its hooks in your
+        actual code.  A better idea is to write your own wrapper around the library.
+
+      That way, if you need to use a different library, we'll just have to change the wrapper.
+
+
 
 - Getting More From pip
 
+    - pip can install or uninstall packages from the PyPI (Python Packaging Index), a tarball, or a
+        Wheel archive.
+
+        # Install a package
+        $ pip install voluptuous
+
+        # Install a package in your home directory to avoid polluting system-wide directories
+        $ pip install --user voluptuous
+
+        # Uninstall a package
+        $ pip uninstall voluptuous
+
+
+    - The 'freeze' command can be used to list the packages you already have installed.
+
+        $ pip freeze
+
+
+    - One useful feature of pip is the ability to install a package without copying the package's file.
+        You can do this when you're actively working on a package and want to avoid reinstalling it 
+        every time you need to test a change.
+
+        $ pip install -e .
+
+      Here, pip does not copy the files from the local source directory, but places a special file, called
+        an 'egg-link', in your distribution path.  The egg-link file contains the path to add to 
+        'sys.path' to look for packages.
+
+
+    - The '-e' option can also be used to install a library directly from a VCS repository.
+
+        # Install a library directly from github
+        $ pip install -e git+https://github.com/jd/daiquiri.git\#egg=daiquiri
+
+      In this case, pip uses a 'git clone' command to copy the repository locally and creates an egg-link
+        for it.
+
+
 
 - Using and Choosing Frameworks
+
+    - The main difference between frameworks and external libraries is that applications use frameworks
+        by building on top of them.  There are upsides, like increased productivity.  
+
+      There are also downsides, like lock-in.  Typically, replacing a framework requires a complete 
+        rewrite of your program from the ground up.
