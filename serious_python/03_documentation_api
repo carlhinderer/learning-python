@@ -1,0 +1,92 @@
+--------------------------------------------------------------------
+CHAPTER 3 - DOCUMENTATION AND GOOD API PRACTICE
+--------------------------------------------------------------------
+
+- Documenting With Sphinx
+
+    - The most common format for Python documentation is 'reStructuredText' or 'reST'.  It's a
+        lightweight markup language (similar to markdown).  Sphinx is the most popular tool
+        for working with this format.  
+
+
+    - It is recommended that project documentation always includes the following:
+
+        1. The problem your project solves in 1-2 sentences
+
+        2. The license your project is distributed under.  If the project is open source, this 
+             should also be included in a header in each code file.
+
+        3. A small example of how your code works
+
+        4. Installation instructions
+
+        5. Links to community support, mailing list, forums, etc.
+
+        6. A link to your bug tracker system
+
+        7. A link to your source code
+
+
+    - You should also include a README.rst file that explains what your project does.  This should
+        be displayed on your GitHub or PyPI project page.
+
+
+    - If you're using GitHub, you can also add a CONTRIBUTING.rst file that will be displayed when
+        someone submits a pull request.  It should provide a checklist for users to follow before
+        they submit the request, including things like running the PEP8 checker and reminders to
+        run the unit tests.
+
+
+
+- Getting Started with Sphinx and reST
+
+    - First, we need to install Sphinx.  Once it is installed, we run 'sphinx-quickstart' in our
+        project's top-level directory.  
+
+        # Install sphinx
+        $ pip install sphinx
+
+        # Run in project's top-level directory
+        $ sphinx-quickstart
+
+
+    - The quickstart will create the directory structure that Sphinx expects to find, along with 2
+        files in the 'doc/source' folder:
+
+        conf.py
+          Contains Sphinx's config settings
+
+        index.rst
+          Serves as the front page of your documentation
+
+      Once the quickstart command is run, you'll be taken through a series of steps to designate naming
+        conventions, version conventions, and options for other useful tools and standards.
+
+
+    - 
+
+
+
+
+- Sphinx Modules
+
+
+- Automating the Table of Contents with autosummary
+
+
+- Automating Testing with doctest
+
+
+- Writing a Sphinx Extension
+
+
+- Managing Changes to your APIs
+
+
+- Numbering API Versions
+
+
+- Documenting your API Changes
+
+
+- Marking Depracated Functions with the warnings Module
