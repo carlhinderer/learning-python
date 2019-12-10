@@ -110,13 +110,99 @@ CHAPTER 6 - UNIT TESTING
 
         # Run (# of cpus on machine) processes
         $ pytest -n auto
-        
+
 
 
 - Creating Objects Used in Tests with Fixtures
 
+    - Fixtures are components that are set up before a test and deleted once the test is
+        done.  With pytest, fixtures are defined as simple functions.
+
+
+    - Here, we specify the setup in the fixture:
+
+        import pytest
+
+        @pytest.fixture
+        def database():
+            return <some database connection>
+
+        def test_insert(database):
+            database.insert(123)
+
+
+    - Here, we specify both the setup and teardown in the fixture:
+
+        import pytest
+
+        @pytest.fixture
+        def database():
+            db = <some database connection>
+            yield db
+            db.close()
+
+        def test_insert(database):
+            database.insert(123)
+
+
+    - Since closing the database connection on each test might be costly, we can reuse the same 
+        connection for all the tests.  
+
+      Here, the setup for the fixture runs once before all the tests and the teardown runs once
+        after all the tests are finished:
+
+        import pytest
+
+        @pytest.fixture(scope='module')
+        def database():
+            db = <some database connection>
+            yield db
+            db.close()
+
+
+    - The 'autouse' option will cause the fixture to be run before and after each test, without 
+        having to specify it as an argument in the tests that use it.
+
+        import os, pytest
+
+        @pytest.fixture(autouse=True)
+        def change_user_env():
+            curuser = os.environ.get("USER")
+            os.environ["USER"] = "foobar"
+            yield
+            os.environ["USER"] =  curuser
+
+        def test_user():
+            assert os.getenv("USER") == "foobar"
+
+
 
 - Running Test Scenarios
+
+    - Let's say we want to run an entire test suite against different drivers.   For instance, we
+        might have an abstract class called the 'Storage API' in our application.  Any Python 
+        class can implement this abstract base and register itself to become a driver.  The
+        package loads the configured storage driver and uses it to store and retrieve data.
+
+
+    - We need a class of unit tests that runs against each driver to make sure all drivers conform
+        to what clients expect.  An easy way to achieve this is with 'parameterized fixtures' which
+        will run all the tests for each of the defined parameters.
+
+
+        # Run tests for mysql and postgres
+        import myapp, pytest
+
+        @pytest.fixture(params=['mysql', 'postgresql'])
+        def database(request):
+            d = myapp.driver(request.param)
+            d.start()
+            yield d
+            d.stop()
+
+        def test_insert(database):
+            database.insert("somedata")
+
 
 
 - Controlled Tests Using Mocking
