@@ -1,0 +1,14 @@
+--------------------------------------------------------------------
+CHAPTER 12 - MANAGING RELATIONAL DATABASES
+--------------------------------------------------------------------
+
+- RDBMSs, ORMs, and When to Use Them
+
+
+- Database Backends
+
+
+- Streaming Data with Flask and PostgreSQL
+
+    - Writing the Data-Streaming Application
+    - Building the Application
