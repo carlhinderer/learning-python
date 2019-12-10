@@ -179,11 +179,193 @@ CHAPTER 5 - DISTRIBUTING YOUR SOFTWARE
 
 - Entry Points
 
+    - Entry points are methods by which other Python programs can discover the dynamic features
+        a package provides.  
+
+
+    - Here, we reate an entry point called 'rebuildd' in the 'console_scripts' entry point group:
+
+        #!/usr/bin/python
+        from distutils.core import setup
+        
+        setup(name="rebuildd",
+            description="Debian packages rebuild tool",
+            author="Julien Danjou",
+            author_email="acid@debian.org",
+            url="http://julien.danjou.info/software/rebuildd.html",
+            entry_points={
+                'console_scripts': [
+                    'rebuildd = rebuildd:main',
+                ],
+            },
+            packages=['rebuildd'])
+
+
+    - Entry points are organized in groups, where each group is made of a list of key/value pairs.
+
+
 
 - Visualizing Entry Points
 
+    - We can use the 'entry-point-inspector' package to visualize the entry points avaiable in the
+        package.  
 
-- Using Console Scripts
+        # Install package
+        $ pip install entry-point-inspector
+
+        # See list of entry point groups
+        $ epi group list
+
+        # Show details of an entry point group
+        $ epi group show console_scripts
+
+
+
+- Using console_scripts
+
+    - When writing a Python application, you almost always have to provide a launchable program
+        that needs to be installed inside a directory in the system path.
+
+
+    - Here is a launchable example program:
+
+        #!/usr/bin/python
+        import sys
+        import mysoftware
+
+        mysoftware.SomeClass(sys.argv).run()
+
+
+    - This short script is ideal.  In many projects, you'll find much longer scripts installed
+        in the system path.  However, these scripts have major issues:
+
+        1. There is no way the user can know where the Python interpreter is or which version 
+             it uses.
+
+        2. The script leaks binary code that can't be imported by software or unit tests.
+
+        3. There is no easy way to define where to install this script.
+
+        4. It's not obvious how to install this in a portable way (ie for Linux and Windows).
+
+
+    - setuptools provides the 'console_scripts' feature to help us get around these problems.  This
+        entry point can be used to make setuptools install a tiny program in the system path that
+        calls a specific function in your module.
+
+
+
+- Example - Using console_scripts
+
+    # foobar/client.py
+    def main():
+        print("Client started")
+
+
+    # foobar/server.py
+    def main():
+        print("Server started")
+
+
+    # setup.py
+    from setuptools import setup
+
+    setup(
+        name="foobar",
+        version="1",
+        description="Foo!",
+        author="Julien Danjou",
+        author_email="julien@danjou.info",
+        packages=["foobar"],
+        entry_points={
+            "console_scripts": [
+                "foobard = foobar.server:main",
+                "foobar = foobar.client:main",
+            ],
+         },
+    )
+
+
+    - Now, when 'python setup.py install' is run, setuptools will create a script like this:
+
+        #!/usr/bin/python
+        # EASY-INSTALL-ENTRY-SCRIPT: 'foobar==1','console_scripts','foobar'
+        __requires__ = 'foobar==1'
+        import sys
+        from pkg_resources import load_entry_point
+        
+        if __name__ == '__main__':
+            sys.exit(
+                load_entry_point('foobar==1', 'console_scripts', 'foobar')()
+            )
+
 
 
 - Using Plugins and Drivers
+
+    - Entry points make it easy to discover and dynamically load code deployed by other packages,
+        but this is not their only use.  
+
+      In this example, we create a cron-style daemon called 'pycrond' that will allow any Python program 
+        to register a command to be run once every few seconds by registering an entry point in the group 
+        'pytimed'.
+
+
+        # pytimed.py
+
+        import pkg_resources
+        import time
+        
+        def main():
+            seconds_passed = 0
+            while True:
+                for entry_point in pkg_resources.iter_entry_points('pytimed'):
+                    try:
+                        seconds, callable = entry_point.load()()
+                    except:
+                        # Ignore failure
+                        pass
+                    else:
+                        if seconds_passed % seconds == 0:
+                            callable()
+                time.sleep(1)
+                seconds_passed += 1
+
+
+    - Now, we can write another program 'hello.py', which needs one of its functinos called on a periodic
+        basis:
+
+        # hello.py
+
+        def print_hello():
+            print('Hello, world!')
+
+        def say_hello():
+            return 2, print_hello
+
+
+    - Once we have the function defined, we can register it using the appropriate entry points in 'setup.py':
+
+        # setup.py
+
+        from setuptools import setup
+
+        setup(
+            name="hello",
+            version="1",
+            packages=["hello"],
+            entry_points={
+                "pytimed": [
+                    "hello = hello:say_hello",
+                ],
+             },)
+
+
+    - The 'setup.py' script registers an entry point in the group 'pytimed' with the key 'hello' and the 
+        value pointing to the function 'hello.say_hello'.  Once the package is installed (with pip install),
+        the pytimed script can detect the newly added entry point.
+
+      Now, we can run the server:
+
+        >>> import pytimed
+        >>> pytimed.main()
