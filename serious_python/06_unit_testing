@@ -36,7 +36,7 @@ CHAPTER 6 - UNIT TESTING
 
 - Skipping Tests
 
-    - If a test cannot be run, it maes sense to skip the test.  For instance, you may want to run
+    - If a test cannot be run, it makes sense to skip the test.  For instance, you may want to run
         a test conditionally based on whether a particular library is present.
 
 
@@ -207,10 +207,133 @@ CHAPTER 6 - UNIT TESTING
 
 - Controlled Tests Using Mocking
 
-    - Mock objects are simulated objects that mimic the behavior of real application objects.
+    - Mock objects are simulated objects that mimic the behavior of real application objects.  They
+        allow you to create environments that precisely describe the conditions you want to test for.
+
+
+    - The standard library for creating mock objects in Python is 'mock'.  As of Python 3.3, it has
+        been merged into the standard library as 'unittest.mock'.
+
+        # Create a mock with an attribute
+        >>> from unittest import mock
+        >>> m = mock.Mock()
+        >>> m.some_attribute = 'hello world'
+        >>> m.some_attribute
+        'hello world'
+
+        # Add a method
+        >>> m.some_method.return_value = 42
+        >>> m.some_method()
+        42
+
+
+    - Dynamically created methods can also have side effects.
+
+        >>> m = mock.Mock()
+        >>> def print_hello():
+                print('hello world!')
+                return 43
+
+        >>> m.some_method.side_effects = print_hello
+        >>> m.some_method()
+        hello world!
+        43
+
+        >>> m.some_method.call_count
+        1
+
+
+    - The 'mock' library uses the action/assertion pattern.  
+
+        # Call a method
+        >>> from unittest import mock
+        >>> m = mock.Mock()
+        >>> m.some_method('foo', 'bar')
+
+        # Check that method was called with arguments
+        >>> m.some_method.assert_called_once_with('foo', 'bar')
+        >>> m.some_method.assert_called_once_with('foo', mock.ANY)
+
+        # This fails, since it wasn't called with these arguments
+        >>> m.some_method.assert_called_once_with('foo', 'baz')
+
+
+    - The 'mock' library can also be used to patch some function, method, or object from an
+        external module.  
+
+        # Replace os.unlink() 
+        >>> from unittest import mock
+        >>> import os
+
+        >>> def fake_os_unlink(path):
+                raise IOError("Testing!")
+
+        >>> with mock.patch('os.unlink', fake_os_unlink):
+                os.unlink('foobar')
+        Testing!
 
 
 
+- Example - Simulating a Web Server with Mocks
+
+    - This test suite searches for all instances of the string 'Python is a programming langage'
+        on the 'http://python.org/' web page.  
+
+      Since we have no way to test scenarios in which the string isn't there, we create mocked
+        replies with fake pages that don't contain the string.
+
+
+        from unittest import mock
+    
+        import pytest
+        import requests
+      
+        class WhereIsPythonError(Exception):
+            pass
+      
+        def is_python_still_a_programming_language():
+            try:
+                r = requests.get("http://python.org")
+            except IOError:
+                pass
+            else:
+                if r.status_code == 200:
+                    return 'Python is a programming language' in r.content
+            raise WhereIsPythonError("Something bad happened")
+      
+        def get_fake_get(status_code, content):
+            m = mock.Mock()
+            m.status_code = status_code
+            m.content = content
+      
+            def fake_get(url):
+                return m
+      
+            return fake_get
+      
+        def raise_get(url):
+            raise IOError("Unable to fetch url %s" % url)
+      
+        @mock.patch('requests.get', get_fake_get(200, 'Python is a programming language for sure'))
+        def test_python_is():
+            assert is_python_still_a_programming_language() is True
+      
+        @mock.patch('requests.get', get_fake_get(200, 'Python is no more a programming language'))
+        def test_python_is_not():
+            assert is_python_still_a_programming_language() is False
+      
+        @mock.patch('requests.get', get_fake_get(404, 'Whatever'))
+        def test_bad_status_code():
+            with pytest.raises(WhereIsPythonError):
+                is_python_still_a_programming_language()
+      
+        @mock.patch('requests.get', raise_get)
+        def test_ioerror():
+           with pytest.raises(WhereIsPythonError):
+               is_python_still_a_programming_language()
+    
+    
+    
 - Revealing Untested Code with coverage
 
     - The 'coverage' tool identifies whether any of your code has been missed during testing.
@@ -233,8 +356,15 @@ CHAPTER 6 - UNIT TESTING
         # Now, we pass in the source and test directories
         $ pytest --cov=gnocchiclient gnocchiclient/tests/unit
 
+        # Generate an HTML coverage report instead of text
+        $ pytest --cov=gnocchiclient gnocchiclient/tests/unit --cov-report=html
 
-    - 
+
+    - Some teams will set a minimum percentage of the code that needs to be covered.  The test
+        suite will fail if if the threshold is not met.
+
+        # Must be 100% covered
+        $ pytest --cov=gnocchiclient gnocchiclient/tests/unit --cover-fail-under=100
 
 
 
