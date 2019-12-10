@@ -1,0 +1,38 @@
+--------------------------------------------------------------------
+CHAPTER 8 - FUNCTIONAL PROGRAMMING
+--------------------------------------------------------------------
+
+- Functional Programming
+
+
+- Creating Pure Functions
+
+
+- Generators
+
+  - Creating a Generator
+  - Returing and Passing Values with yield
+  - Inspecting Generators
+
+
+- List Comprehensions
+
+
+- Functions for Functional Programming
+
+  - Applying Functions to Items with map()
+  - Filtering Lists with filter()
+  - Getting Indexes with enumerate()
+  - Sorting a List With sorted()
+  - Finding Items that Satisfy Conditions with any() and all()
+  - Combining Lists with zip()
+
+
+- Finding the First Item in a List
+
+    - Finding the Item with Simple Code
+    - Finding the Item Using first()
+    - Using lambda() with functools
+
+
+- Useful itertools Functions
