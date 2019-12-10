@@ -1,0 +1,47 @@
+--------------------------------------------------------------------
+CHAPTER 7 - METHODS AND DECORATORS
+--------------------------------------------------------------------
+
+- Decorators
+
+
+- Creating Decorators
+
+
+- Writing Decorators
+
+
+- Stacking Decorators
+
+
+- Writing Class Decorators
+
+
+- Retrieving Original Attributes with the update_wrapper Decorator
+
+
+- wraps: A Decorator for Decorators
+
+
+- Extracting Relevant Information with Inspect
+
+
+- How Methods Work in Python
+
+
+- Static Methods
+
+
+- Class Methods
+
+
+- Abstract Methods
+
+
+- Mixing Static, Class, and Abstract Methods
+
+
+- Putting Implementations in Abstract Methods
+
+
+- The Truth About super
