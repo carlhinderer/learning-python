@@ -1,0 +1,20 @@
+--------------------------------------------------------------------
+CHAPTER 11 - SCALING & ARCHITECTURE
+--------------------------------------------------------------------
+
+- Multithreading in Python and its Limitations
+
+
+- Multiprocessing vs Multithreading
+
+
+- Event-Driven Architecture
+
+
+- Other Options and asyncio
+
+
+- Service-Oriented Architecture
+
+
+- Interprocess Communication with ZeroMQ
