@@ -207,8 +207,35 @@ CHAPTER 6 - UNIT TESTING
 
 - Controlled Tests Using Mocking
 
+    - Mock objects are simulated objects that mimic the behavior of real application objects.
+
+
 
 - Revealing Untested Code with coverage
+
+    - The 'coverage' tool identifies whether any of your code has been missed during testing.
+        It uses code analysis tools and tracing hooks to determine which lines of your code
+        have been executed.
+
+      If we use coverage in standalone mode, it can show you what code is uncovered and what
+        code is dead.  
+
+        # Install coverage
+        $ pip install coverage
+
+
+    - When using pytest, we use the 'pytest-cov' plugin, which generates a detailed coverage
+        report.
+
+        # Install pytest-cov
+        $ pip install pytest-cov
+
+        # Now, we pass in the source and test directories
+        $ pytest --cov=gnocchiclient gnocchiclient/tests/unit
+
+
+    - 
+
 
 
 - Virtual Environments
