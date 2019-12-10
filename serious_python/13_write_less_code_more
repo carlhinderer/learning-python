@@ -1,0 +1,21 @@
+--------------------------------------------------------------------
+CHAPTER 13 - WRITE LESS, CODE MORE
+--------------------------------------------------------------------
+
+- Using six For Python 2 and 3 Support
+
+    - String and Unicode
+    - Handling Python Modules Moves
+    - The modernize Module
+
+
+- Using Python Like Lisp to Make a Single Dispatcher
+
+    - Creating Generic Methods in Lisp
+    - Generic Methods with Python
+
+
+- Context Managers
+
+
+- Less Boilerplate with Attr
