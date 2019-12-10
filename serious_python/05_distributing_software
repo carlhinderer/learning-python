@@ -369,3 +369,7 @@ CHAPTER 5 - DISTRIBUTING YOUR SOFTWARE
 
         >>> import pytimed
         >>> pytimed.main()
+        
+        Hello, world!
+        Hello, world!
+        Hello, world!

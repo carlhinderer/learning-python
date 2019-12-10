@@ -515,6 +515,20 @@ CHAPTER 6 - UNIT TESTING
 
         # command to install dependencies
         install: "pip install -r requirements.txt --use-mirrors"
-        
+
         # command to run tests
         script: pytest
+
+
+
+- Python Coding Strategies
+
+    1. Separate out concerns and don't do multiple things in one place.  This makes reuse natural,
+         makes it easier to put test doubles in place.
+
+    2. Take a purely functional approach when possible.  For example, in a single method either 
+         calculate something or change some state, but avoid doing both.
+
+    3. The most heinous things to test are deeply layered stacks with complex cross-layer behavioral
+         dependencies.  We want to evolve the code so that the contract between layers is simple,
+         predictable, and (especially for testing) replacable.
