@@ -370,11 +370,70 @@ CHAPTER 6 - UNIT TESTING
 
 - Virtual Environments
 
+    - Once an application reaches a significant size, it will depend on many external libraries.
+        Tests may not reveal problems in which:
+
+          1. You don't have the library you need.
+          2. You don't have the right version of the library you need.
+          3. You need 2 different versions of the same library for different applications.
+
+
+    - The solution is for each application to use its own library directory that contains all of an 
+        application's dependencies.  This directory is known as a 'virtual environment'.
+
+
 
 - Setting Up a Virtual Environment
 
+    - The 'virtualenv' tool handles virtual environments automatically for you.  
+
+        # Create virtual environment
+        $ python3 -m venv myvenv
+
+        # Activate the virtual environment
+        $ source myenv/bin/activate
+
+        # Deactivate the virtual environment
+        $ deactivate
+
+
 
 - Using virtualenv with tox
+
+    - The 'tox' management tool aims to automate and standardize how tests are run in Python.
+        It provides everything needed to run an entire test suite in a clean virtual environment,
+        while also installing your application to check that the installation works.
+
+        $ pip install tox
+
+
+    - First, we need to create a config file 'tox.ini' in the root directory of our project, 
+        beside the 'setup.py'.
+
+        # Create a config file
+        $ touch tox.ini
+
+        # Run tox
+        $ tox
+
+
+    - In this instance, tox creates a virtual environment in .tox/python using the default 
+        Python version.  It uses 'setup.py' to create a distribution of your package, which it
+        then installs in this virtual environment.  
+
+
+    - Next, we add a command to run to our 'tox.ini'.  We need to add pytest as a dependency
+        that must be installed in our virutal environment.
+
+        # tox.ini
+        [testenv]
+        deps=pytest
+        commands=pytest
+
+
+    - Now, when we run 'tox', tox recreates the environment, installs the new dependency, and
+        runs the command 'pytest', which executes all the unit tests.
+        
 
 
 - Re-creating an Environment
