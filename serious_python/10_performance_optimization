@@ -1,0 +1,32 @@
+--------------------------------------------------------------------
+CHAPTER 10 - PERFORMANCES & OPTIMIZATIONS
+--------------------------------------------------------------------
+
+- Data Structures
+
+
+- Understanding Behavior Through Profiling
+
+
+- cProfile
+
+
+- Disassembling with the dis Module
+
+
+- Defining Functions Efficiently
+
+
+- Ordered Lists and Bisect
+
+
+- Namedtuple and Slots
+
+
+- Memoization
+
+
+- Faster Python with Pypy
+
+
+- Achieving Zero Copy with the Buffer Protocol
