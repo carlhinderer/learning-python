@@ -86,13 +86,95 @@ CHAPTER 5 - DISTRIBUTING YOUR SOFTWARE
 
 
     - Many other tools, such as Sphinx and Wheel, now also read information from the 'setup.cfg'.
+        Note that it's always good to also have a README.rst so that users can quickly understand
+        what the project is about.
 
 
 
 - The Wheel Format Distribution Standard
 
+    - For most of Python's existence, there has been no standard distribution format.  Each 
+        distribution tool used it's own format (ie setuptools created the Egg format).
+
+      To solve these problems, PEP 427 created the Wheel format.  It is supported by pip.
+
+
+    - Here, we run the 'bdist_wheel' command to create a .whl file in the 'dist' directory:
+
+        $ python setup.py bdist_wheel
+
+
 
 - Sharing Your Work with the World
+
+    - Once you have a proper 'setup.py', it is easy to build a source tarball that can be distributed.
+        The setuptools 'sdist' command is used for that.
+
+        # Creates a tarball in the 'dist' directory
+        $ python setup.py sdist
+
+
+    - The final step to make your code accessible is to export the package somewhere that users can
+        install it via pip.  This means publishing to PyPI.
+
+        1. Create a '~/.pypirc' file for settings.  We will use the PyPI test server to test changes
+             before publishing to the PyPI production server.
+
+            # ~/.pypirc
+            [distutils]
+            index-servers =
+                testpypi
+
+            [testpypi]
+            username = <your username>
+            password = <your password>
+            repository = https://testpypi.python.org/pypi
+
+
+        2. Now, we can register our project in the PyPI index:
+
+            $ python setup.py register -r testpypi
+
+
+        3. Now that the project is registered, we can upload the tarball:
+
+            $ python setup.py sdist upload -r testpypi
+
+
+        4. Alternatively, we can upload a wheel instead of a tarball:
+
+            $ python setup.py bdist_wheel upload -r testpypi
+
+
+        5. We can use pip to search for our package on the test server:
+
+            $ pip install -i https://testpypi.python.org/pypi ceilometer
+
+
+        6. Once everything checks out, we can publish to the PyPI production server:
+
+            # Updated ~/.pypirc
+            [distutils]
+            index-servers =
+                pypi
+                testpypi
+            
+            [pypi]
+            username = <your username>
+            password = <your password>
+
+            [testpypi]
+            repository = https://testpypi.python.org/pypi
+            username = <your username>
+            password = <your password>
+
+
+            # Register package in production
+            $ python setup.py register -r pypi
+
+            # Upload package in production
+            $ python setup.py register -r pypi
+
 
 
 - Entry Points
