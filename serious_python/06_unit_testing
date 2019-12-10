@@ -36,13 +36,81 @@ CHAPTER 6 - UNIT TESTING
 
 - Skipping Tests
 
-    - 
+    - If a test cannot be run, it maes sense to skip the test.  For instance, you may want to run
+        a test conditionally based on whether a particular library is present.
+
+
+        import pytest
+
+        try:
+            import mylib
+        except ImportError:
+            mylib = None
+
+        @pytest.mark.skip("Do not run this")
+        def test_fail():
+            assert False
+
+        @pytest.mark.skipif(mylib is None, reason="mylib is not available")
+        def test_mylib():
+            assert mylib.foobar() == 42
+
+        def test_skip_at_runtime():
+            if True:
+                pytest.skip("Finally I don't want to run it")
+
 
 
 - Running Particular Tests
 
+    - To run only specific tests:
+
+        # Run a single file
+        $ pytest -v examples/test_skip.py
+
+        # Run tests whose method names match a pattern
+        $ pytest -v examples/test_skip.py -k test_fail
+ 
+
+    - We can also run only tests that are marked with a decorator:
+
+        # test_mark.py
+        import pytest
+
+        @pytest.mark.dicttest
+        def test_something():
+            a = ['a', 'b']
+            assert a == a
+
+        def test_something_else():
+            assert False
+
+
+        # Run the tests marked with an attribute
+        $ pytest -v test_mark.py -m dicttest
+
+        # Run the tests not marked
+        $ pytest -v test_mark.py -m 'not dicttest'
+
+
 
 - Running Tests in Parallel
+
+    - Test suites can take a long time to run.  By default, pytest runs all tests serially, in
+        undefined order.
+
+      We can speed things up by running tests on multiple CPUs at the same time.  We start by 
+        downloading the 'pytest-xdist' plugin (installed with pip), then we specify the number
+        of parallel processes we want to have.
+
+
+        # Run 4 parallel processes
+        $ pytest -n 4
+        $ pytest --numprocesses 4
+
+        # Run (# of cpus on machine) processes
+        $ pytest -n auto
+        
 
 
 - Creating Objects Used in Tests with Fixtures
