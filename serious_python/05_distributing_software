@@ -1,0 +1,26 @@
+--------------------------------------------------------------------
+CHAPTER 5 - DISTRIBUTING YOUR SOFTWARE
+--------------------------------------------------------------------
+
+- A Bit of setup.py History
+
+
+- Packaging with setup.cfg
+
+
+- The Wheel Format Distribution Standard
+
+
+- Sharing Your Work with the World
+
+
+- Entry Points
+
+
+- Visualizing Entry Points
+
+
+- Using Console Scripts
+
+
+- Using Plugins and Drivers
