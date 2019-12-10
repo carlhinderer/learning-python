@@ -1,0 +1,23 @@
+--------------------------------------------------------------------
+CHAPTER 4 - HANDLING TIMESTAMPS AND TIME ZONES
+--------------------------------------------------------------------
+
+- Working with Time Zones
+
+
+- The Problem of Missing Time Zones
+
+
+- Building Default DateTime Objects
+
+
+- Time Zone-Aware Timestamps with dateutil
+
+
+- Implementing Your Own Time Zone Classes
+
+
+- Serializing Time Zone-Aware DateTime Objects
+
+
+- Solving Ambiguous Times
