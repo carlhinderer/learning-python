@@ -1,0 +1,25 @@
+--------------------------------------------------------------------
+CHAPTER 9 - THE AST, HY, & LISP-LIKE ATTRIBUTES
+--------------------------------------------------------------------
+
+- Looking at the Abstract Syntax Tree
+
+
+- Writing a Program Using the AST
+
+
+- The AST Objects
+
+
+- Walking Through an AST
+
+
+- Extending Flake8 with AST Checks
+
+  - Writing the Class
+  - Ignoring Irrelevant Code
+  - Checking for the Correct Decorator
+  - Looking for self
+
+
+- A Quick Introduction to Hy
