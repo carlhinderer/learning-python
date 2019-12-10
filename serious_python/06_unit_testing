@@ -1,0 +1,78 @@
+--------------------------------------------------------------------
+CHAPTER 6 - UNIT TESTING
+--------------------------------------------------------------------
+
+- Simple Tests
+
+    - Tests should be a submodule of your main package, and should be shipped along with the 
+        source code.  This allows the tests to be reused by whoever downloads the module, and
+        prevents the tests from being accidentally installed as a top-level module.
+
+
+    - Using a hierarchy of tests that mimics your code hierarchy will make the tests much more
+        managable.  So, tests covering 'mylib/foobar.py' should be stored in 
+        'mylib/tests/test_foobar.py'.
+
+
+    - Here is the simplest possible unit test:
+
+        # Passing test
+        def test_true():
+            assert True
+
+        # Failing test
+        def test_false():
+            assert False
+
+
+        # Run the test
+        $ pytest -v test_true.py
+
+
+    - This simple testing strategy works well for many small projects, requiring nothing more than
+        pytest and assertion tests.
+
+
+
+- Skipping Tests
+
+    - 
+
+
+- Running Particular Tests
+
+
+- Running Tests in Parallel
+
+
+- Creating Objects Used in Tests with Fixtures
+
+
+- Running Test Scenarios
+
+
+- Controlled Tests Using Mocking
+
+
+- Revealing Untested Code with coverage
+
+
+- Virtual Environments
+
+
+- Setting Up a Virtual Environment
+
+
+- Using virtualenv with tox
+
+
+- Re-creating an Environment
+
+
+- Using Different Python Versions
+
+
+- Integrating Other Tests
+
+
+- Testing Policy
