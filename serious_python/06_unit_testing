@@ -433,16 +433,88 @@ CHAPTER 6 - UNIT TESTING
 
     - Now, when we run 'tox', tox recreates the environment, installs the new dependency, and
         runs the command 'pytest', which executes all the unit tests.
-        
+
 
 
 - Re-creating an Environment
 
+    - Sometimes, we'll need to recreate an environment.  tox acceps a '--recreate' option that
+        will rebuild the virtual environment from scratch.
+
+
 
 - Using Different Python Versions
+
+    - Here, we specify that we want a test environment with Python 2.1:
+
+        # tox.ini
+        [testenv]
+        deps=pytest
+        commands=pytest
+
+        [testenv:py21]
+        basepython=python2.1
+
 
 
 - Integrating Other Tests
 
+    - We can also use tox to integrate things like flake8:
+
+        # tox.ini
+        [tox]
+        envlist=py35,py36,pypy,pep8
+        
+        [testenv]
+        deps=pytest
+        commands=pytest
+        
+        [testenv:pep8]
+        deps=flake8
+        commands=flake8
+
+
+    - When running tox, all the environments are built and run sequentially, which can make it
+        a long process.  However, since the virtual environments are isolated, nothing prevents 
+        them from running sequentially.
+
+      This is what the 'detox' package was created to do.  It runs all of the default environments
+        from 'envlist' in parallel.
+
+        $ pip install detox
+
+
 
 - Testing Policy
+
+    - There should always be a zero-tolerance policy against merging in code without a proper set
+        of unit tests to cover it.  
+
+
+    - Each of the commits you push should pass all tests.  Automating this process is even better.
+
+      For example, we can create a workflow that relies on Gerrit (a web-based code review service)
+        and Zuul (a CI and delivery service).  Each commit goes through the code review system
+        provided by Gerrit, and Zuul runs the unit tests and higher-level functional tests for each
+        project.
+
+
+    - Travis CI is a popular tool that allows you to run tests after each push or merge or against
+        pull requests that are submitted.  The testing is done post-push, but is still a fantastic
+        way to track regressions.
+
+
+    - We add a 'travis.yml' file to specify how tests are run:
+
+        # travis.yml
+
+        language: python
+        python:
+          - "2.7"
+          - "3.6"
+
+        # command to install dependencies
+        install: "pip install -r requirements.txt --use-mirrors"
+        
+        # command to run tests
+        script: pytest
