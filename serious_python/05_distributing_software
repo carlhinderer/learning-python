@@ -4,8 +4,89 @@ CHAPTER 5 - DISTRIBUTING YOUR SOFTWARE
 
 - A Bit of setup.py History
 
+    - The distutils library, originally created by software developer Greg Ward, has been part of 
+        the standard Python library since 1998. Ward sought to create an easy way for developers to 
+        automate the installation process for their end users. 
+
+      Packages provide the setup.py file as the standard Python script for their installation, and 
+        they can use distutils to install themselves.
+
+
+    - Here, we build a 'setup.py' using 'distutils':
+
+        #!/usr/bin/python
+        from distutils.core import setup
+        
+        setup(name="rebuildd",
+              description="Debian packages rebuild tool",
+              author="Julien Danjou",
+              author_email="acid@debian.org",
+              url="http://julien.danjou.info/software/rebuildd.html",
+              packages=['rebuildd'])
+
+
+    - With the 'setup.py' file as the root of a project, all users have to do is run that file with 
+        the appropriate command as its argument.  distutils can even handle C modules bundled
+        in your application.
+
+
+    - Eventually, distutils was abandoned, and several successors emerged.  The most used one now
+        is 'setuptools'.
+
+        #!/usr/bin/env python
+        import setuptools
+        
+        setuptools.setup(
+            name="rebuildd",
+            version="0.2",
+            author="Julien Danjou",
+            author_email="acid@debian.org",
+            description="Debian packages rebuild tool",
+            license="GPL",
+            url="http://julien.danjou.info/software/rebuildd/",
+            packages=['rebuildd'],
+            classifiers=[
+                "Development Status :: 2 - Pre-Alpha",
+                "Intended Audience :: Developers",
+                "Intended Audience :: Information Technology",
+                "License :: OSI Approved :: GNU General Public License (GPL)",
+                "Operating System :: OS Independent",
+                "Programming Language :: Python"
+            ],
+        )
+
+
 
 - Packaging with setup.cfg
+
+    - Building a 'setup.py' is not necessarily intuitive.  setuptools added support of the
+        'setup.cfg' file to make things easier.
+
+        # setup.py
+        import setuptools
+        setuptools.setup()
+
+        # setup.cfg
+        [metadata]
+        name = foobar
+        author = Dave Null
+        author-email = foobar@example.org
+        license = MIT
+        long_description = file: README.rst
+        url = http://pypi.python.org/pypi/foobar
+        requires-python = >=2.6
+        classifiers =
+            Development Status :: 4 - Beta
+            Environment :: Console
+            Intended Audience :: Developers
+            Intended Audience :: Information Technology
+            License :: OSI Approved :: Apache Software License
+            Operating System :: OS Independent
+            Programming Language :: Python
+
+
+    - Many other tools, such as Sphinx and Wheel, now also read information from the 'setup.cfg'.
+
 
 
 - The Wheel Format Distribution Standard
