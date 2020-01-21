@@ -34,7 +34,7 @@ CHAPTER 17 - SCOPES
 
 
 
-- The LEBG Rule
+- The LEGB Rule
 
     - Name references search at most 4 scopes:
 

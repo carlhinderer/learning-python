@@ -128,8 +128,8 @@ CHAPTER 19 - ADVANCED FUNCTION TOPICS
       ...     action = (lambda x: title + ' ' + x)
       ...     return action
 
-      >>> act = knights
-      >>> mgs = act('robin')
+      >>> act = knights()
+      >>> msg = act('robin')
       >>> msg
       'Sir robin'
 

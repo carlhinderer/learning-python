@@ -40,7 +40,7 @@ CHAPTER 15 - DOCUMENTATION
       Function documentation
       goes here
       """
-      return x **2
+      return x ** 2
 
     class Employee:
       "class documentation here"
