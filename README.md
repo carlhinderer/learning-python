@@ -1,2 +1,2 @@
 # learning-python
-Taking a few notes on the book 'Learning Python' by Mark Lutz
+Taking a few notes on foundational Python books
