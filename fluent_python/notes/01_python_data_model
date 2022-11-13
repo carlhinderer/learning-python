@@ -1,0 +1,360 @@
+----------------------------------------------------------------------
+| CHAPTER 1 - THE PYTHON DATA MODEL                                  |
+----------------------------------------------------------------------
+
+- Special Methods
+
+    - Special methods in Python begin and end with 2 underscores.  They are also known as 'magic methods' or
+        'dunder methods'.
+
+        my_collection.__getitem__(key)
+
+
+
+- A Pythonic Card Deck
+
+    - Here is an example of a simple card deck that demonstrates the power of 2 special methods, '__getitem__'
+        and '__len__'.
+
+        import collections
+
+        Card = collections.namedtuple('Card', ['rank', 'suit'])
+
+        class FrenchDeck:
+            ranks = [str(n) for n in range(2, 11)] + list('JQKA')
+            suits = 'spades diamonds clubs hearts'.split()
+
+            def __init__(self):
+                self._cards = [Card(rank, suit) for suit in self.suits for rank in self.ranks]
+
+            def __len__(self):
+                return len(self._cards)
+
+            def __getitem__(self, position):
+                return self._cards[position]
+
+
+    - The 'collections.namedtuple' class is used to construct a simple class that is just a bundle of
+        attributes with no custom methods.
+
+        >>> beer_card = Card('7', 'diamonds')
+
+
+    - Since we implemented '__len__', our deck responds to the 'len()' function just like any standard
+        Python collection.
+
+        >>> deck = FrenchDeck()
+        >>> len(deck)
+
+
+    - Reading specific cards (for instance, the first or last) is easy, since we implemented the '__getitem__'
+        method.
+
+        >>> deck[0]
+        >>> deck[-1]
+
+
+    - Because our '__getitem__' delegates to the [] operator of 'self._cards', our deck automatically 
+        supports slicing.
+
+        >>> deck[:3]
+        >>> deck[12::13]
+
+
+    - Implementing '__getitem__' also makes our deck iterable.
+
+        # Iterate over cards
+        >>> for card in deck:
+                print(card)
+
+        # Iterate in reverse
+        >>> for card in reversed(deck):
+                print(card)
+
+
+    - Iteration is often implicit.  If a collection has no '__contains__' method, the 'in' operator does a
+        sequential scan.  It works in our FrenchDeck because it is iterable.
+
+        >>> Card('Q', 'hearts') in deck
+
+
+    - We can also sort cards.  A common system of ranking cards is by rank, then by suit in order of
+        [spades, hearts, diamonds, clubs].  Here is a function that sorts by that rule, returing 0 for the
+        2 of clubs and 51 for the ace of spaces.
+
+        suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)
+
+        def spades_high(card):
+            rank_value = FrenchDeck.ranks.index(card.rank)
+            return rank_value * len(suit_values) + suit_values[card.suit]
+
+
+    - Now, we can list our deck in order of increasing rank:
+
+        >>> for card in sorted(deck, key=spades_high):
+                print(card)
+
+
+
+- How Special Methods are Used
+
+    - Special methods are meant to be called by the Python interpreter, not by you.
+
+        # Don't do this
+        >>> my_object.__len__()
+
+
+    - The Python interpreter takes a shortcut when dealing with built-in types like 'list' or 'str'.
+        Python variable-sized collections written in C include a C struct called 'PyVarObject', which has
+        an 'ob_size' field that holds the number of items in a collection.  So if you call 'len()', it just
+        retrieves this 'ob_size' value.
+
+
+    - More often than not, the special method call is implicit.  For instance, when you use 'for i in x:',
+        this causes an invocation of 'iter(x)', which may in turn call 'x.__iter__()' if it is available,
+        or use 'x.__getitem__()'.
+
+
+    - The only special method that is frequently called by user code directly is '__iter__'.
+
+
+
+- Emulating Numeric Types
+
+    - We can also use special methods to implement operators such as '+'.  We'll build a class to represent
+        2D vectors as an example.
+
+
+    - This is what the API for our class will look like:
+
+        >>> v1 = Vector(2, 4)
+        >>> v2 = Vector(2, 1)
+
+        >>> v1 + v2
+        Vector(4, 5)
+
+
+    - The 'abs' built-in function returns the absolute value of integers and floats, and the magnitude of
+        complex numbers, so we will also use it to calculate the magnitude of a vector.
+
+        >>> v = Vector(3, 4)
+
+        >>> abs(v)
+        5.0
+
+
+    - We can also implement the '*' operator to perform scalar multiplication.
+
+        >>> v * 3
+        Vector(9, 12)
+
+        >>> abs(v * 3)
+        15.0
+
+
+    - Here is the implementation of our class:
+
+        import math
+
+        class Vector:
+            def __init__(self, x=0, y=0):
+                self.x = x
+                self.y = y
+
+            def __repr__(self):
+                return f'Vector({self.x!r}, {self.y!r})'
+
+            def __abs__(self):
+                return math.hypot(self.x, self.y)
+
+            def __bool__(self):
+                return bool(abs(self))
+
+            def __add__(self, other):
+                x = self.x + other.x
+                y = self.y + other.y
+                return Vector(x, y)
+
+            def __mul__(self, scalar):
+                return Vector(self.x * scalar, self.y * scalar)
+
+
+
+- String Representation
+
+    - The '__repr__' special method is called by the 'repr' built-in to get the string representation of the
+        object for inspection.  Without a custom '__repr__', Python's console would display a Vector 
+        instance as '<Vector object at 0x10e100070>'.
+
+
+    - The interactive console and debugger call 'repr' on the results of the expression evaluated.  The %r
+        placeholder does this in classic formatting and the !r does this with 'str.format' and f-strings.
+
+
+    - As a convention, the string returned by __repr__ should match the source code necessary to recreate
+        the represented object.  This is why our Vector representation looks like calling the constructor
+        of the class.
+
+        Vector(3, 4)
+
+
+    - In contrast, __str__ is called by the str() built-in and is implicitly used by the 'print' function.
+        It should return a string suitable for display to end users.
+
+
+    - If __str__ is not implemented, __repr__ will be called as a fallback.  So, if we only implement one,
+        we should implement __repr__.
+
+
+
+- Boolean Value of a Custom Type
+
+    - Although Python has a 'bool' type, it accepts any type in a Boolean context, such as an expression
+        with if, while, or, not.  To determine whether a value x is truthy or falsy, Python applies
+        'bool(x)', which returns either True of False.
+
+
+    - By default, instances of user-defined classes are considered truthy, unless either '__bool__' or
+        '__len__' is implemented.  Basically, 'bool(x)' calls 'x.__bool__()' and uses the result.  If
+        __bool__ is not implemented, Python tries to invoke 'x.__len__()', and if it returns 0, 'bool'
+        returns False.  Otherwise 'bool' returns True.
+
+
+
+- The Collection API
+
+    - Here are the most important interfaces of the essential collection types.  All of these classes are
+        ABCs.  
+
+
+          Iterable                    Sized                    Container
+          -----------                 ------------             ---------------
+          __iter__                    __len__                  __contains__
+
+
+         Reversible                   Collection
+         ------------
+         __reversed__
+
+
+         Sequence                     Mapping                  Set
+         ------------                 -------------            ---------------
+         __getitem__                  __getitem__              isdisjoint
+         __contains__                 __contains__             __le__
+         __iter__                     __eq__                   __lt__
+         __reversed__                 __ne__                   __gt__
+         index                        get                      __ge__
+         count                        items                    __eq__
+                                      keys                     __ne__
+                                      values                   __and__
+                                                               __or__
+                                                               __sub__
+                                                               __xor__
+
+
+    - Each of the top ABCs has a single special method.  The 'Collections' ABC (new in 3.6) unifies the
+        3 essential interfaces that every collection should implement:
+
+        - 'Iterable' to support 'for', unpacking, and other forms of iteration
+        - 'Sized' to support the built-in 'len' function
+        - 'Container' to support the 'in' operator
+
+
+    - Python does not require concrete classes to actually inherit from any of these ABCs.  Any class that
+        implements '__len__' satisfies the 'Sized' interface.
+
+
+    - Three very important specializations of 'Collection' are:
+
+        - 'Sequence', formalizing the interface of built-ins like 'list' and 'str'
+        - 'Mapping', implemented by 'dict', 'defaultdict'
+        - 'Set', the interface of the 'set' and 'frozenset' built-in types
+
+
+    - Only 'Sequence' is 'Reversible', because sequences support arbitrary ordering of their contents, while
+        mappings and sets do not.  Since 3.7, the 'dict' type is ordered by key insertion, but you cannot
+        rearrange the ordering.
+
+
+
+- Overview of Special Methods
+
+    - There are more than 80 special methods names.  More than half of them implement arithmetic, bitwise,
+        and comparison operators.
+
+
+    - Here are the non-operator special methods:
+
+        String/bytes representation:
+            __repr__ __str__ __format__ __bytes__ __fspath__
+
+        Conversion to number:
+            __bool__ __complex__ __int__ __float__ __hash__ __index__
+
+        Emulating collections:
+            __len__ __getitem__ __setitem__ __delitem__ __contains__
+
+        Iteration:
+            __iter__ __aiter__ __next__ __anext__ __reversed__
+
+        Callable or coroutine execution:
+            __call__ __await__
+
+        Context management:
+            __enter__ __exit__ __aexit__ __aenter__
+
+        Instance creation and destruction:
+            __new__ __init__ __del__
+
+        Attribute management:
+            __getattr__ __getattribute__ __setattr__ __delattr__ __dir__
+
+        Attribute descriptors:
+            __get__ __set__ __delete__ __set_name__
+
+        Abstract base classes:
+            __instancecheck__ __subclasscheck__
+
+        Class metaprogramming:
+            __prepare__ __init_subclass__ __class_getitem__ __mro_entries__
+
+
+    - Here are the operator special methods:
+
+        Unary numeric [- + abs()]:
+            __neg__ __pos__ __abs__
+
+        Rich comparison [< <= == != > >=]:
+            __lt__ __le__ __eq__ __ne__ __gt__ __ge__
+
+        Arithmetic [+ - * / // % @ divmod() round() ** pow()]:
+            __add__ __sub__ __mul__ __truediv__ __floordiv__ __mod__ __matmul__ __div 
+            mod__ __round__ __pow__
+
+        Reversed arithmetic (arithmetic operators with swapped operands):
+            __radd__ __rsub__ __rmul__ __rtrue div__ __rfloordiv__ __rmod__ __rmat
+            mul__ __rdivmod__ __rpow__
+
+        Augmented assignment arithmetic [+= -= *= /= //= %= @= **=]
+            __iadd__ __isub__ __imul__ __itrue div__ __ifloordiv__ __imod__ __imat mul__ __ipow__
+
+        Bitwise (& | ^ << >> ~)
+            __and__ __or__ __xor__ __lshift__ __rshift__ __invert__
+
+        Reversed bitwise (bitwise operators with swapped operands)
+            __rand__ __ror__ __rxor__ __rlshift__ __rrshift__
+
+        Augmented assignment bitwise (&= |= ^= <<= >>=)
+            __iand__ __ior__ __ixor__ __ilshift__ __irshift__
+
+
+
+- Why 'len' is Not a Method
+
+    - The 'len(x)' statement runs very fast when x is an instance of a built-in type.  No method is called 
+        for the built-in objects of CPython.  The length is simply read from a field in a C struct.
+
+
+    - In other words, 'len' is not called as a method, because it gets special treatment as part of the
+        Python Data Model, just like 'abs'.  But thanks to the '__len__' special method, you can also make
+        it work with your custom objects.
