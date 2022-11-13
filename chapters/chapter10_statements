@@ -37,7 +37,7 @@ CHAPTER 10 -  PYTHON STATEMENTS
                                                              return a + b + c + d[0]
 
     yield                    Generator functions         def gen(n):
-                                                             for i in n: yield i*2
+                                                             for i in range(n): yield i*2
 
     global                   Namespaces                  x = 'old'
                                                          def function():

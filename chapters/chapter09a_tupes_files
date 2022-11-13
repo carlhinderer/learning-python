@@ -62,7 +62,7 @@ CHAPTER 9A - TUPLES AND FILES
 
 
 
-- Tuples and other immutables serve a role similr to constant declarations in
+- Tuples and other immutables serve a role similar to constant declarations in
     other languages.  Though, the notion of 'constantness' is associated with objects
     in Python, not with variables.
 
@@ -126,14 +126,14 @@ CHAPTER 9A - TUPLES AND FILES
     # Serializing an object with pickle
     >>> import pickle
     >>> D = {'a': 1, 'b': 2}
-    >>> F = open('datafile.pk1', 'wb')
+    >>> F = open('datafile.pkl', 'wb')
     >>> pickle.dump(D, F)
     >>> F.close()
 
     # Deserializing an object with pickle
     >>> import pickle
-    >>> F = open('datafile.pk1', 'rb')
-    >>> D = pickle.load(F)
+    >>> F = open('datafile.pkl', 'rb')
+    >>> D = pickle.load(E)
     >>> E
     {'a': 1, 'b': 2}
 

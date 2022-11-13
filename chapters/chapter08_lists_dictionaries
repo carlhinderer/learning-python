@@ -133,7 +133,7 @@ CHAPTER 8 - LISTS & DICTIONARIES
 
     # Creating Dictionaries
     >>> D = {}
-    >>> D = ['name': 'Bob', 'age': 40]
+    >>> D = {'name': 'Bob', 'age': 40}
     >>> E = {'cto': {'name': 'Bob', 'age': 40}}
 
     >>> D = dict(name='Bob', age=40)
